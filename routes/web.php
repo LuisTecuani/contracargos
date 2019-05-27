@@ -15,9 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/mediakey', 'mediakey@index')->name('mediakey.index');
-Route::get('/mediakey/result', 'mediakey@show');
-Route::post('/mediakey', 'mediakey@finder');
+Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
+Route::get('/mediakey/result', 'MediakeyController@show');
+Route::post('/mediakey', 'MediakeyController@finder');
 
 Route::get('/cellers', 'CellersController@index')->name('cellers.index');
 Route::post('/cellers', 'CellersController@finder');

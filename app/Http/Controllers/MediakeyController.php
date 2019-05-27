@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 
-class mediakey extends Controller
+class MediakeyController extends Controller
 {
 
     public function index() {
