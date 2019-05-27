@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AliadoController extends Controller
+{
+    public function index() {
+
+
+        return view('aliado.index', compact('cards'));
+    }
+
+
+    public function finder() {
+
+        $autorizacionesS =  request()->input('autorizaciones');
+
+        $autorizacionesRaw = preg_split("[\r\n]",$autorizacionesS);
+
+        echo '"num_buscado","autorizacion","fecha","number","email"'."<br>";
+
+        foreach($autorizacionesRaw as $autorizacionRaw) {
+            if(strlen($autorizacionRaw) == 1)
+            {
+                $autorizacion = "00000$autorizacionRaw";
+            }
+
+            if(strlen($autorizacionRaw) == 2)
+            {
+                $autorizacion = "0000$autorizacionRaw";
+            }
+
+            if(strlen($autorizacionRaw) == 3)
+            {
+                $autorizacion = "000$autorizacionRaw";
+            }
+
+            if(strlen($autorizacionRaw) == 4)
+            {
+                $autorizacion = "00$autorizacionRaw";
+            }
+
+            if(strlen($autorizacionRaw) == 5)
+            {
+                $autorizacion = "0$autorizacionRaw";
+            }
+
+            if(strlen($autorizacionRaw) == 6)
+            {
+                $autorizacion = "$autorizacionRaw";
+            }
+
+
+            $cards = DB::connection('mysql3')->table('reps')
+                ->leftJoin('user_tdc', 'reps.numero', '=', 'user_tdc.number')
+                ->leftJoin('users', 'user_tdc.user_id', '=', 'users.id')
+                ->where('reps.autorizacion', '=', $autorizacion)
+                ->get();
+
+            foreach($cards as $ca)
+            {
+                echo $autorizacion.',"';
+                echo $ca->autorizacion.'","';
+                echo $ca->fecha_cobro.'","';
+                echo $ca->number.'",';
+                echo $ca->email."<br>";
+            }}
+
+
+        return view('aliado.index')->with(compact('cards'));
+
+
+
+    }
+}
