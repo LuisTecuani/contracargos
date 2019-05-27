@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
 Route::get('/mediakey/result', 'MediakeyController@show');
 Route::post('/mediakey', 'MediakeyController@finder');
+Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediakey');
 
 Route::get('/cellers', 'CellersController@index')->name('cellers.index');
 Route::post('/cellers', 'CellersController@finder');
