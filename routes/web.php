@@ -25,6 +25,7 @@ Route::post('/cellers', 'CellersController@finder');
 
 Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 Route::post('/aliado', 'AliadoController@finder');
+Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 
 Route::get('/asmas', 'AsmasController@index')->name('asmas.index');
 Route::post('/asmas', 'AsmasController@finder');
