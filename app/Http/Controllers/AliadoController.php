@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Repsaliado;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class AliadoController extends Controller
@@ -24,61 +24,67 @@ class AliadoController extends Controller
 
         $autorizacionesRaw = preg_split("[\r\n]",$autorizacionesS);
 
-        echo '"num_buscado","autorizacion","fecha","number","email"'."<br>";
+        echo '"num_buscado","autorizacion","fecha","number","user_id","email"'."<br>";
 
-        foreach($autorizacionesRaw as $autorizacionRaw) {
-            if(strlen($autorizacionRaw) == 1)
+        foreach($autorizacionesRaw as $autorizacionRaw1) {
+
+            $autorizacionRaw = preg_split("[,]",$autorizacionRaw1);
+
+            if(strlen($autorizacionRaw[0]) == 1)
             {
-                $autorizacion = "00000$autorizacionRaw";
+                $autorizacion = "00000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw) == 2)
+            if(strlen($autorizacionRaw[0]) == 2)
             {
-                $autorizacion = "0000$autorizacionRaw";
+                $autorizacion = "0000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw) == 3)
+            if(strlen($autorizacionRaw[0]) == 3)
             {
-                $autorizacion = "000$autorizacionRaw";
+                $autorizacion = "000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw) == 4)
+            if(strlen($autorizacionRaw[0]) == 4)
             {
-                $autorizacion = "00$autorizacionRaw";
+                $autorizacion = "00$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw) == 5)
+            if(strlen($autorizacionRaw[0]) == 5)
             {
-                $autorizacion = "0$autorizacionRaw";
+                $autorizacion = "0$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw) == 6)
+            if(strlen($autorizacionRaw[0]) == 6)
             {
-                $autorizacion = "$autorizacionRaw";
+                $autorizacion = "$autorizacionRaw[0]";
             }
 
+            $tarjeta = "%$autorizacionRaw[1]";
 
-            $cards = DB::connection('mysql3')->table('reps')
-                ->leftJoin('user_tdc', 'reps.numero', '=', 'user_tdc.number')
-                ->leftJoin('users', 'user_tdc.user_id', '=', 'users.id')
-                ->where('reps.autorizacion', '=', $autorizacion)
-                ->get();
+            $cards = DB::table('consultas.repsaliado as ra')
+                ->leftjoin('aliado.users as u', 'u.id', '=', 'ra.user_id')
+                ->leftjoin('aliado.user_tdc as ut', 'u.id', '=', 'ut.user_id')
+                ->where([
+                    ['ra.autorizacion', '=', $autorizacion],
+                    ['ut.number', 'like', $tarjeta]
+                ])->get();
 
             foreach($cards as $ca)
             {
+
                 echo $autorizacion.',"';
                 echo $ca->autorizacion.'","';
-                echo $ca->fecha_cobro.'","';
+                echo $ca->fecha.'","';
                 echo $ca->number.'",';
+                echo $ca->id.',';
                 echo $ca->email."<br>";
             }}
 
-
         return view('aliado.index')->with(compact('cards'));
 
-
-
     }
+
 
     public function import(Request $request)
     {
@@ -111,13 +117,12 @@ class AliadoController extends Controller
                 $rep4 = fix_keys($rep5);
 
                 foreach ($rep4 as $rep3) {
-                    $rep3[10] = Str::after($rep3[10], 'C0000000');
 
                     Repsaliado::create([
 
                         'tarjeta' => $rep3[0],
 
-                        'user_id' => $rep3[10],
+                        'user_id' => $rep3[1],
 
                         'fecha' => $rep3[2],
 

@@ -15,11 +15,11 @@
             <form method="POST" action="/aliado">
                 @csrf
                 <div class="form-group">
-                    <textarea name="autorizaciones" id="autorizaciones" cols="30" rows="10" placeholder="Numeros de cuenta"></textarea>
+                    <textarea name="autorizaciones" id="autorizaciones" cols="30" rows="10" placeholder="Autorizacion,tarjeta"></textarea>
 
                 </div>
 
-                <button type="submit" class="btn btn-outline-primary">Post</button>
+                <button type="submit" class="btn btn-outline-primary">Buscar usuarios</button>
 
             </form>
 
