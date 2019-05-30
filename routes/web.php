@@ -22,6 +22,7 @@ Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediak
 
 Route::get('/cellers', 'CellersController@index')->name('cellers.index');
 Route::post('/cellers', 'CellersController@finder');
+Route::post('/cellers/import', 'CellersController@import')->name('importCellers');
 
 Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 Route::post('/aliado', 'AliadoController@finder');

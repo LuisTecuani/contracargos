@@ -14,11 +14,12 @@
             <form method="POST" action="/cellers">
                 @csrf
                 <div class="form-group">
-                    <textarea name="tarjetas" id="tarjetas" cols="30" rows="10" placeholder="Numeros de cuenta"></textarea>
+
+                    <textarea name="autorizaciones" id="autorizaciones" cols="30" rows="10" placeholder="Autorizacion,tarjeta"></textarea>
 
                 </div>
 
-                <button type="submit" class="btn btn-outline-primary">Post</button>
+                <button type="submit" class="btn btn-outline-primary">Buscar usuarios</button>
 
             </form>
 
@@ -26,6 +27,26 @@
 
     </div>
 
+    <div class="container">
+        <div class="card bg-light mt-3">
+            <div class="card-header">
+                Importa usuarios autorizados en los .rep a la tabla repscellers
+            </div>
+            <div class="card-body">
+
+
+
+
+                <form action="{{ route('importCellers') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="files[]" multiple class="form-control">
+                    <br>
+                    <button class="btn btn-success">Import User Data</button>
+                    <a class="btn btn-warning" href="{{ route('export') }}">Export User Data</a>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 

@@ -97,9 +97,9 @@ class AliadoController extends Controller
         }
 
 
+$archivos     =   $request->file('files');
 
-
-        foreach($request->file('files') as $file)
+        foreach($archivos as $file)
         {
 
 
@@ -115,8 +115,8 @@ class AliadoController extends Controller
                 }
 
                 $rep4 = fix_keys($rep5);
-
                 foreach ($rep4 as $rep3) {
+
 
                     Repsaliado::create([
 
