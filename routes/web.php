@@ -30,6 +30,7 @@ Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 
 Route::get('/asmas', 'AsmasController@index')->name('asmas.index');
 Route::post('/asmas', 'AsmasController@finder');
+Route::post('/asmas/import', 'AsmasController@import')->name('importAsmas');
 
 Route::get('export', 'MyController@export')->name('export');
 Route::get('importExportView', 'MyController@importExportView');
