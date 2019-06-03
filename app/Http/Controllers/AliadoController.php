@@ -70,16 +70,26 @@ class AliadoController extends Controller
                     ['ut.number', 'like', $tarjeta]
                 ])->get();
 
-            foreach($cards as $ca)
+            echo $autorizacion.',"';
+
+            if (!$cards)
+            {
+                echo 'usuario no encontrado","???","???","???"';
+            }else
+            {foreach($cards as $ca)
             {
 
-                echo $autorizacion.',"';
+
                 echo $ca->autorizacion.'","';
                 echo $ca->fecha.'","';
                 echo $ca->number.'",';
                 echo $ca->id.',';
-                echo $ca->email."<br>";
-            }}
+                echo $ca->email;
+            }
+
+            }
+            echo "<br>";
+        }
 
         return view('aliado.index')->with(compact('cards'));
 

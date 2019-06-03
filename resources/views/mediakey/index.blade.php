@@ -36,7 +36,7 @@
             <div class="card-body">
                 <form action="{{ route('importMediakey') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="file" class="form-control">
+                    <input type="file" name="files[]" multiple class="form-control">
                     <br>
                     <button class="btn btn-success">Import User Data</button>
                     <a class="btn btn-warning" href="{{ route('export') }}">Export User Data</a>
