@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CreditCards;
 use App\Repsmediakey;
 use App\Exports\UsersExport;
+use App\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
 use App\Providers\BroadcastServiceProvider;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class MediakeyController extends Controller
     public function index() {
 
          $cards1= DB::select('select rm.user_id, u.email,rm.fecha,rm.tarjeta as t1,cm.tarjeta as t2,
-                cm.autorizacion as aut2, rm.autorizacion as aut1
+                cm.autorizacion as aut2, rm.autorizacion as aut1, date (cm.created_at) as creacion
                 from consultas.contracargos_mediakey cm
                 left join repsmediakey rm on rm.autorizacion=cm.autorizacion
                 left join mediakey.users u on u.id=rm.user_id
@@ -38,9 +39,11 @@ class MediakeyController extends Controller
 
         foreach ($arr as $a) {
             $store = preg_split("[,]",$a);
-            DB::table('contracargos_mediakey')->insert(
-                ['autorizacion' => $store[0],
-                'tarjeta' => $store[1]]);
+            $ContracargosMediakey = new ContracargosMediakey;
+            $ContracargosMediakey->autorizacion = $store[0];
+            $ContracargosMediakey->tarjeta = $store[1];
+            $ContracargosMediakey->save();
+
        }
         return redirect()->route('mediakey.index');
     }

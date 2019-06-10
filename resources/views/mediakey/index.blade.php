@@ -60,7 +60,7 @@
                     @if($c->email == null and $c->aut1 == null)
                         <td><b><a class="text-danger"> Usuario no encontrado en reps</a></b></td>
                         @elseif($c->email== null and $c->aut1 != null)
-                            <td><b><a class="text-danger"> Usuario no encontrado en tabla users</a></b></td>
+                            <td><b><a class="text-danger"> Usuario no encontrado en users</a></b></td>
                         @else
                         <td>{{$c->email}}</td>
                     @endif
@@ -78,19 +78,21 @@
                 <th scope="col">Tarjeta excel</th>
                 <th scope="col">Tarjeta DB</th>
                 <th scope="col">Fecha Rep</th>
+                <th scope="col">Fecha Registro</th>
             </tr>
             </thead>
             <tbody>
             @foreach($cards1 as $c)
                     <td>{{$c->aut2}}</td>
                     @if(is_null($c->aut1))
-                        <td><b><a class="text-danger">Autorización no encontrada en reps</a></b></td>
+                        <td><b><a class="text-danger">Autorización no encontrada</a></b></td>
                     @else
                         <td>{{$c->aut1}}</td>
                     @endif
                     <td>{{$c->t2}}</td>
                     <td>{{$c->t1}}</td>
                     <td>{{$c->fecha}}</td>
+                    <td>{{$c->creacion}}</td>
                     </tr>
             @endforeach
             </tbody>
