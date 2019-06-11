@@ -72,7 +72,7 @@ class AliadoController extends Controller
 
             echo $autorizacion.',"';
 
-            if (!$cards)
+            if (count($cards) === 0)
             {
                 echo 'usuario no encontrado","???","???","???"';
             }else
@@ -111,7 +111,6 @@ $archivos     =   $request->file('files');
 
         foreach($archivos as $file)
         {
-
 
             $rep10 = file_get_contents($file);
             if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {

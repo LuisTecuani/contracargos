@@ -35,36 +35,30 @@ class CellersController extends Controller
         echo '"num_buscado","autorizacion","fecha","number","user_id","email"'."<br>";
         foreach($autorizacionesRaw as $autorizacionRaw1) {
 
-            $autorizacionRaw = preg_split("[,]",$autorizacionRaw1);
+            $autorizacionRaw = preg_split("[,]", $autorizacionRaw1);
 
 
-            if(strlen($autorizacionRaw[0]) == 1)
-            {
+            if (strlen($autorizacionRaw[0]) == 1) {
                 $autorizacion = "00000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw[0]) == 2)
-            {
+            if (strlen($autorizacionRaw[0]) == 2) {
                 $autorizacion = "0000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw[0]) == 3)
-            {
+            if (strlen($autorizacionRaw[0]) == 3) {
                 $autorizacion = "000$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw[0]) == 4)
-            {
+            if (strlen($autorizacionRaw[0]) == 4) {
                 $autorizacion = "00$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw[0]) == 5)
-            {
+            if (strlen($autorizacionRaw[0]) == 5) {
                 $autorizacion = "0$autorizacionRaw[0]";
             }
 
-            if(strlen($autorizacionRaw[0]) == 6)
-            {
+            if (strlen($autorizacionRaw[0]) == 6) {
                 $autorizacion = "$autorizacionRaw[0]";
             }
 
@@ -79,18 +73,26 @@ class CellersController extends Controller
                 ])->get();
 
 
-            foreach($cards as $ca)
-            {
+            echo $autorizacion . ',"';
 
-                echo $autorizacion.',"';
-                echo $ca->autorizacion.'","';
-                echo $ca->fecha.'","';
-                echo $ca->number.'",';
-                echo $ca->id.',';
-                echo $ca->email."<br>";
-            }}
+            if (count($cards) === 0) {
+                echo 'usuario no encontrado","???","???","???"';
+            } else {
+                foreach ($cards as $ca) {
 
+
+                    echo $ca->autorizacion . '","';
+                    echo $ca->fecha . '","';
+                    echo $ca->number . '",';
+                    echo $ca->user_id . ',';
+                    echo $ca->email;
+                }
+
+            }
+            echo "<br>";
+        }
         return view('cellers.index')->with(compact('cards'));
+
     }
 
 
