@@ -45,34 +45,12 @@
 
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-3">
+    <div class="col-md-8">
         <table class="table">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">User_id</th>
                 <th scope="col">Email</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($cards1 as $c)
-                <tr>
-                    <td>{{$c->user_id}}</td>
-                    @if($c->email == null and $c->aut1 == null)
-                        <td><b><a class="text-danger"> Usuario no encontrado en reps</a></b></td>
-                        @elseif($c->email== null and $c->aut1 != null)
-                            <td><b><a class="text-danger"> Usuario no encontrado en users</a></b></td>
-                        @else
-                        <td>{{$c->email}}</td>
-                    @endif
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-5">
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
                 <th scope="col">Autorizacion excel</th>
                 <th scope="col">Autorizacion rep</th>
                 <th scope="col">Tarjeta excel</th>
@@ -82,7 +60,16 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($cards1 as $c)
+            @foreach($cards as $c)
+                <tr>
+                    <td>{{$c->user_id}}</td>
+                    @if($c->email == null and $c->aut1 == null)
+                        <td><b><a class="text-danger"> Usuario no encontrado en reps</a></b></td>
+                        @elseif($c->email== null and $c->aut1 != null)
+                            <td><b><a class="text-danger"> Usuario no encontrado en users</a></b></td>
+                        @else
+                        <td>{{$c->email}}</td>
+                    @endif
                     <td>{{$c->aut2}}</td>
                     @if(is_null($c->aut1))
                         <td><b><a class="text-danger">Autorización no encontrada</a></b></td>
@@ -93,10 +80,12 @@
                     <td>{{$c->t1}}</td>
                     <td>{{$c->fecha}}</td>
                     <td>{{$c->creacion}}</td>
-                    </tr>
+
+                </tr>
             @endforeach
             </tbody>
         </table>
+         {{$cards->render()}}
     </div>
     <div class="col-md-2"></div>
 </div>

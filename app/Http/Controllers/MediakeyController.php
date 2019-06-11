@@ -19,34 +19,38 @@ class MediakeyController extends Controller
 
     public function index() {
 
-         $cards1= DB::select('select rm.user_id, u.email,rm.fecha,rm.tarjeta as t1,cm.tarjeta as t2,
-                cm.autorizacion as aut2, rm.autorizacion as aut1, date (cm.created_at) as creacion
-                from consultas.contracargos_mediakey cm
-                left join repsmediakey rm on rm.autorizacion=cm.autorizacion
-                left join mediakey.users u on u.id=rm.user_id
-                where right(cm.tarjeta,2)=right(rm.tarjeta,2) 
-                or rm.autorizacion is null 
-                order by cm.id');
-        return view('mediakey.index',compact('cards1'));
+        $cards = DB::table('consultas.contracargos_mediakey as cm')
+                ->leftJoin('consultas.repsmediakey as rm','rm.autorizacion','=','cm.autorizacion')
+                ->leftJoin('mediakey.users as u','u.id','=','rm.user_id')
+                ->select('rm.user_id as user_id','u.email as email','rm.fecha as fecha','rm.tarjeta as t1','cm.tarjeta as t2',
+                    'cm.autorizacion as aut2', 'rm.autorizacion as aut1','cm.created_at as creacion')
+                //->orderBy('cm.id')
+                ->whereColumn('rm.terminacion','cm.terminacion')
+                ->paginate(16);
+
+
+        return view('mediakey.index',compact('cards'));
     }
 
     public function store(){
-        
-        DB::table('contracargos_mediakey')->truncate();
-
+        //DB::table('contracargos_mediakey')->truncate();
         $autorizacionesS = request()->input('autorizaciones');
-        $arr = preg_split("[\r\n]", $autorizacionesS);
+        if (preg_match("/[0-9][[:punct:]][0-9]/",$autorizacionesS)) {
+            $arr = preg_split("[\r\n]", $autorizacionesS);
+            foreach ($arr as $a) {
+                $store = preg_split("[,]", $a);
+                $ContracargosMediakey = new ContracargosMediakey;
+                $ContracargosMediakey->autorizacion = $store[0];
+                $ContracargosMediakey->tarjeta = $store[1];
+                $ContracargosMediakey->save();
+            }
+            return redirect()->route('mediakey.index');
+        }
+        else {
+            return redirect()->route('mediakey.index');
 
-        foreach ($arr as $a) {
-            $store = preg_split("[,]",$a);
-            $ContracargosMediakey = new ContracargosMediakey;
-            $ContracargosMediakey->autorizacion = $store[0];
-            $ContracargosMediakey->tarjeta = $store[1];
-            $ContracargosMediakey->save();
-
-       }
-        return redirect()->route('mediakey.index');
-    }
+        }
+        }
 
     
 

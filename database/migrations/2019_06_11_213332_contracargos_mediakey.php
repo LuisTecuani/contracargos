@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContracargosMediakeysTable extends Migration
+class ContracargosMediakey extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateContracargosMediakeysTable extends Migration
      */
     public function up()
     {
-        Schema::create('contracargos_mediakey', function (Blueprint $table) {
+        Schema::create('consultas.contracargos_mediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('autorizacion');
-            $table->integer('tarjeta');            
+            $table->integer('tarjeta');
+            $table->integer('teminacion');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateContracargosMediakeysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contracargos_mediakey');
+        //
     }
 }

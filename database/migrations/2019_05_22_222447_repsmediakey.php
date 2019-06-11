@@ -16,6 +16,7 @@ class Repsmediakey extends Migration
         Schema::create('repsmediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('tarjeta');
+            $table->integer('teminacion');
             $table->integer('user_id');
             $table->bigInteger('fecha');
             $table->bigInteger('autorizacion');
