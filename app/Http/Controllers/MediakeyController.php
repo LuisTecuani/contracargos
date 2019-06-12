@@ -91,6 +91,8 @@ class MediakeyController extends Controller
 
                         'tarjeta' => $rep3[0],
 
+                        'terminacion' => substr($rep3[0],-2,2),
+
                         'user_id' => $rep3[10],
 
                         'fecha' => $rep3[2],
