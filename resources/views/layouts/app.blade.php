@@ -10,7 +10,6 @@
 <body>
 {{-- That's how you write a comment in blade --}}
 
-@include('inc.navbar')
 
 <main class="container mt-4">
     @yield('content')

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CreditCards;
 use App\Repsmediakey;
 use App\Exports\UsersExport;
+use App\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
 use App\Providers\BroadcastServiceProvider;
 use Illuminate\Http\Request;
@@ -18,118 +19,40 @@ class MediakeyController extends Controller
 
     public function index() {
 
-        if ($searched_card = [request('tarjetas')]) {
+        $cards = DB::table('consultas.contracargos_mediakey as cm')
+                ->leftJoin('consultas.repsmediakey as rm','rm.autorizacion','=','cm.autorizacion')
+                ->leftJoin('mediakey.users as u','u.id','=','rm.user_id')
+                ->select('rm.user_id as user_id','u.email as email','rm.fecha as fecha','rm.tarjeta as t1','cm.tarjeta as t2',
+                    'cm.autorizacion as aut2', 'rm.autorizacion as aut1','cm.created_at as creacion')
+                //->orderBy('cm.id')
+                ->whereColumn('rm.terminacion','cm.terminacion')
+                ->paginate(16);
 
 
-        $cards = CreditCards::with('user')->where('number', 'like', compact('searched_card'))->get();
-
-
-        } else {
-            $cards = CreditCards::with('user')->latest()->paginate(14);
-        }
-
-        return view('mediakey.index', compact('cards'));
+        return view('mediakey.index',compact('cards'));
     }
 
-    public function show()
-    {
-
-        $cardsA = [
-            '415231%0840',
-            '549949%8516',
-            '549949%8516',
-            '549949%8516',
-            '415231%1570',
-            '415231%7748',
-            '547046%4570',
-            '493172%3614',
-            '528843%3700',
-            '426807%6665',
-            '426807%6665',
-            '415231%0667',
-            '415231%4658',
-            '415231%1875',
-            '491573%3115',
-            '415231%1570',
-            '415231%1570'
-        ];
-
-
-        echo '"id","email","number","num_buscado"'."<br>";
-        foreach($cardsA as $card) {
-
-            $cards = CreditCards::with('user')->where('number', 'like', compact('card'))->get();
-            foreach($cards as $ca){
-                echo $ca->user_id.',"';
-                echo $ca->user->email.'",';
-                echo $ca->number.','.$card."<br>";
-        }}
-        return (new UsersExport)->download('users.xlsx');
-    }
-
-    public function finder() {
-
-
-            $autorizacionesS =  request()->input('autorizaciones');
-
-            $autorizacionesRaw = preg_split("[\r\n]",$autorizacionesS);
-
-            echo '"num_buscado","autorizacion","fecha","number","user_id","email"'."<br>";
-
-            foreach($autorizacionesRaw as $autorizacionRaw) {
-                if(strlen($autorizacionRaw) == 1)
-                {
-                    $autorizacion = "00000$autorizacionRaw";
-                }
-
-                if(strlen($autorizacionRaw) == 2)
-                {
-                    $autorizacion = "0000$autorizacionRaw";
-                }
-
-                if(strlen($autorizacionRaw) == 3)
-                {
-                    $autorizacion = "000$autorizacionRaw";
-                }
-
-                if(strlen($autorizacionRaw) == 4)
-                {
-                    $autorizacion = "00$autorizacionRaw";
-                }
-
-                if(strlen($autorizacionRaw) == 5)
-                {
-                    $autorizacion = "0$autorizacionRaw";
-                }
-
-                if(strlen($autorizacionRaw) == 6)
-                {
-                    $autorizacion = "$autorizacionRaw";
-                }
-
-                $cards = DB::table('consultas.repsmediakey as rm')
-                    ->leftjoin('mediakey.users as u', 'u.id', '=', 'rm.user_id')
-                    ->leftjoin('mediakey.credit_cards as cc', 'u.id', '=', 'cc.user_id')
-                    ->where('rm.autorizacion', '=', $autorizacion)
-                    ->get();
-
-                foreach($cards as $ca)
-                {
-
-                    echo $autorizacion.',"';
-                    echo $ca->autorizacion.'","';
-                    echo $ca->fecha.'","';
-                    echo $ca->number.'",';
-                    echo $ca->id.',';
-                    echo $ca->email."<br>";
-                }}
-
-
-            return view('mediakey.index')->with(compact('cards'));
-
-
+    public function store(){
+        //DB::table('contracargos_mediakey')->truncate();
+        $autorizacionesS = request()->input('autorizaciones');
+        if (preg_match("/[0-9][[:punct:]][0-9]/",$autorizacionesS)) {
+            $arr = preg_split("[\r\n]", $autorizacionesS);
+            foreach ($arr as $a) {
+                $store = preg_split("[,]", $a);
+                $ContracargosMediakey = new ContracargosMediakey;
+                $ContracargosMediakey->autorizacion = $store[0];
+                $ContracargosMediakey->tarjeta = $store[1];
+                $ContracargosMediakey->save();
+            }
+            return redirect()->route('mediakey.index');
+        }
+        else {
+            return redirect()->route('mediakey.index');
 
         }
+        }
+
+    
 
     public function import(Request $request)
     {
@@ -167,6 +90,8 @@ class MediakeyController extends Controller
                     Repsmediakey::create([
 
                         'tarjeta' => $rep3[0],
+
+                        'terminacion' => substr($rep3[0],-2,2),
 
                         'user_id' => $rep3[10],
 
