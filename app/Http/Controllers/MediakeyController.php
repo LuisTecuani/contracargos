@@ -19,23 +19,25 @@ class MediakeyController extends Controller
 
     public function index() {
 
+
         $cards = DB::table('consultas.contracargos_mediakey as cm')
                 ->leftJoin('consultas.repsmediakey as rm','rm.autorizacion','=','cm.autorizacion')
                 ->leftJoin('mediakey.users as u','u.id','=','rm.user_id')
                 ->select('rm.user_id as user_id','u.email as email','rm.fecha as fecha','rm.tarjeta as t1','cm.tarjeta as t2',
                     'cm.autorizacion as aut2', 'rm.autorizacion as aut1','cm.created_at as creacion')
-                //->orderBy('cm.id')
-                ->whereColumn('rm.terminacion','cm.terminacion')
-                ->paginate(16);
-
+                ->whereColumn('rm.terminacion','cm.tarjeta')
+                ->orWhere('rm.autorizacion',null)
+                ->orderBy('cm.id')
+                ->paginate(14);
 
         return view('mediakey.index',compact('cards'));
     }
 
-    public function store(){
-        //DB::table('contracargos_mediakey')->truncate();
-        $autorizacionesS = request()->input('autorizaciones');
-        if (preg_match("/[0-9][[:punct:]][0-9]/",$autorizacionesS)) {
+    public function store(Request $request){
+        $request->validate([
+            'autorizaciones' => 'regex:/[0-9]{6}[[:punct:]][0-9]{4}\r\n[0-9]{6}[[:punct:]][0-9]{4}/i',
+        ]);
+        $autorizacionesS = $request->input('autorizaciones');
             $arr = preg_split("[\r\n]", $autorizacionesS);
             foreach ($arr as $a) {
                 $store = preg_split("[,]", $a);
@@ -45,11 +47,7 @@ class MediakeyController extends Controller
                 $ContracargosMediakey->save();
             }
             return redirect()->route('mediakey.index');
-        }
-        else {
-            return redirect()->route('mediakey.index');
 
-        }
         }
 
     
@@ -90,8 +88,6 @@ class MediakeyController extends Controller
                     Repsmediakey::create([
 
                         'tarjeta' => $rep3[0],
-
-                        'terminacion' => substr($rep3[0],-2,2),
 
                         'user_id' => $rep3[10],
 
