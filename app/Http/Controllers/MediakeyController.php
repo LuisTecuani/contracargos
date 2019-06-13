@@ -9,6 +9,7 @@ use App\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
 use App\Providers\BroadcastServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,12 +31,13 @@ class MediakeyController extends Controller
                 ->orderBy('cm.id')
                 ->paginate(14);
 
+
         return view('mediakey.index',compact('cards'));
     }
 
     public function store(Request $request){
         $request->validate([
-            'autorizaciones' => 'regex:/[0-9]{6}[[:punct:]][0-9]{4}\r\n[0-9]{6}[[:punct:]][0-9]{4}/i',
+            'autorizaciones' => 'regex:/[0-9]{6}[[:punct:]][0-9]{4}/i',
         ]);
         $autorizacionesS = $request->input('autorizaciones');
             $arr = preg_split("[\r\n]", $autorizacionesS);
@@ -49,8 +51,19 @@ class MediakeyController extends Controller
             return redirect()->route('mediakey.index');
 
         }
+        public function store2 (Request $request){
+        $request-> validate([
+            'autorizacion' => 'required|digits:6|numeric',
+            'terminacion' => 'required|digits:4|numeric',
+        ]);
+            $ContracargosMediakey = new ContracargosMediakey;
+            $ContracargosMediakey->autorizacion= $request->input('autorizacion');
+            $ContracargosMediakey->tarjeta= $request->input('terminacion');
+            $ContracargosMediakey->save();
 
-    
+            return redirect()->route('mediakey.index');
+        }
+
 
     public function import(Request $request)
     {
@@ -88,6 +101,8 @@ class MediakeyController extends Controller
                     Repsmediakey::create([
 
                         'tarjeta' => $rep3[0],
+
+                        'terminacion' => substr( $rep3,-4,4),
 
                         'user_id' => $rep3[10],
 

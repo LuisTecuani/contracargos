@@ -13,9 +13,6 @@
         <div class="alert-primary">Autorización: 6 Digitos</div>
         <div class="alert-primary">Separacion por coma</div>
         <div class="alert-primary">Terminación Tarjeta: 4 Digitos</div>
-
-
-
     @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -27,7 +24,7 @@
         @endif
     </div>
         <div class="row">
-            <div class="col-md-2 ">
+            <div class="col-md-2 mt-1">
                 <form method="POST" action="/mediakey">
                     @csrf
                     <div class="form-group">
@@ -35,12 +32,11 @@
                                   cols="30" rows="10" placeholder="Autorización, terminación tarjeta" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-outline-primary" >Post</button>
-                </form>
 
+                </form>
             </div>
         </div>
     <div class="col-md-1"></div>
-
     <div class="col-md-3">
         <div class="card bg-light mt-2">
             <div class="card-header">
@@ -57,10 +53,32 @@
         </div>
     </div>
     <div class="col-md-2"></div>
+
 </div>
 
+<div class="container">
+    <div class="row justify-content-md-center ">
+        <div class="col-md-2 "></div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <form method="POST" action="{{ route('index2') }}">
+                    @csrf
+                    <input class="form-control form-control-lg mt-1" type="text" placeholder="Autorización (6 digitos)" name="autorizacion" id="autorizacion">
+                    <input class="form-control form-control-lg mt-1" type="text" placeholder="Terminación Tarjeta (6 digitos)" name="terminacion" id="terminacion">
+                    <button type="submit" class="btn btn-outline-primary mt-3">Registrar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+
+
+
 <div class="row">
-    <div class="col-md-2"></div>
+    <div class="col-md-2 bg-light mt-3"></div>
     <div class="col-md-8">
         <table class="table">
             <thead class="thead-dark">
