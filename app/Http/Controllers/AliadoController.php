@@ -97,14 +97,6 @@ class AliadoController extends Controller
     public function import(Request $request)
     {
 
-        function fix_keys($array) {
-            foreach ($array as $k => $val) {
-                if (is_array($val))
-                    $array[$k] = fix_keys($val); //recurse
-            }
-            return array_values($array);
-        }
-
         $archivos     =   $request->file('files');
 
         foreach($archivos as $file)
@@ -113,7 +105,7 @@ class AliadoController extends Controller
             $valid = DB::table('consultas.repsaliado as ra')
                 ->where( 'source_file', 'like', $source)->get();
 
-            if (count($valid) === 0)
+            if (count($valid) !== 0)
             {
                 $rep10 = file_get_contents($file);
 
