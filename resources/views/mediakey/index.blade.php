@@ -3,7 +3,7 @@
     Mediakey
 @endsection
 @include('inc.navbar')
-
+{{$var=2}}
 <body>
 <br>
 <div class="row">
@@ -11,7 +11,6 @@
     <div class="col-md-2">
         <h1><b>Contracargos mediakey</b></h1>
         <div class="alert-primary">Autorización: 6 Digitos</div>
-        <div class="alert-primary">Separacion por coma</div>
         <div class="alert-primary">Terminación Tarjeta: 4 Digitos</div>
     @if ($errors->any())
             <div class="alert alert-danger">
@@ -23,6 +22,7 @@
             </div>
         @endif
     </div>
+    @if($var==1)
         <div class="row">
             <div class="col-md-2 mt-1">
                 <form method="POST" action="/mediakey">
@@ -31,8 +31,7 @@
                         <textarea name="autorizaciones" id="autorizaciones" pattern="\d" title="Username should only contain lowercase letters. e.g. john"
                                   cols="30" rows="10" placeholder="Autorización, terminación tarjeta" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-outline-primary" >Post</button>
-
+                    <button type="submit" class="btn btn-outline-primary" >Registrar</button>
                 </form>
             </div>
         </div>
@@ -40,7 +39,7 @@
     <div class="col-md-3">
         <div class="card bg-light mt-2">
             <div class="card-header">
-                Importa usuarios autorizados en los .rep a la tabla rep mediakey
+                Importa respuestas de cobranza (REP)
             </div>
             <div class="card-body">
                 <form action="{{ route('importMediakey') }}" method="POST" enctype="multipart/form-data">
@@ -52,29 +51,21 @@
             </div>
         </div>
     </div>
+
+@elseif($var==2)
+        <div class="col-md-2">
+                <form method="POST" action="{{ route('index2') }}">
+                    @csrf
+                    <input class="form-control form-control-lg mt-lg-2" type="text" placeholder="Autorización 6 Digitos" name="autorizacion" id="autorizacion">
+                    <input class="form-control form-control-lg mt-lg-2" type="text" placeholder="Terminación Tarjeta 4 Digitos" name="terminacion" id="terminacion">
+                    <button type="submit" class="btn btn-outline-primary mt-3">Registrar</button>
+                </form>
+        </div>
+        <div class="col-md-4"></div>
+@endif
     <div class="col-md-2"></div>
 
 </div>
-
-<div class="container">
-    <div class="row justify-content-md-center ">
-        <div class="col-md-2 "></div>
-        <div class="col-md-8">
-            <div class="form-group">
-                <form method="POST" action="{{ route('index2') }}">
-                    @csrf
-                    <input class="form-control form-control-lg mt-1" type="text" placeholder="Autorización (6 digitos)" name="autorizacion" id="autorizacion">
-                    <input class="form-control form-control-lg mt-1" type="text" placeholder="Terminación Tarjeta (6 digitos)" name="terminacion" id="terminacion">
-                    <button type="submit" class="btn btn-outline-primary mt-3">Registrar</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="col-md-2"></div>
-    </div>
-</div>
-
-
 
 
 <div class="row">
@@ -91,6 +82,7 @@
                 <th scope="col">Tarjeta DB</th>
                 <th scope="col">Fecha Rep</th>
                 <th scope="col">Fecha Registro</th>
+
             </tr>
             </thead>
             <tbody>
