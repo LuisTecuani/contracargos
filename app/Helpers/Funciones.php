@@ -1,11 +1,12 @@
 <?php
 
-if (!function_exists('fix_keys')) {
+
     /**
-    Reindexa un array o un array de arrays
+     * Reindexa un array o un array de arrays
      * */
 
-    function fix_keys($array) {
+    function fix_keys($array)
+    {
         foreach ($array as $k => $val) {
             if (is_array($val))
                 $array[$k] = fix_keys($val); //recursive
@@ -13,15 +14,15 @@ if (!function_exists('fix_keys')) {
         return array_values($array);
     }
 
-}
 
-if (!function_exists('accep_rep_to_array')) {
+
     /**
      * De los .rep toma los datos de los usuarios aceptados
      * y los prepara como array
      * */
 
-    function accep_rep_to_array($texto) {
+    function accep_rep_to_array($texto)
+    {
 
         $rep9 = Str::after($texto, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                        ');
         $rep8 = Str::before($rep9, 'Totales:                                                                           ');
@@ -29,8 +30,7 @@ if (!function_exists('accep_rep_to_array')) {
         $rep6 = preg_grep("/([[:digit:]]{16})/", $rep7);
         $rep5 = [];
 
-        foreach ($rep6 as $cls => $vls)
-        {
+        foreach ($rep6 as $cls => $vls) {
 
             $rep5[$cls] = preg_grep("/\S/", preg_split("/\s/", $vls));
 
@@ -40,6 +40,5 @@ if (!function_exists('accep_rep_to_array')) {
         return $rep4;
     }
 
-}
 
 

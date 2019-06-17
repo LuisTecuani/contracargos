@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repscellers;
 use App\CreditCards;
+use App\Helpers\Funciones;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class CellersController extends Controller
 {
+
+
     public function index() {
 
         if ($searched_card = [request('tarjetas')]) {
@@ -145,7 +148,7 @@ class CellersController extends Controller
         return back();
 
     }
-        
+
 
 
 }
