@@ -18,9 +18,10 @@ class Repsmediakey extends Migration
             $table->bigInteger('tarjeta');
             $table->integer('terminacion');
             $table->integer('user_id');
-            $table->bigInteger('fecha');
-            $table->bigInteger('autorizacion');
+            $table->date('fecha');
+            $table->string('autorizacion');
             $table->string('monto');
+            $table->string('source_file');
             $table->timestamps();
         });
     }

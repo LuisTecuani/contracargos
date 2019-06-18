@@ -42,6 +42,7 @@ class MediakeyController extends Controller
                 $ContracargosMediakey = new ContracargosMediakey;
                 $ContracargosMediakey->autorizacion = $store[0];
                 $ContracargosMediakey->tarjeta = $store[1];
+                $ContracargosMediakey->terminacion = substr($store[1],-4,4);
                 $ContracargosMediakey->save();
             }
             return redirect()->route('mediakey.index');
@@ -96,9 +97,9 @@ class MediakeyController extends Controller
                     ]);
                 }
             }
-        }
+        }}
         return back();
-    }}
+    }
 
     public function export()
     {
