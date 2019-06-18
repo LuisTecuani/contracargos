@@ -1,3 +1,4 @@
+@csrf
 <div class="card-header">
     Importa respuestas de cobranza (REP)
 </div>

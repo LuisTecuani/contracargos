@@ -1,3 +1,4 @@
+users
 <div class="row">
     <div class="col-md-2 bg-light mt-3"></div>
     <div class="col-md-8">
@@ -12,49 +13,48 @@
                 <th scope="col">Tarjeta DB</th>
                 <th scope="col">Fecha Rep</th>
                 <th scope="col">Fecha Registro</th>
-
             </tr>
             </thead>
             <tbody>
-            @foreach($cards as $c)
+            @foreach($cards2 as $c2)
                 <tr>
-                    @if($c->user_id == null)
+                    @if($c2->user_id == null)
                         <td><b><a class="text-danger">NULL</a></b></td>
                     @else
-                        <td>{{$c->user_id}}</td>
+                        <td>{{$c2->user_id}}</td>
                     @endif
-                    @if($c->email == null and $c->aut1 == null)
+                    @if($c2->email == null and $c2->aut1 == null)
                         <td><b><a class="text-danger"> NULL</a></b></td>
-                    @elseif($c->email== null and $c->aut1 != null)
+                    @elseif($c2->email== null and $c2->aut1 != null)
                         <td><b><a class="text-danger"> Usuario no encontrado en users</a></b></td>
                     @else
-                        <td>{{$c->email}}</td>
+                        <td>{{$c2->email}}</td>
                     @endif
-                    <td>{{$c->aut2}}</td>
-                    @if(is_null($c->aut1))
+                    <td>{{$c2->aut2}}</td>
+                    @if(is_null($c2->aut1))
                         <td><b><a class="text-danger">Autorización no encontrada</a></b></td>
                     @else
-                        <td>{{$c->aut1}}</td>
+                        <td>{{$c2->aut1}}</td>
                     @endif
-                    <td>{{$c->t2}}</td>
-                    @if($c->t1 == null)
+                    <td>{{$c2->t2}}</td>
+                    @if($c2->t1 == null)
                         <td><b><a class="text-danger">NULL</a></b></td>
                     @else
-                        <td>{{$c->t1}}</td>
+                        <td>{{$c2->t1}}</td>
                     @endif
-                    @if($c->fecha == null)
+                    @if($c2->fecha == null)
                         <td><b><a class="text-danger">NULL</a></b></td>
                     @else
-                        <td>{{$c->fecha}}</td>
+                        <td>{{$c2->fecha}}</td>
                     @endif
-                    <td>{{$c->creacion}}</td>
+                    <td>{{$c2->creacion}}</td>
 
                 </tr>
             @endforeach
             </tbody>
-            {{$cards->render()}}
+            {{$cards2->render()}}
         </table>
-        {{$cards->render()}}
+        {{$cards2->render()}}
 
     </div>
     <div class="col-md-2"></div>

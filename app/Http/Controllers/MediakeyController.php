@@ -18,56 +18,70 @@ use Maatwebsite\Excel\Facades\Excel;
 class MediakeyController extends Controller
 {
 
-    public function index() {
-
+    public function index()
+    {
 
         $cards = DB::table('consultas.contracargos_mediakey as cm')
-                ->leftJoin('consultas.repsmediakey as rm','rm.autorizacion','=','cm.autorizacion')
-                ->leftJoin('mediakey.users as u','u.id','=','rm.user_id')
-                ->select('rm.user_id as user_id','u.email as email','rm.fecha as fecha','rm.tarjeta as t1','cm.tarjeta as t2',
-                    'cm.autorizacion as aut2', 'rm.autorizacion as aut1','cm.created_at as creacion')
-                ->whereColumn('rm.terminacion','cm.tarjeta')
-                ->orWhere('rm.autorizacion',null)
-                ->orderBy('cm.id')
-                ->paginate(25);
+            ->leftJoin('consultas.repsmediakey as rm', 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin('mediakey.users as u', 'u.id', '=', 'rm.user_id')
+            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
+                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->orderBy('cm.id')
+            ->paginate(25);
 
+        $cards2 = DB::table('consultas.contracargos_mediakey as cm')
+            ->leftJoin('consultas.repsmediakey as rm', 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin('mediakey.users as u', 'u.id', '=', 'rm.user_id')
+            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
+                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->where('cm.created_at', 'like', '2019-06-18%')
+            ->orWhere('rm.autorizacion', null)
+            ->orderBy('cm.id')
+            ->paginate(25);
 
-        return view('mediakey.index',compact('cards'));
+        return view('mediakey.index', compact('cards', 'cards2'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
         ]);
         $autorizacionesS = $request->input('autorizaciones');
-            $arr = preg_split("[\r\n]", $autorizacionesS);
-            foreach ($arr as $a) {
-                $store = preg_split("[,]", $a);
-                $ContracargosMediakey = new ContracargosMediakey;
-                $ContracargosMediakey->autorizacion = $store[0];
-                $ContracargosMediakey->tarjeta = $store[1];
-                $ContracargosMediakey->save();
-            }
-            return redirect()->route('mediakey.index');
-
+        $arr = preg_split("[\r\n]", $autorizacionesS);
+        foreach ($arr as $a) {
+            $store = preg_split("[,]", $a);
+            $ContracargosMediakey = new ContracargosMediakey;
+            $ContracargosMediakey->autorizacion = $store[0];
+            $ContracargosMediakey->tarjeta = $store[1];
+            $ContracargosMediakey->save();
         }
-        public function store2 (Request $request){
-        $request-> validate([
+        return redirect()->route('mediakey.index');
+
+    }
+
+    public function store2(Request $request)
+    {
+        $request->validate([
             'autorizacion' => 'required|digits:6|numeric',
             'terminacion' => 'required|digits:4|numeric',
         ]);
-            $ContracargosMediakey = new ContracargosMediakey;
-            $ContracargosMediakey->autorizacion= $request->input('autorizacion');
-            $ContracargosMediakey->tarjeta= $request->input('terminacion');
-            $ContracargosMediakey->save();
+        $ContracargosMediakey = new ContracargosMediakey;
+        $ContracargosMediakey->autorizacion = $request->input('autorizacion');
+        $ContracargosMediakey->tarjeta = $request->input('terminacion');
+        $ContracargosMediakey->save();
 
-            return redirect()->route('mediakey.index');
-        }
+        return redirect()->route('mediakey.index');
+    }
 
 
     public function import(Request $request)
     {
-        function fix_keys($array) {
+        function fix_keys($array)
+        {
             foreach ($array as $k => $val) {
                 if (is_array($val))
                     $array[$k] = fix_keys($val); //recurse
@@ -75,9 +89,9 @@ class MediakeyController extends Controller
             return array_values($array);
         }
 
-        $archivos     =   $request->file('files');
+        $archivos = $request->file('files');
 
-        foreach($archivos as $file) {
+        foreach ($archivos as $file) {
 
 
             $rep10 = file_get_contents($file);
@@ -102,7 +116,7 @@ class MediakeyController extends Controller
 
                         'tarjeta' => $rep3[0],
 
-                        'terminacion' => substr( $rep3,-4,4),
+                        'terminacion' => substr($rep3, -4, 4),
 
                         'user_id' => $rep3[10],
 
