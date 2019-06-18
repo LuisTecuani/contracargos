@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-2 bg-light mt-3"></div>
     <div class="col-md-8">
-<table class="table mt-lg-3">
+<table class="table mt-lg-4">
     <thead class="thead-dark">
     <tr>
         <th scope="col">User_id</th>

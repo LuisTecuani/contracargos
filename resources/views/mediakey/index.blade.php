@@ -6,18 +6,7 @@
     <div class="row">
         <div class="col-md-2 bg-light mt-2"></div>
         <div class="col-md-2">
-            <h1><b>Contracargos mediakey</b></h1>
-            <div class="alert-primary">Autorización: 6 Digitos</div>
-            <div class="alert-primary">Terminación Tarjeta: 4 Digitos</div>
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('contracargos.errors')
         </div>
         @if($var==1)
             <div class="row">
@@ -43,7 +32,7 @@
         @elseif($var==2)
             <div class="col-md-1"></div>
             <div class="col-md-2">
-                <form method="POST" action="{{ route('index2') }}">
+                <form method="POST" action="{{ route('mediakey.index2') }}">
                     @csrf
                     @include('contracargos.user.input_data')
                 </form>
