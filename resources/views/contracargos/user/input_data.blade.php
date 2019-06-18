@@ -1,3 +1,4 @@
+@csrf
 <input class="form-control form-control-lg mt-lg-5" type="text" placeholder="Autorización 6 Digitos"
        name="autorizacion" id="autorizacion">
 <input class="form-control form-control-lg mt-lg-2" type="text"

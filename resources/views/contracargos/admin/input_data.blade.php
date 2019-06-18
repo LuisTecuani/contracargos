@@ -1,3 +1,4 @@
+@csrf
 <div class="form-group">
                         <textarea name="autorizaciones" id="autorizaciones" pattern="\d"
                                   title="Username should only contain lowercase letters. e.g. john"
