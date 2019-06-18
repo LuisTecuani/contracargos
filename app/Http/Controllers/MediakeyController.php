@@ -56,33 +56,23 @@ class MediakeyController extends Controller
 
     public function import(Request $request)
     {
-        function fix_keys($array) {
-            foreach ($array as $k => $val) {
-                if (is_array($val))
-                    $array[$k] = fix_keys($val); //recurse
-            }
-            return array_values($array);
-        }
 
         $archivos     =   $request->file('files');
 
-        foreach($archivos as $file) {
+        foreach($archivos as $file)
+        {
+            $source = Str::before($file->getClientOriginalName(), '.');
 
+            $valid = DB::table('consultas.repsmediakey as ra')
+                ->where( 'source_file', 'like', $source)->get();
 
-            $rep10 = file_get_contents($file);
+            if (count($valid) === 0)
+            {
+                $rep10 = file_get_contents($file);
 
-
-            if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                $rep9 = Str::after($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                        ');
-                $rep8 = Str::before($rep9, 'Totales:                                                                           ');
-                $rep7 = Arr::sort(preg_split("/\n/", $rep8));
-                $rep6 = preg_grep("/([[:digit:]]{16})/", $rep7);
-
-                foreach ($rep6 as $cls => $vls) {
-                    $rep5[$cls] = preg_grep("/\S/", preg_split("/\s/", $vls));
-                }
-
-                $rep4 = fix_keys($rep5);
+                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
+                {
+                    $rep4 = accep_rep_to_array($rep10);
 
                 foreach ($rep4 as $rep3) {
                     $rep3[10] = Str::after($rep3[10], 'C0000000');
@@ -91,7 +81,7 @@ class MediakeyController extends Controller
 
                         'tarjeta' => $rep3[0],
 
-                        'terminacion' => substr($rep3[0],-2,2),
+                        'terminacion' => substr($rep3[0],-4,4),
 
                         'user_id' => $rep3[10],
 
@@ -99,17 +89,16 @@ class MediakeyController extends Controller
 
                         'autorizacion' => $rep3[5],
 
-                        'monto' => $rep3[8]
+                        'monto' => $rep3[8],
+
+                        'source_file' => $source
 
                     ]);
-
                 }
-
-
             }
         }
         return back();
-    }
+    }}
 
     public function export()
     {
