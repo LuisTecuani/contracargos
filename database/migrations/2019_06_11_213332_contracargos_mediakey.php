@@ -17,7 +17,6 @@ class ContracargosMediakey extends Migration
             $table->bigIncrements('id');
             $table->integer('autorizacion');
             $table->integer('tarjeta');
-            $table->integer('terminacion');
             $table->timestamps();
         });
     }
