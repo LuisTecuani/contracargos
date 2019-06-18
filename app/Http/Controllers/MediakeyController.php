@@ -37,7 +37,7 @@ class MediakeyController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]\r\n(?R)[[0-9][[:punct:]][0-9]\r\n/i',
+            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
         ]);
         $autorizacionesS = $request->input('autorizaciones');
             $arr = preg_split("[\r\n]", $autorizacionesS);
