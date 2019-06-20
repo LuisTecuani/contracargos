@@ -15,6 +15,10 @@ class CellersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->database = ENV('DB_DATABASE2');
+
+        $this->model = "App\Reps$this->database";
     }
 
 
@@ -30,7 +34,7 @@ class CellersController extends Controller
             $cards = CreditCards::with('user')->latest()->paginate(14);
         }
 
-        return view('cellers.index', compact('cards'));
+        return view("$this->database.index", compact('cards'));
     }
 
     public function finder() {
@@ -71,9 +75,9 @@ class CellersController extends Controller
 
             $tarjeta = "%$autorizacionRaw[1]";
 
-            $cards = DB::table('consultas.repscellers as rc')
-                ->leftjoin('cellers.users as u', 'u.id', '=', 'rc.user_id')
-                ->leftjoin('cellers.tdc as t', 'u.id', '=', 't.user_id')
+            $cards = DB::table("consultas.reps$this->database as rc")
+                ->leftjoin("$this->database.users as u", 'u.id', '=', 'rc.user_id')
+                ->leftjoin("$this->database.tdc as t", 'u.id', '=', 't.user_id')
                 ->where([
                     ['rc.autorizacion', '=', $autorizacion],
                     ['t.number', 'like', $tarjeta]
@@ -98,7 +102,7 @@ class CellersController extends Controller
             }
             echo "<br>";
         }
-        return view('cellers.index')->with(compact('cards'));
+        return view("$this->database.index")->with(compact('cards'));
 
     }
 
@@ -106,14 +110,19 @@ class CellersController extends Controller
     public function import(Request $request)
     {
 
+
         $archivos     =   $request->file('files');
 
         foreach($archivos as $file)
         {
+        //    $table = "reps$this->table";
+
+   //         check_file_existence($file, $table);
             $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = DB::table('consultas.repscellers as rc')
+            $valid = DB::table("consultas.reps$this->database")
                 ->where( 'source_file', 'like', $source)->get();
+
 
             if (count($valid) === 0)
             {
@@ -127,7 +136,7 @@ class CellersController extends Controller
                     {
 
 
-                        Repscellers::create([
+                        $this->model::create([
 
                             'tarjeta' => $rep3[0],
 

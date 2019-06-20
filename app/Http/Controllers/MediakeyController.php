@@ -20,15 +20,22 @@ class MediakeyController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->database = ENV('DB_DATABASE1');
+
+        $this->model = "App\Reps$this->database";
+
+        $str = Str::title($this->database);
+        $this->model2 = "App\Contracargos$str";
     }
 
 
     public function index() {
 
 
-        $cards = DB::table('consultas.contracargos_mediakey as cm')
-            ->leftJoin('consultas.repsmediakey as rm', 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin('mediakey.users as u', 'u.id', '=', 'rm.user_id')
+        $cards = DB::table("consultas.contracargos_$this->database as cm")
+            ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("$this->database.users as u", 'u.id', '=', 'rm.user_id')
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
@@ -36,9 +43,9 @@ class MediakeyController extends Controller
             ->orderBy('cm.id')
             ->paginate(25);
 
-        $cards2 = DB::table('consultas.contracargos_mediakey as cm')
-            ->leftJoin('consultas.repsmediakey as rm', 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin('mediakey.users as u', 'u.id', '=', 'rm.user_id')
+        $cards2 = DB::table("consultas.contracargos_$this->database as cm")
+            ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("$this->database.users as u", 'u.id', '=', 'rm.user_id')
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
@@ -47,7 +54,7 @@ class MediakeyController extends Controller
             ->orderBy('cm.id')
             ->paginate(25);
 
-        return view('mediakey.index', compact('cards', 'cards2'));
+        return view("$this->database.index", compact('cards', 'cards2'));
     }
 
     public function store(Request $request)
@@ -59,12 +66,12 @@ class MediakeyController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
-            $ContracargosMediakey = new ContracargosMediakey;
-            $ContracargosMediakey->autorizacion = $store[0];
-            $ContracargosMediakey->tarjeta = $store[1];
-            $ContracargosMediakey->save();
+            $Contracargos = new $this->model2;
+            $Contracargos->autorizacion = $store[0];
+            $Contracargos->tarjeta = $store[1];
+            $Contracargos->save();
         }
-        return redirect()->route('mediakey.index');
+        return redirect()->route("$this->database.index");
 
     }
 
@@ -74,12 +81,12 @@ class MediakeyController extends Controller
             'autorizacion' => 'required|digits:6|numeric',
             'terminacion' => 'required|digits:4|numeric',
         ]);
-        $ContracargosMediakey = new ContracargosMediakey;
-        $ContracargosMediakey->autorizacion = $request->input('autorizacion');
-        $ContracargosMediakey->tarjeta = $request->input('terminacion');
-        $ContracargosMediakey->save();
+        $Contracargos = new $this->model2;
+        $Contracargos->autorizacion = $request->input('autorizacion');
+        $Contracargos->tarjeta = $request->input('terminacion');
+        $Contracargos->save();
 
-        return redirect()->route('mediakey.index');
+        return redirect()->route("$this->database.index");
     }
 
 
