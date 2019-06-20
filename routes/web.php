@@ -36,5 +36,7 @@ Route::get('export', 'MyController@export')->name('export');
 Route::get('importExportView', 'MyController@importExportView');
 Route::post('import', 'MyController@import')->name('import');
 
-Route::get('/pages  ','PagesController@index')->name('pages.index');
-Route::get('/about','PagesController@about')->name('pages.about');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

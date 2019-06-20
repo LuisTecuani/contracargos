@@ -66,15 +66,18 @@ Contracargos
             <div class="title m-b-md">
                 Contracargos
             </div>
+                @guest
 
+                    <h1>Please log in</h1>
+                @else
             <div class="links">
                 <a href="/mediakey">Mediakey</a>
                 <a href="/cellers">Cellers</a>
                 <a href="/asmas">Asmas</a>
                 <a href="/aliado">Aliado</a>
-                <a href="importExportView">Import / Export</a>
 
             </div>
+                @endguest
         </div>
     </div>
     </body>
