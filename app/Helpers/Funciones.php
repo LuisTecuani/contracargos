@@ -5,6 +5,7 @@
      * Reindexa un array o un array de arrays
      * */
 
+if (!function_exists('fix_keys')) {
     function fix_keys($array)
     {
         foreach ($array as $k => $val) {
@@ -13,7 +14,7 @@
         }
         return array_values($array);
     }
-
+}
 
 
     /**

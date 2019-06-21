@@ -110,19 +110,13 @@ class CellersController extends Controller
     public function import(Request $request)
     {
 
-
         $archivos     =   $request->file('files');
 
         foreach($archivos as $file)
         {
-        //    $table = "reps$this->table";
+            $table = "reps$this->database";
 
-   //         check_file_existence($file, $table);
-            $source = Str::before($file->getClientOriginalName(), '.');
-
-            $valid = DB::table("consultas.reps$this->database")
-                ->where( 'source_file', 'like', $source)->get();
-
+            $valid = check_file_existence($file, $table);
 
             if (count($valid) === 0)
             {
@@ -161,7 +155,5 @@ class CellersController extends Controller
         return back();
 
     }
-
-
 
 }
