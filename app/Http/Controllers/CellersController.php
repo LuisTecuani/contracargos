@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Repscellers;
 use App\CreditCards;
-use App\Helpers\Funciones;
+use App\FileProcessor;
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CellersController extends Controller
 {
-    public function __construct()
+    public function __construct(FileProcessor $imports)
     {
         $this->middleware('auth');
 
         $this->database = ENV('DB_DATABASE2');
 
         $this->model = "App\Reps$this->database";
+
+        $this->imports = $imports;
     }
 
 
@@ -116,7 +116,9 @@ class CellersController extends Controller
         {
             $table = "reps$this->database";
 
-            $valid = check_file_existence($file, $table);
+            $source = Str::before($file->getClientOriginalName(), '.');
+
+            $valid = $this->imports->checkFileExistence($table, $source);
 
             if (count($valid) === 0)
             {
@@ -124,7 +126,7 @@ class CellersController extends Controller
 
                 if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
                 {
-                    $rep4 = accep_rep_to_array($rep10);
+                    $rep4 = $this->imports->accepRepToArray($rep10);
 
                     foreach ($rep4 as $rep3)
                     {

@@ -116,7 +116,7 @@ class AsmasController extends Controller
 
                 if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
                 {
-                    $rep4 = accep_rep_to_array($rep10);
+                    $rep4 = accepRepToArray($rep10);
 
                     foreach ($rep4 as $rep3)
                     {

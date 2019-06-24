@@ -111,7 +111,7 @@ class MediakeyController extends Controller
                     $rep5[$cls] = preg_grep("/\S/", preg_split("/\s/", $vls));
                 }
 
-                $rep4 = fix_keys($rep5);
+                $rep4 = fixKeys($rep5);
 
                 foreach ($rep4 as $rep3) {
                     $rep3[10] = Str::after($rep3[10], 'C0000000');
