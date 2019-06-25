@@ -78,7 +78,7 @@ class MediakeyController extends Controller
             $Contracargos->tarjeta = $store[1];
             $Contracargos->save();
         }
-        Session::flash('flash_message', 'Mensaje de prueba');
+        Session()->flash('message', 'Datos Registrados');
 
         return redirect()->route("$this->database.index");
 
@@ -104,6 +104,7 @@ class MediakeyController extends Controller
         $request->validate([
            'files'=> 'required'
         ]);
+        Session()->flash('message', 'Rep Registrado');
 
         $archivos = $request->file('files');
 
@@ -147,7 +148,7 @@ class MediakeyController extends Controller
 
             }
         }
-        return back();
+        return redirect()->route("$this->database.index");
     }
 
     public function export()
