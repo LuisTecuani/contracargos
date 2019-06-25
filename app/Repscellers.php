@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Contracargos;
 
 use Illuminate\Database\Eloquent\Model;
 

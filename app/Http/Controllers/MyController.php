@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Contracargos\Http\Controllers;
 
-use App\Imports\RepsmediakeyImport;
+use Contracargos\Imports\RepsmediakeyImport;
 use Illuminate\Http\Request;
-use App\Exports\RepsmediakeyExport;
-use App\Imports\UsersImport;
+use Contracargos\Exports\RepsmediakeyExport;
+use Contracargos\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MyController extends Controller

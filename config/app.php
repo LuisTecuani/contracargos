@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Contracargos'),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,11 +169,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Contracargos\Providers\AppServiceProvider::class,
+        Contracargos\Providers\AuthServiceProvider::class,
+        // Contracargos\Providers\BroadcastServiceProvider::class,
+        Contracargos\Providers\EventServiceProvider::class,
+        Contracargos\Providers\RouteServiceProvider::class,
 
     ],
 

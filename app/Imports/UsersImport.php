@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Imports;
+namespace Contracargos\Imports;
 
-use App\User;
+use Contracargos\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\Importable;

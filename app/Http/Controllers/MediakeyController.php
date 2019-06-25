@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Contracargos\Http\Controllers;
 
-use App\CreditCards;
-use App\Repsmediakey;
+use Contracargos\CreditCards;
+use Contracargos\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use App\Exports\UsersExport;
+use Contracargos\Exports\UsersExport;
 use Illuminate\Http\Request;
-use App\ContracargosMediakey;
+use Contracargos\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-use App\Providers\BroadcastServiceProvider;
+use Contracargos\Providers\BroadcastServiceProvider;
 
 
 class MediakeyController extends Controller
@@ -24,10 +24,10 @@ class MediakeyController extends Controller
 
         $this->database = ENV('DB_DATABASE1');
 
-        $this->model = "App\Reps$this->database";
+        $this->model = "Contracargos\Reps$this->database";
 
         $str = Str::title($this->database);
-        $this->model2 = "App\Contracargos$str";
+        $this->model2 = "Contracargos\Contracargos$str";
     }
 
 
@@ -99,14 +99,15 @@ class MediakeyController extends Controller
 
     public function import(Request $request)
     {
+        $request->validate([
+           'files'=> 'required'
+        ]);
 
         $archivos = $request->file('files');
 
         foreach ($archivos as $file) {
 
-
             $rep10 = file_get_contents($file);
-
 
             if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
                 $rep9 = Str::after($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                        ');
