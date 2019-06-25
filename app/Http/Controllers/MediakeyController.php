@@ -66,10 +66,14 @@ class MediakeyController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
-            $Contracargos = new $this->model2;
-            $Contracargos->autorizacion = $store[0];
-            $Contracargos->tarjeta = $store[1];
-            $Contracargos->save();
+            $aut = strlen($store[0]);
+            if($aut < 7 && $aut > 0) {
+                if(preg_match('/^\d{1,4}$/', $store[1])){
+                    $Contracargos = new $this->model2;
+                    $Contracargos->autorizacion = $store[0];
+                    $Contracargos->tarjeta = $store[1];
+                    $Contracargos->save();}}
+
         }
         return redirect()->route("$this->database.index");
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\Repsaliado;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -24,3 +25,20 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->define(Repsaliado::class, function (Faker $faker) {
+    $tarjeta = $faker->creditCardNumber;
+    return [
+        'tarjeta' => $tarjeta,
+        'terminacion' => substr($tarjeta,-4,4),
+        'user_id' => $faker->randomNumber(6),
+        'fecha' => $faker->date('Y-m-d'),
+        'autorizacion' => $faker->randomNumber(6),
+        'monto' => $faker->randomNumber(4),
+        'source_file' => Str::random(24),
+    ];
+});
+
+
+
+

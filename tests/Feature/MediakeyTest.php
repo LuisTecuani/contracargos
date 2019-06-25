@@ -3,21 +3,37 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 
 class MediakeyTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /** @test */
-    public function a_user_can_register_data_from_rep_files()
+    public function a_non_authenticated_user_cant_browse_mediakey()
     {
-        $atributes = [
-            'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph
-        ];
+        $response = $this->get('/mediakey');
 
-        $this->post('/projects', $atributes);
+        $response->assertDontSee('Mediakey');
 
-        $this->assertDatabaseHas('projects', $atributes);
     }
+
+    /** @test */
+    public function an_authenticated_user_can_browse_mediakey()
+    {
+        $this->be($user = factory('App\User')->create());
+
+        $this->get('/mediakey')->assertSee('Mediakey');
+    }
+
+    /** @test */
+    public function a_non_authenticated_user_cant_see_nav_links_from_home()
+    {
+        $response = $this->get('/');
+
+        $response->assertDontSee('mediakey');
+    }
+
+
 }
