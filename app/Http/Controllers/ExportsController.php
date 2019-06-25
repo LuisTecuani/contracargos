@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Contracargos\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Exports\UsersExport;
+use Contracargos\Exports\UsersExport;
 use Maatwebsite\Excel\Exporter;
 
 class ExportsController

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Exports;
+namespace Contracargos\Exports;
 
-use App\User;
+use Contracargos\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 

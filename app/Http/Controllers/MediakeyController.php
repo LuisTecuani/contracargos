@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Contracargos\Http\Controllers;
 
-use App\CreditCards;
-use App\Repsmediakey;
-use App\Exports\UsersExport;
-use App\ContracargosMediakey;
-use Illuminate\Support\Facades\DB;
-use App\Providers\BroadcastServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Contracargos\CreditCards;
+use Contracargos\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Contracargos\Exports\UsersExport;
+use Illuminate\Http\Request;
+use Contracargos\ContracargosMediakey;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Contracargos\Providers\BroadcastServiceProvider;
 
 
 class MediakeyController extends Controller
@@ -23,15 +24,21 @@ class MediakeyController extends Controller
 
         $this->database = ENV('DB_DATABASE1');
 
-        $this->model = "App\Reps$this->database";
+        $this->model = "Contracargos\Reps$this->database";
 
         $str = Str::title($this->database);
-        $this->model2 = "App\Contracargos$str";
+        $this->model2 = "Contracargos\Contracargos$str";
     }
 
 
     public function index() {
 
+        $id = Auth::id();
+
+        $role = DB::table('consultas.users as u')
+            ->select('u.role')
+            ->where('u.id','=',$id)
+            ->get();
 
         $cards = DB::table("consultas.contracargos_$this->database as cm")
             ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -54,7 +61,7 @@ class MediakeyController extends Controller
             ->orderBy('cm.id')
             ->paginate(25);
 
-        return view("$this->database.index", compact('cards', 'cards2'));
+        return view("$this->database.index", compact('cards', 'cards2','role'));
     }
 
     public function store(Request $request)
@@ -96,14 +103,15 @@ class MediakeyController extends Controller
 
     public function import(Request $request)
     {
+        $request->validate([
+           'files'=> 'required'
+        ]);
 
         $archivos = $request->file('files');
 
         foreach ($archivos as $file) {
 
-
             $rep10 = file_get_contents($file);
-
 
             if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
                 $rep9 = Str::after($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                        ');

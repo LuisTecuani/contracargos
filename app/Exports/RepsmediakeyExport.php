@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Exports;
+namespace Contracargos\Exports;
 
-use App\Repsmediakey;
+use Contracargos\Repsmediakey;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 

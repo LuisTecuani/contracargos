@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Imports;
+namespace Contracargos\Imports;
 
-use App\Repsmediakey;
+use Contracargos\Repsmediakey;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
