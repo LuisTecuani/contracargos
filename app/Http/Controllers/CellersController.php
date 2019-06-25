@@ -1,10 +1,10 @@
 <?php
 
-namespace Contracargos\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Contracargos\Repscellers;
-use Contracargos\CreditCards;
-use Contracargos\Helpers\Funciones;
+use App\Repscellers;
+use App\CreditCards;
+use App\Helpers\Funciones;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class CellersController extends Controller
 
         $this->database = ENV('DB_DATABASE2');
 
-        $this->model = "Contracargos\Reps$this->database";
+        $this->model = "App\Reps$this->database";
     }
 
 

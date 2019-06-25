@@ -37,7 +37,7 @@
             "app/Helpers/Funciones.php"
         ],
         "psr-4": {
-            "Contracargos\\": "app/"
+            "App\\": "app/"
         },
         "classmap": [
             "database/seeds",

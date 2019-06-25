@@ -1,19 +1,19 @@
 <?php
 
-namespace Contracargos\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Contracargos\CreditCards;
-use Contracargos\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use Contracargos\Exports\UsersExport;
 use Illuminate\Http\Request;
-use Contracargos\ContracargosMediakey;
+use App\CreditCards;
+use App\Repsmediakey;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\UsersExport;
 use Illuminate\Support\Facades\Input;
-use Contracargos\Providers\BroadcastServiceProvider;
+use App\ContracargosMediakey;
+use App\Providers\BroadcastServiceProvider;
 
 
 class MediakeyController extends Controller
@@ -24,10 +24,10 @@ class MediakeyController extends Controller
 
         $this->database = ENV('DB_DATABASE1');
 
-        $this->model = "Contracargos\Reps$this->database";
+        $this->model = "App\Reps$this->database";
 
         $str = Str::title($this->database);
-        $this->model2 = "Contracargos\Contracargos$str";
+        $this->model2 = "App\Contracargos$str";
     }
 
 
@@ -78,6 +78,8 @@ class MediakeyController extends Controller
             $Contracargos->tarjeta = $store[1];
             $Contracargos->save();
         }
+        Session::flash('flash_message', 'Mensaje de prueba');
+
         return redirect()->route("$this->database.index");
 
     }

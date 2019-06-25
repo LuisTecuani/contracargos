@@ -1,8 +1,8 @@
 <?php
 
-namespace Contracargos\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Contracargos\Repsasmas;
+use App\Repsasmas;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
