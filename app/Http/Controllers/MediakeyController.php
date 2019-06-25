@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\CreditCards;
 use App\Repsmediakey;
-use App\Exports\UsersExport;
-use App\ContracargosMediakey;
-use Illuminate\Support\Facades\DB;
-use App\Providers\BroadcastServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use App\Exports\UsersExport;
+use Illuminate\Http\Request;
+use App\ContracargosMediakey;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use App\Providers\BroadcastServiceProvider;
 
 
 class MediakeyController extends Controller
@@ -32,6 +33,12 @@ class MediakeyController extends Controller
 
     public function index() {
 
+        $id = Auth::id();
+
+        $role = DB::table('consultas.users as u')
+            ->select('u.role')
+            ->where('u.id','=',$id)
+            ->get();
 
         $cards = DB::table("consultas.contracargos_$this->database as cm")
             ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -54,7 +61,7 @@ class MediakeyController extends Controller
             ->orderBy('cm.id')
             ->paginate(25);
 
-        return view("$this->database.index", compact('cards', 'cards2'));
+        return view("$this->database.index", compact('cards', 'cards2','role'));
     }
 
     public function store(Request $request)
