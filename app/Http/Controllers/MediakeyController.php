@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use App\CreditCards;
-use App\Repsmediakey;
+use App\Exports\UsersExport;
+use App\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
-use App\Exports\UsersExport;
-use Illuminate\Support\Facades\Input;
-use App\ContracargosMediakey;
-use App\Providers\BroadcastServiceProvider;
 
 
 class MediakeyController extends Controller
@@ -31,18 +28,17 @@ class MediakeyController extends Controller
     }
 
 
-    public function index() {
-
-        $id = Auth::id();
+    public function index()
+    {
 
         $role = DB::table('consultas.users as u')
             ->select('u.role')
-            ->where('u.id','=',$id)
+            ->where('u.id', '=', Auth::id())
             ->get();
 
-        $cards = DB::table("consultas.contracargos_$this->database as cm")
-            ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("$this->database.users as u", 'u.id', '=', 'rm.user_id')
+        $cards = DB::table("consultas.contracargos_mediakey as cm")
+            ->leftJoin("consultas.repsmediakey as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("mediakey.users as u", 'u.id', '=', 'rm.user_id')
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
@@ -50,18 +46,16 @@ class MediakeyController extends Controller
             ->orderBy('cm.id')
             ->paginate(25);
 
-        $cards2 = DB::table("consultas.contracargos_$this->database as cm")
-            ->leftJoin("consultas.reps$this->database as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("$this->database.users as u", 'u.id', '=', 'rm.user_id')
+        $cards2 = DB::table("consultas.contracargos_mediakey as cm")
+            ->leftJoin("consultas.repsmediakey as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("mediakey.users as u", 'u.id', '=', 'rm.user_id')
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->where('cm.created_at', 'like', '2019-06-18%')
-            ->orWhere('rm.autorizacion', null)
+            ->whereDate('cm.created_at', today())
             ->orderBy('cm.id')
-            ->paginate(25);
+            ->get();
 
-        return view("$this->database.index", compact('cards', 'cards2','role'));
+        return view("$this->database.index", compact('cards', 'cards2', 'role'));
     }
 
     public function store(Request $request)
@@ -102,11 +96,15 @@ class MediakeyController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-           'files'=> 'required'
+            'files' => 'required'
         ]);
-        Session()->flash('message', 'Rep Registrado');
+
 
         $archivos = $request->file('files');
+
+        $total = count($archivos);
+
+        Session()->flash('message', 'Reps Registrados: ' . $total);
 
         foreach ($archivos as $file) {
 

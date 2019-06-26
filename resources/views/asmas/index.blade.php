@@ -1,58 +1,50 @@
-
-
 @extends('layouts.app')
-
-@section('title')
- Asmas
-@endsection
-
+@section('title',"Asmas")
 @section('content')
-    <body>
-    <h1>Contracargos Asmas</h1>
 
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <form method="POST" action="/asmas">
-                @csrf
-                <div class="form-group">
-                    <textarea name="autorizaciones" id="autorizaciones" cols="30" rows="10" placeholder="Autorizacion,tarjeta"></textarea>
-
+    @foreach($role as $r)
+        @if($r->role ==1)
+            <div class="row">
+                <div class="col-md-2 bg-light mt-2"></div>
+                <div class="col-md-2 mt-2">
+                    <h1><b>Contracargos Asmas</b></h1>
+                    @include('contracargos.errors')
                 </div>
-
-                <button type="submit" class="btn btn-outline-primary">Buscar usuarios</button>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-
-    <div class="container">
-        <div class="card bg-light mt-3">
-            <div class="card-header">
-                Importa usuarios autorizados en los .rep a la tabla repsasmas
+                <div class="row">
+                    <div class="col-md-2 mt-1">
+                        <form method="POST" action="{{ route('asmas.store') }}">
+                            @include('contracargos.admin.input_data')
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <div class="card bg-light mt-2">
+                        <form action="{{ route('importMediakey') }}" method="POST" enctype="multipart/form-data">
+                            @include('contracargos.admin.import_rep')
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-
-
-
-
-                <form action="{{ route('importAsmas') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file" name="files[]" multiple class="form-control">
-                    <br>
-                    <button class="btn btn-success">Import User Data</button>
-                    <a class="btn btn-warning" href="{{ route('export') }}">Export User Data</a>
-                </form>
+            @include('contracargos.admin.table_results')
+        @elseif($r->role == 2)
+            <div class="row">
+                <div class="col-md-2 bg-light mt-2"></div>
+                <div class="col-md-2 mt-2">
+                    @include('contracargos.errors')
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    <form method="POST" action="{{ route('asmas.store2') }}">
+                        @include('contracargos.user.input_data')
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-2"></div>
             </div>
-        </div>
-    </div>
-
-
-
-
-    </body>
-
+            @include('contracargos.user.table_results')
+        @else
+            @include('contracargos.asignation')
+        @endif
+    @endforeach
 @endsection

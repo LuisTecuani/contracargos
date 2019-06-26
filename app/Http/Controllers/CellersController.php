@@ -8,6 +8,8 @@ use App\Helpers\Funciones;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\ContracargosCellers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CellersController extends Controller
@@ -23,94 +25,78 @@ class CellersController extends Controller
 
 
     public function index() {
+        $role = DB::table('consultas.users as u')
+            ->select('u.role')
+            ->where('u.id', '=', Auth::id())
+            ->get();
 
-        if ($searched_card = [request('tarjetas')]) {
+        $cards = DB::table("consultas.contracargos_cellers as cm")
+            ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
+            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
+                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->orderBy('cm.id')
+            ->paginate(25);
 
+        $cards2 = DB::table("consultas.contracargos_cellers as cm")
+            ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
+            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
+                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->whereDate('cm.created_at', today())
+            ->orderBy('cm.id')
+            ->get();
 
-            $cards = CreditCards::with('user')->where('number', 'like', compact('searched_card'))->get();
-
-
-        } else {
-            $cards = CreditCards::with('user')->latest()->paginate(14);
-        }
-
-        return view("$this->database.index", compact('cards'));
-    }
-
-    public function finder() {
-
-        $autorizacionesS =  request()->input('autorizaciones');
-
-        $autorizacionesRaw = preg_split("[\r\n]",$autorizacionesS);
-
-        echo '"num_buscado","autorizacion","fecha","number","user_id","email"'."<br>";
-        foreach($autorizacionesRaw as $autorizacionRaw1) {
-
-            $autorizacionRaw = preg_split("[,]", $autorizacionRaw1);
-
-
-            if (strlen($autorizacionRaw[0]) == 1) {
-                $autorizacion = "00000$autorizacionRaw[0]";
-            }
-
-            if (strlen($autorizacionRaw[0]) == 2) {
-                $autorizacion = "0000$autorizacionRaw[0]";
-            }
-
-            if (strlen($autorizacionRaw[0]) == 3) {
-                $autorizacion = "000$autorizacionRaw[0]";
-            }
-
-            if (strlen($autorizacionRaw[0]) == 4) {
-                $autorizacion = "00$autorizacionRaw[0]";
-            }
-
-            if (strlen($autorizacionRaw[0]) == 5) {
-                $autorizacion = "0$autorizacionRaw[0]";
-            }
-
-            if (strlen($autorizacionRaw[0]) == 6) {
-                $autorizacion = "$autorizacionRaw[0]";
-            }
-
-            $tarjeta = "%$autorizacionRaw[1]";
-
-            $cards = DB::table("consultas.reps$this->database as rc")
-                ->leftjoin("$this->database.users as u", 'u.id', '=', 'rc.user_id')
-                ->leftjoin("$this->database.tdc as t", 'u.id', '=', 't.user_id')
-                ->where([
-                    ['rc.autorizacion', '=', $autorizacion],
-                    ['t.number', 'like', $tarjeta]
-                ])->get();
-
-
-            echo $autorizacion . ',"';
-
-            if (count($cards) === 0) {
-                echo 'usuario no encontrado","???","???","???"';
-            } else {
-                foreach ($cards as $ca) {
-
-
-                    echo $ca->autorizacion . '","';
-                    echo $ca->fecha . '","';
-                    echo $ca->number . '",';
-                    echo $ca->user_id . ',';
-                    echo $ca->email;
-                }
-
-            }
-            echo "<br>";
-        }
-        return view("$this->database.index")->with(compact('cards'));
+        return view("cellers.index", compact('cards', 'cards2', 'role'));
 
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
+        ]);
+        $autorizacionesS = $request->input('autorizaciones');
+        $arr = preg_split("[\r\n]", $autorizacionesS);
+        foreach ($arr as $a) {
+            $store = preg_split("[,]", $a);
+            $Contracargos = new ContracargosCellers();
+            $Contracargos->autorizacion = $store[0];
+            $Contracargos->tarjeta = $store[1];
+            $Contracargos->save();
+        }
+        Session()->flash('message', 'Datos Registrados');
+
+        return redirect()->route("cellers.index");
+
+    }
+
+    public function store2(Request $request)
+    {
+        $request->validate([
+            'autorizacion' => 'required|digits:6|numeric',
+            'terminacion' => 'required|digits:4|numeric',
+        ]);
+        $Contracargos = new ContracargosCellers();
+        $Contracargos->autorizacion = $request->input('autorizacion');
+        $Contracargos->tarjeta = $request->input('terminacion');
+        $Contracargos->save();
+
+        return redirect()->route("cellers.index");
+    }
+
 
 
     public function import(Request $request)
     {
-
+        $request->validate([
+            'files' => 'required'
+        ]);
         $archivos     =   $request->file('files');
+        $total = count($archivos);
+        Session()->flash('message', 'Reps Registrados: ' . $total);
 
         foreach($archivos as $file)
         {
