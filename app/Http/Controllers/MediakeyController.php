@@ -127,6 +127,7 @@ class MediakeyController extends Controller
                 $rep4 = fixKeys($rep5);
 
                 foreach ($rep4 as $rep3) {
+
                     $rep3[10] = Str::after($rep3[10], 'C0000000');
 
                     Repsmediakey::create([
