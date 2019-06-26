@@ -1,6 +1,6 @@
 <?php
 
-namespace Contracargos\Providers;
+namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

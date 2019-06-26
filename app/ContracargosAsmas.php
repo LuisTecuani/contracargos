@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContracargosMediakey extends Model
+class ContracargosAsmas extends Model
 {
     protected $guarded = [];
 
-    protected $table = 'contracargos_mediakey';
+    protected $table = 'contracargos_asmas';
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
