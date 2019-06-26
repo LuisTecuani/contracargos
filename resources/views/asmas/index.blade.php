@@ -20,7 +20,7 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-3">
                     <div class="card bg-light mt-2">
-                        <form action="{{ route('importMediakey') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('importAsmas') }}" method="POST" enctype="multipart/form-data">
                             @include('contracargos.admin.import_rep')
                         </form>
                     </div>

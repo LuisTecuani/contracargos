@@ -100,9 +100,11 @@ class CellersController extends Controller
 
         foreach($archivos as $file)
         {
-            $table = "reps$this->database";
+            $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = check_file_existence($file, $table);
+            $valid = DB::table('consultas.repscellers as ra')
+                ->where('source_file', 'like', $source)->get();
+
 
             if (count($valid) === 0)
             {

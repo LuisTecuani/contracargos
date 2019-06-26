@@ -102,31 +102,27 @@ class MediakeyController extends Controller
         $request->validate([
             'files' => 'required'
         ]);
-
-
-        $archivos = $request->file('files');
-
+        $archivos     =   $request->file('files');
         $total = count($archivos);
-
         Session()->flash('message', 'Reps Registrados: ' . $total);
 
-        foreach ($archivos as $file) {
+        foreach($archivos as $file)
+        {
+            $source = Str::before($file->getClientOriginalName(), '.');
 
-            $rep10 = file_get_contents($file);
+            $valid = DB::table('consultas.repsmediakey as ra')
+                ->where('source_file', 'like', $source)->get();
 
-            if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                $rep9 = Str::after($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                        ');
-                $rep8 = Str::before($rep9, 'Totales:                                                                           ');
-                $rep7 = Arr::sort(preg_split("/\n/", $rep8));
-                $rep6 = preg_grep("/([[:digit:]]{16})/", $rep7);
 
-                foreach ($rep6 as $cls => $vls) {
-                    $rep5[$cls] = preg_grep("/\S/", preg_split("/\s/", $vls));
-                }
+            if (count($valid) === 0)
+            {
+                $rep10 = file_get_contents($file);
 
-                $rep4 = fixKeys($rep5);
+                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
+                {
+                    $rep4 = accepRepToArray($rep10);
 
-                foreach ($rep4 as $rep3) {
+                    foreach ($rep4 as $rep3) {
 
                     $rep3[10] = Str::after($rep3[10], 'C0000000');
 
@@ -142,22 +138,20 @@ class MediakeyController extends Controller
 
                         'autorizacion' => $rep3[5],
 
-                        'monto' => $rep3[8]
+                        'monto' => $rep3[8],
+
+                        'source_file' => $source
 
                     ]);
 
                 }
-
-
+            }
             }
         }
         return redirect()->route("$this->database.index");
     }
 
-    public function export()
-    {
-        return Excel::download(new UsersExport, 'users.xlsx');
-    }
+
 }
 
 
