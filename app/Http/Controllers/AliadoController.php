@@ -46,6 +46,7 @@ class AliadoController extends Controller
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
             ->whereDate('cm.created_at', today())
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orderBy('cm.id')
             ->get();
 
