@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportRepRequest;
+use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -58,11 +61,8 @@ class MediakeyController extends Controller
         return view("$this->database.index", compact('cards', 'cards2', 'role'));
     }
 
-    public function store(Request $request)
+    public function store(StoreAdminRequest $request)
     {
-        $request->validate([
-            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
-        ]);
         $autorizacionesS = $request->input('autorizaciones');
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
@@ -82,12 +82,8 @@ class MediakeyController extends Controller
 
     }
 
-    public function store2(Request $request)
+    public function store2(StoreUserRequest $request)
     {
-        $request->validate([
-            'autorizacion' => 'required|digits:6|numeric',
-            'terminacion' => 'required|digits:4|numeric',
-        ]);
         $Contracargos = new $this->model2;
         $Contracargos->autorizacion = $request->input('autorizacion');
         $Contracargos->tarjeta = $request->input('terminacion');
@@ -97,11 +93,8 @@ class MediakeyController extends Controller
     }
 
 
-    public function import(Request $request)
+    public function import(ImportRepRequest $request)
     {
-        $request->validate([
-            'files' => 'required'
-        ]);
         $archivos     =   $request->file('files');
         $total = count($archivos);
         Session()->flash('message', 'Reps Registrados: ' . $total);

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportRepRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Repscellers;
 use App\CreditCards;
 use App\Helpers\Funciones;
@@ -9,8 +11,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\ContracargosCellers;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreAdminRequest;
 
 class CellersController extends Controller
 {
@@ -53,11 +56,8 @@ class CellersController extends Controller
 
     }
 
-    public function store(Request $request)
+    public function store(StoreAdminRequest $request)
     {
-        $request->validate([
-            'autorizaciones' => 'regex:/[0-9][[:punct:]][0-9]/i',
-        ]);
         $autorizacionesS = $request->input('autorizaciones');
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
@@ -68,17 +68,11 @@ class CellersController extends Controller
             $Contracargos->save();
         }
         Session()->flash('message', 'Datos Registrados');
-
         return redirect()->route("cellers.index");
+        }
 
-    }
-
-    public function store2(Request $request)
+        public function store2(StoreUserRequest $request)
     {
-        $request->validate([
-            'autorizacion' => 'required|digits:6|numeric',
-            'terminacion' => 'required|digits:4|numeric',
-        ]);
         $Contracargos = new ContracargosCellers();
         $Contracargos->autorizacion = $request->input('autorizacion');
         $Contracargos->tarjeta = $request->input('terminacion');
@@ -89,11 +83,8 @@ class CellersController extends Controller
 
 
 
-    public function import(Request $request)
+    public function import(ImportRepRequest $request)
     {
-        $request->validate([
-            'files' => 'required'
-        ]);
         $archivos     =   $request->file('files');
         $total = count($archivos);
         Session()->flash('message', 'Reps Registrados: ' . $total);
