@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileProcessor;
 use App\Repsmediakey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MediakeyController extends Controller
 {
-    public function __construct()
+    public function __construct(FileProcessor $filep)
     {
         $this->middleware('auth');
 
@@ -25,6 +26,8 @@ class MediakeyController extends Controller
 
         $str = Str::title($this->database);
         $this->model2 = "App\Contracargos$str";
+
+        $this->fileP = $filep;
     }
 
 
@@ -44,7 +47,7 @@ class MediakeyController extends Controller
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
-            ->paginate(25);
+            ->get();
 
         $cards2 = DB::table("consultas.contracargos_mediakey as cm")
             ->leftJoin("consultas.repsmediakey as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -61,21 +64,19 @@ class MediakeyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
+            'autorizaciones' => 'regex:/\w[[:punct:]][0-9]/i',
         ]);
         $autorizacionesS = $request->input('autorizaciones');
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
-            $aut = strlen($store[0]);
-            if($aut < 7 && $aut > 0) {
-                if(preg_match('/^\d{1,4}$/', $store[1])){
+            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
+            if(preg_match('/^\d{1,4}$/', $store[1])){
                     $Contracargos = new $this->model2;
                     $Contracargos->autorizacion = $store[0];
                     $Contracargos->tarjeta = $store[1];
                     $Contracargos->save();}}
 
-        }
         Session()->flash('message', 'Datos Registrados');
 
         return redirect()->route("$this->database.index");
@@ -85,7 +86,7 @@ class MediakeyController extends Controller
     public function store2(Request $request)
     {
         $request->validate([
-            'autorizacion' => 'required|digits:6|numeric',
+
             'terminacion' => 'required|digits:4|numeric',
         ]);
         $Contracargos = new $this->model2;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileProcessor;
 use App\Repsaliado;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -13,9 +14,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AliadoController extends Controller
 {
-    public function __construct()
+    public function __construct(FileProcessor $filep)
     {
         $this->middleware('auth');
+        $this->fileP = $filep;
     }
 
     public function index()
@@ -33,7 +35,7 @@ class AliadoController extends Controller
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
-            ->paginate(25);
+            ->get();
 
         $cards2 = DB::table("consultas.contracargos_aliado as cm")
             ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -49,13 +51,12 @@ class AliadoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
-        ]);
+
         $autorizacionesS = $request->input('autorizaciones');
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
+            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
             $Contracargos = new ContracargosAliado();
             $Contracargos->autorizacion = $store[0];
             $Contracargos->tarjeta = $store[1];
@@ -70,7 +71,7 @@ class AliadoController extends Controller
     public function store2(Request $request)
     {
         $request->validate([
-            'autorizacion' => 'required|digits:6|numeric',
+
             'terminacion' => 'required|digits:4|numeric',
         ]);
         $Contracargos = new ContracargosAliado();

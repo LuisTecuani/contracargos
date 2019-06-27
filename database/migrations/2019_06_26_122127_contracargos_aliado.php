@@ -15,7 +15,7 @@ class ContracargosAliado extends Migration
     {
         Schema::create('consultas.contracargos_aliado', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('autorizacion');
+            $table->string('autorizacion');
             $table->integer('tarjeta');
             $table->timestamps();
         });
