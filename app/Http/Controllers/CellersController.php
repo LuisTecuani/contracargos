@@ -56,7 +56,7 @@ class CellersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'autorizaciones' => 'regex:/[[0-9][[:punct:]][0-9]/i',
+            'autorizaciones' => 'regex:/[0-9][[:punct:]][0-9]/i',
         ]);
         $autorizacionesS = $request->input('autorizaciones');
         $arr = preg_split("[\r\n]", $autorizacionesS);

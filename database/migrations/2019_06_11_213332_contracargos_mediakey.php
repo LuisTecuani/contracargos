@@ -15,7 +15,7 @@ class ContracargosMediakey extends Migration
     {
         Schema::create('contracargos_mediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('autorizacion');
+            $table->string('autorizacion');
             $table->integer('tarjeta');
             $table->timestamps();
         });
