@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileProcessor;
 use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Repscellers;
@@ -17,13 +18,14 @@ use App\Http\Requests\StoreAdminRequest;
 
 class CellersController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(FileProcessor $filep) {
         $this->middleware('auth');
 
         $this->database = ENV('DB_DATABASE2');
 
         $this->model = "App\Reps$this->database";
+
+        $this->fileP = $filep;
     }
 
 
@@ -41,7 +43,7 @@ class CellersController extends Controller
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
-            ->paginate(25);
+            ->get();
 
         $cards2 = DB::table("consultas.contracargos_cellers as cm")
             ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -62,6 +64,7 @@ class CellersController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
+            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
             $Contracargos = new ContracargosCellers();
             $Contracargos->autorizacion = $store[0];
             $Contracargos->tarjeta = $store[1];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileProcessor;
 use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -16,9 +17,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AliadoController extends Controller
 {
-    public function __construct()
+    public function __construct(FileProcessor $filep)
     {
         $this->middleware('auth');
+        $this->fileP = $filep;
     }
 
     public function index()
@@ -36,7 +38,7 @@ class AliadoController extends Controller
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
-            ->paginate(25);
+            ->get();
 
         $cards2 = DB::table("consultas.contracargos_aliado as cm")
             ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -56,6 +58,7 @@ class AliadoController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
+            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
             $Contracargos = new ContracargosAliado();
             $Contracargos->autorizacion = $store[0];
             $Contracargos->tarjeta = $store[1];

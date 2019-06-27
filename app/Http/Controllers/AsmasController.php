@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FileProcessor;
 use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -15,9 +16,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AsmasController extends Controller
 {
-    public function __construct()
+    public function __construct(FileProcessor $filep)
     {
         $this->middleware('auth');
+        $this->fileP = $filep;
     }
 
 
@@ -36,7 +38,7 @@ class AsmasController extends Controller
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
-            ->paginate(25);
+        ->get();
 
         $cards2 = DB::table("consultas.contracargos_asmas as cm")
             ->leftJoin("consultas.repsasmas as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -56,6 +58,7 @@ class AsmasController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
+            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
             $Contracargos = new ContracargosAsmas();
             $Contracargos->autorizacion = $store[0];
             $Contracargos->tarjeta = $store[1];

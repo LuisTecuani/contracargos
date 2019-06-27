@@ -39,4 +39,14 @@ class FileProcessor
         return $valid;
     }
 
+    public function autorizacionSeisDigit($aut) {
+        $len = strlen($aut);
+        while($len < 6){
+            $aut = "0$aut";
+            $len = strlen($aut);
+        }
+        $autseisd = $aut;
+        return $autseisd;
+    }
+
 }

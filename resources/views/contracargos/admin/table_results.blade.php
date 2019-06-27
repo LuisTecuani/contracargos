@@ -52,9 +52,9 @@
                 </tr>
             @endforeach
             </tbody>
-            {{$cards->render()}}
+
         </table>
-        {{$cards->render()}}
+
 
     </div>
     <div class="col-md-2"></div>
