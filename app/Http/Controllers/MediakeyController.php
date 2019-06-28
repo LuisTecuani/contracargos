@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\FileProcessor;
-use App\Http\Requests\ImportRepRequest;
-use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\StoreUserRequest;
 use App\Repsmediakey;
+use App\FileProcessor;
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use App\Exports\UsersExport;
-use App\ContracargosMediakey;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ImportRepRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\StoreAdminRequest;
 
 
 class MediakeyController extends Controller
@@ -97,56 +92,56 @@ class MediakeyController extends Controller
 
     public function import(ImportRepRequest $request)
     {
-        $archivos     =   $request->file('files');
+        $archivos = $request->file('files');
         $total = count($archivos);
-        Session()->flash('message', 'Reps Registrados: ' . $total);
 
-        foreach($archivos as $file)
-        {
+        foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = DB::table('consultas.repsmediakey as ra')
-                ->where('source_file', 'like', $source)->get();
+            if (substr($source, -4, 4) != 6873) {
+                Session()->flash('message1', 'Verifique que el Archivo Rep Corresponda');
+                return back();
+            } else {
+                $valid = DB::table('consultas.repsmediakey as ra')
+                    ->where('source_file', 'like', $source)->get();
+                if (count($valid) === 0) {
+                    $rep10 = file_get_contents($file);
 
+                    if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
+                        $rep4 = accepRepToArray($rep10);
 
-            if (count($valid) === 0)
-            {
-                $rep10 = file_get_contents($file);
+                        foreach ($rep4 as $rep3) {
 
-                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
-                {
-                    $rep4 = accepRepToArray($rep10);
+                            $rep3[10] = Str::after($rep3[10], 'C0000000');
 
-                    foreach ($rep4 as $rep3) {
+                            Repsmediakey::create([
 
-                    $rep3[10] = Str::after($rep3[10], 'C0000000');
+                                'tarjeta' => $rep3[0],
 
-                    Repsmediakey::create([
+                                'terminacion' => substr($rep3[0], -4, 4),
 
-                        'tarjeta' => $rep3[0],
+                                'user_id' => $rep3[10],
 
-                        'terminacion' => substr($rep3[0], -4, 4),
+                                'fecha' => $rep3[2],
 
-                        'user_id' => $rep3[10],
+                                'autorizacion' => $rep3[5],
 
-                        'fecha' => $rep3[2],
+                                'monto' => $rep3[8],
 
-                        'autorizacion' => $rep3[5],
+                                'source_file' => $source
 
-                        'monto' => $rep3[8],
+                            ]);
 
-                        'source_file' => $source
-
-                    ]);
-
+                        }
+                    }
                 }
             }
-            }
+            Session()->flash('message', 'Reps Registrados: ' . $total);
+
+            return redirect()->route("$this->database.index");
         }
-        return redirect()->route("$this->database.index");
+
     }
-
-
 }
 
 

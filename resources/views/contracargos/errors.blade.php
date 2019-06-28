@@ -8,7 +8,7 @@
             </button>
             @foreach ($errors->all() as $error)
 
-                <li>{{ $error }}</li>
+                <li> {{ $error }}</li>
             @endforeach
 
         </ul>
@@ -16,7 +16,15 @@
 @endif
 @if(session('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <h3>{{Session('message')}}</h3>
+        <li>{{Session('message')}}</li>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+@if(session('message1'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <li>{{Session('message1')}}</li>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

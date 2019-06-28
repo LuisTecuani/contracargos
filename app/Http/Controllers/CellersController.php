@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\FileProcessor;
-use App\Http\Requests\ImportRepRequest;
-use App\Http\Requests\StoreUserRequest;
-use App\Repscellers;
-use App\CreditCards;
 use App\Helpers\Funciones;
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use App\ContracargosCellers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ImportRepRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\StoreAdminRequest;
 
 class CellersController extends Controller
 {
-    public function __construct(FileProcessor $filep) {
+    public function __construct(FileProcessor $filep)
+    {
         $this->middleware('auth');
 
         $this->database = ENV('DB_DATABASE2');
@@ -29,7 +26,8 @@ class CellersController extends Controller
     }
 
 
-    public function index() {
+    public function index()
+    {
         $role = DB::table('consultas.users as u')
             ->select('u.role')
             ->where('u.id', '=', Auth::id())
@@ -73,9 +71,9 @@ class CellersController extends Controller
         }
         Session()->flash('message', 'Datos Registrados');
         return redirect()->route("cellers.index");
-        }
+    }
 
-        public function store2(StoreUserRequest $request)
+    public function store2(StoreUserRequest $request)
     {
         $Contracargos = new ContracargosCellers();
         $Contracargos->autorizacion = $request->input('autorizacion');
@@ -86,57 +84,54 @@ class CellersController extends Controller
     }
 
 
-
     public function import(ImportRepRequest $request)
     {
-        $archivos     =   $request->file('files');
+        $archivos = $request->file('files');
         $total = count($archivos);
-        Session()->flash('message', 'Reps Registrados: ' . $total);
 
-        foreach($archivos as $file)
-        {
+        foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = DB::table('consultas.repscellers as ra')
-                ->where('source_file', 'like', $source)->get();
+            if (substr($source, -4, 4) != 2950) {
+                Session()->flash('message1', 'Verifique que el Archivo Rep Corresponda');
+                return back();
+            } else {
+                $valid = DB::table('consultas.repscellers as ra')
+                    ->where('source_file', 'like', $source)->get();
+                if (count($valid) === 0) {
+                    $rep10 = file_get_contents($file);
+
+                    if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
+                        $rep4 = accepRepToArray($rep10);
+
+                        foreach ($rep4 as $rep3) {
 
 
-            if (count($valid) === 0)
-            {
-                $rep10 = file_get_contents($file);
+                            $this->model::create([
 
-                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS'))
-                {
-                    $rep4 = accepRepToArray($rep10);
+                                'tarjeta' => $rep3[0],
 
-                    foreach ($rep4 as $rep3)
-                    {
+                                'user_id' => $rep3[1],
 
+                                'fecha' => $rep3[2],
 
-                        $this->model::create([
+                                'terminacion' => substr($rep3[0], -4, 4),
 
-                            'tarjeta' => $rep3[0],
+                                'autorizacion' => $rep3[5],
 
-                            'user_id' => $rep3[1],
+                                'monto' => $rep3[8],
 
-                            'fecha' => $rep3[2],
+                                'source_file' => $source
 
-                            'terminacion' => substr($rep3[0],-4,4),
-
-                            'autorizacion' => $rep3[5],
-
-                            'monto' => $rep3[8],
-
-                            'source_file' => $source
-
-                        ]);
+                            ]);
+                        }
                     }
                 }
             }
+            Session()->flash('message', 'Reps Registrados: ' . $total);
+
+            return back();
         }
-
-        return back();
-
     }
 
 }
