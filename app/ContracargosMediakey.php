@@ -10,6 +10,11 @@ class ContracargosMediakey extends Model
 
     protected $table = 'contracargos_mediakey';
 
+    protected $fillable = ['autorizacion',
+        'tarjeta'
+    ];
+
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
     ];

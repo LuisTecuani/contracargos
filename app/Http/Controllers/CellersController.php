@@ -30,7 +30,7 @@ class CellersController extends Controller
     {
         $role = DB::table('consultas.users as u')
             ->select('u.role')
-            ->where('u.id', '=', Auth::id())
+            ->where('u.id', Auth::id())
             ->get();
 
         $cards = DB::table("consultas.contracargos_cellers as cm")

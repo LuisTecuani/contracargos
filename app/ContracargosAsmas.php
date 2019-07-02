@@ -10,6 +10,10 @@ class ContracargosAsmas extends Model
 
     protected $table = 'contracargos_asmas';
 
+    protected $fillable = ['autorizacion',
+        'tarjeta'
+    ];
+
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
     ];
