@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\FileProcessor;
 use App\Helpers\Funciones;
 use Illuminate\Support\Str;
@@ -28,10 +29,7 @@ class CellersController extends Controller
 
     public function index()
     {
-        $role = DB::table('consultas.users as u')
-            ->select('u.role')
-            ->where('u.id', Auth::id())
-            ->get();
+        $role = User::role();
 
         $cards = DB::table("consultas.contracargos_cellers as cm")
             ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')

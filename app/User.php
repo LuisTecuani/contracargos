@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -40,6 +41,23 @@ class User extends Authenticatable
     public function cards()
     {
         return $this->hasMany(CreditCards::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Eloquent Query Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Check User Role.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRole($query)
+    {
+        return $query->select('role')->where('id',Auth::id())->get();
     }
 
 }

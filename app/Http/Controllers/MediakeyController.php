@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Repsmediakey;
 use App\FileProcessor;
 use Illuminate\Support\Str;
@@ -32,10 +33,7 @@ class MediakeyController extends Controller
     public function index()
     {
 
-        $role = DB::table('consultas.users as u')
-            ->select('u.role')
-            ->where('u.id', Auth::id())
-            ->get();
+        $role = User::role();
 
         $cards = DB::table("consultas.contracargos_mediakey as cm")
             ->leftJoin("consultas.repsmediakey as rm", 'rm.autorizacion', '=', 'cm.autorizacion')

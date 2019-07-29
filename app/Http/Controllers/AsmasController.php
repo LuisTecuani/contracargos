@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Repsasmas;
 use App\FileProcessor;
 use App\ContracargosAsmas;
@@ -23,10 +24,7 @@ class AsmasController extends Controller
 
     public function index()
     {
-        $role = DB::table('consultas.users as u')
-            ->select('u.role')
-            ->where('u.id', Auth::id())
-            ->get();
+        $role = User::role();
 
         $cards = DB::table("consultas.contracargos_asmas as cm")
             ->leftJoin("consultas.repsasmas as rm", 'rm.autorizacion', '=', 'cm.autorizacion')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Repsaliado;
 use App\FileProcessor;
 use Illuminate\Support\Str;
@@ -23,10 +24,7 @@ class AliadoController extends Controller
 
     public function index()
     {
-        $role = DB::table('consultas.users as u')
-            ->select('u.role')
-            ->where('u.id', Auth::id())
-            ->get();
+        $role = User::role();
 
         $cards = DB::table("consultas.contracargos_aliado as cm")
             ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
