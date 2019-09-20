@@ -6,7 +6,7 @@ use App\User;
 use App\Repsaliado;
 use App\FileProcessor;
 use Illuminate\Support\Str;
-use App\ContracargosAliado;
+use App\Contracargosaliado;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ImportRepRequest;
@@ -26,25 +26,14 @@ class AliadoController extends Controller
     {
         $role = User::role();
 
-        $cards = DB::table("consultas.contracargos_aliado as cm")
-            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
-                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
-            ->orderBy('cm.id')
-            ->get();
+        DB::select('update contracargos_aliado c left join repsaliado r on r.autorizacion=c.autorizacion 
+                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta'); 
 
-        $cards2 = DB::table("consultas.contracargos_aliado as cm")
-            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
-                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
-            ->whereDate('cm.created_at', today())
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orderBy('cm.id')
-            ->get();
+        DB::select('update contracargos_aliado c join aliado.users u on u.id=c.user_id set c.email=u.email');
+
+        $cards = Contracargosaliado::get();
+
+        $cards2 = Contracargosaliado::get();
 
         return view("aliado.index", compact('cards', 'cards2', 'role'));
     }
@@ -81,49 +70,29 @@ class AliadoController extends Controller
     {
         $archivos = $request->file('files');
         $total = count($archivos);
-
+        Session()->flash('message', 'Reps Registrados: ' . $total);
         foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
-            if (substr($source, -3, 3) != 897 ) {
-                Session()->flash('message1', 'Verifique que el Archivo Rep Corresponda');
-                return back();
-            } else {
-                $valid = DB::table('consultas.repsaliado as ra')
-                    ->where('source_file', 'like', $source)->get();
-
-                if (count($valid) === 0) {
-                    $rep10 = file_get_contents($file);
-
-                    if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                        $rep4 = accepRepToArray($rep10);
-
-                        foreach ($rep4 as $rep3) {
-
-
-                            Repsaliado::create([
-
-                                'tarjeta' => $rep3[0],
-
-                                'user_id' => $rep3[1],
-
-                                'fecha' => $rep3[2],
-
-                                'terminacion' => substr($rep3[0], -4, 4),
-
-                                'autorizacion' => $rep3[5],
-
-                                'monto' => $rep3[8],
-
-                                'source_file' => $source
-
-                            ]);
-                        }
+            $valid = DB::table('consultas.repsaliado as ra')
+                ->where('source_file', 'like', $source)->get();
+            if (count($valid) === 0) {
+                $rep10 = file_get_contents($file);
+                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
+                    $rep4 = accepRepToArray($rep10);
+                    foreach ($rep4 as $rep3) {
+                        Repsaliado::create([
+                            'tarjeta' => $rep3[0],
+                            'user_id' => $rep3[1],
+                            'fecha' => $rep3[2],
+                            'terminacion' => substr($rep3[0], -4, 4),
+                            'autorizacion' => $rep3[5],
+                            'monto' => $rep3[8],
+                            'source_file' => $source
+                        ]);
                     }
                 }
             }
-            Session()->flash('message', 'Reps Registrados: ' . $total);
-
-            return back();
         }
+        return back();
     }
 }

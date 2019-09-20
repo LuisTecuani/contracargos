@@ -11,7 +11,7 @@ class ContracargosAliado extends Model
     protected $table = 'contracargos_aliado';
 
     protected $fillable = ['autorizacion',
-        'tarjeta'
+        'tarjeta', 'user_id', 'email', 'fecha_rep'
     ];
 
     protected $casts = [

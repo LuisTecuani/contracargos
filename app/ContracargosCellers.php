@@ -11,9 +11,9 @@ class ContracargosCellers extends Model
     protected $table = 'contracargos_cellers';
 
     protected $fillable = ['autorizacion',
-        'tarjeta'
+        'tarjeta', 'user_id', 'email', 'fecha_rep'
     ];
-
+    
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
     ];
