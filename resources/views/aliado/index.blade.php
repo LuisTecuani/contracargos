@@ -26,6 +26,7 @@
                     </div>
                 </div>
             </div>
+            <a href="/aliado/last">ultima consulta</a>
             @include('contracargos.admin.table_results')
         @elseif($r->role == 2)
             <div class="row">

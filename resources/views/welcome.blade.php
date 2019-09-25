@@ -75,6 +75,7 @@ Contracargos
                 <a href="/cellers">Cellers</a>
                 <a href="/asmas">Asmas</a>
                 <a href="/aliado">Aliado</a>
+                <a href="/file_cobro">Generar archivo de cobro</a>
 
             </div>
                 @endguest

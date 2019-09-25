@@ -35,21 +35,31 @@ class AliadoController extends Controller
             ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
             ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
                 'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->whereDate('cm.created_at', today())
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
             ->get();
 
-        $cards2 = DB::table("consultas.contracargos_aliado as cm")
+        return view("aliado.index", compact('cards', 'role'));
+    }
+
+    public function last()
+    {
+
+
+        $emails = DB::table("consultas.contracargos_aliado as cm")
             ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
             ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
-                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
+            ->select('u.email')
             ->whereDate('cm.created_at', today())
-            ->orderBy('cm.id')
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->groupBy("u.email")
             ->get();
 
-        return view("aliado.index", compact('cards', 'cards2', 'role'));
+
+        return view("aliado.last", compact('emails'));
     }
 
     public function store(StoreAdminRequest $request)
@@ -59,10 +69,19 @@ class AliadoController extends Controller
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
             $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
-            $Contracargos = new ContracargosAliado();
-            $Contracargos->autorizacion = $store[0];
-            $Contracargos->tarjeta = $store[1];
-            $Contracargos->save();
+            $valid = DB::table("consultas.contracargos_aliado as cm")
+                ->where([
+                    ["cm.autorizacion", "=", $store[0]],
+                    ["cm.tarjeta", "=", $store[1]],
+                    ])
+                ->get();
+            if (count($valid) === 0)
+            {
+                $Contracargos = new ContracargosAliado();
+                $Contracargos->autorizacion = $store[0];
+                $Contracargos->tarjeta = $store[1];
+                $Contracargos->save();
+            }
         }
         Session()->flash('message', 'Datos Registrados');
 
@@ -125,6 +144,11 @@ class AliadoController extends Controller
         }
 
         return back();
+
+    }
+
+    public function generateBanorte()
+    {
 
     }
 }

@@ -57,6 +57,21 @@ class CellersController extends Controller
         return view("cellers.index", compact('cards', 'cards2', 'role'));
 
     }
+    public function last()
+    {
+        $emails = DB::table("consultas.contracargos_cellers as cm")
+            ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
+            ->select('u.email')
+            ->whereDate('cm.created_at', today())
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->groupBy("u.email")
+            ->get();
+
+
+        return view("aliado.last", compact('emails'));
+    }
 
     public function store(StoreAdminRequest $request)
     {
@@ -83,7 +98,6 @@ class CellersController extends Controller
 
         return redirect()->route("cellers.index");
     }
-
 
 
     public function import(ImportRepRequest $request)

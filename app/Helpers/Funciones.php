@@ -14,6 +14,12 @@ if (!function_exists('fixKeys')) {
         }
         return array_values($array);
     }
+}
+
+function processRep($text)
+{
+
+}
 
     function accepRepToArray($texto)
     {
@@ -33,5 +39,5 @@ if (!function_exists('fixKeys')) {
         $rep4 = fixKeys($rep5);
         return $rep4;
     }
-}
+
 

@@ -25,6 +25,7 @@
                         </form>
                     </div>
                 </div>
+                <a href="/cellers/last">ultima consulta</a>
             </div>
             @include('contracargos.admin.table_results')
         @elseif($r->role == 2)
