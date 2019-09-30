@@ -11,7 +11,7 @@ class ContracargosMediakey extends Model
     protected $table = 'contracargos_mediakey';
 
     protected $fillable = ['autorizacion',
-        'tarjeta'
+        'tarjeta', 'user_id', 'email', 'fecha_rep'
     ];
 
 
