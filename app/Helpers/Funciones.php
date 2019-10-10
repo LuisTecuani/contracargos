@@ -16,9 +16,26 @@ if (!function_exists('fixKeys')) {
     }
 }
 
-function processRep($text)
+function processRep($file)
 {
+    $rows = preg_grep("/([[:digit:]]{16})/",file($file));
+    $accepted = [];
+    $rejected = [];
+    foreach ($rows as $row => $cont) {
+        if (Str::contains($cont, ['B036', 'P128'])) {
+            $accepted[$row] = preg_grep("/\S/", preg_split("/\s/", $cont));
+        }else{
+            $motivo = substr($cont, 60, 50);
+            dd($motivo);
+        //    $rejected[$row] =
+        }
+    }
 
+    dd($accepted);
+
+
+    $rep4 = fixKeys($rep5);
+    return $rep4;
 }
 
     function accepRepToArray($texto)

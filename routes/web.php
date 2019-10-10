@@ -66,6 +66,16 @@ Route::post('/asmas/import', 'AsmasController@import')->name('importAsmas');
 Route::post('/asmas/store2', 'AsmasController@store2')->name('asmas.store2');
 /*
 |--------------------------------------------------------------------------
+| Sanborns Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('/sanborns', 'SanbornsController@index')->name('sanborns.index');
+Route::post('/sanborns/store', 'SanbornsController@store');
+
+/*
+|--------------------------------------------------------------------------
 | Pendiente
 |--------------------------------------------------------------------------
 |

@@ -25,31 +25,9 @@ class AsmasController extends Controller
 
     public function index()
     {
-        $role = DB::table('consultas.users as u')
-            ->select('u.role')
-            ->where('u.id', '=', Auth::id())
-            ->get();
 
-        $cards = DB::table("consultas.contracargos_asmas as cm")
-            ->leftJoin("consultas.repsasmas as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("asmas.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
-                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
-            ->orderBy('cm.id')
-        ->get();
 
-        $cards2 = DB::table("consultas.contracargos_asmas as cm")
-            ->leftJoin("consultas.repsasmas as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("asmas.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('rm.user_id as user_id', 'u.email as email', 'rm.fecha as fecha', 'rm.tarjeta as t1', 'cm.tarjeta as t2',
-                'cm.autorizacion as aut2', 'rm.autorizacion as aut1', 'cm.created_at as creacion')
-            ->whereDate('cm.created_at', today())
-            ->orderBy('cm.id')
-            ->get();
-
-        return view("asmas.index", compact('cards', 'cards2', 'role'));
+        return view("asmas.index");
     }
 
     public function store(StoreAdminRequest $request)
@@ -93,10 +71,7 @@ class AsmasController extends Controller
                 ->where('source_file', 'like', $source)->get();
 
             if (count($valid) === 0) {
-                $rep10 = file_get_contents($file);
-
-                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                    $rep4 = accepRepToArray($rep10);
+                    $rep4 = processRep($file);
 
                     foreach ($rep4 as $rep3) {
 
@@ -119,7 +94,6 @@ class AsmasController extends Controller
 
                         ]);
                     }
-                }
             }
         }
 

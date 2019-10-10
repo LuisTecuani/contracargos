@@ -73,7 +73,7 @@ Contracargos
             <div class="links">
                 <a href="/mediakey">Mediakey</a>
                 <a href="/cellers">Cellers</a>
-                <a href="/asmas">Asmas</a>
+                <a href="/sanborns">Sanborns</a>
                 <a href="/aliado">Aliado</a>
                 <a href="/file_cobro">Generar archivo de cobro</a>
 
