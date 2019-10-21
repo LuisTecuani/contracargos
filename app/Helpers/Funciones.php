@@ -19,23 +19,39 @@ if (!function_exists('fixKeys')) {
 function processRep($file)
 {
     $rows = preg_grep("/([[:digit:]]{16})/",file($file));
-    $accepted = [];
     $rejected = [];
+    $accepted = [];
     foreach ($rows as $row => $cont) {
         if (Str::contains($cont, ['B036', 'P128'])) {
             $accepted[$row] = preg_grep("/\S/", preg_split("/\s/", $cont));
         }else{
-            $motivo = substr($cont, 60, 50);
-            dd($motivo);
-        //    $rejected[$row] =
+            $rejected[$row] = fixKeys(preg_grep("/\S/", preg_split("/\s/", $cont)));
+            $rejected[$row]['motivo'] = substr($cont, 60, 50);
+        //
         }
     }
 
-    dd($accepted);
+    return $rejected;
+}
 
+function processXml($file)
+{
+    $dataRaw = preg_grep("(Cargo afiliacion)",preg_split("[>]",file_get_contents($file)));
+    $data = [];
+    foreach ($dataRaw as $index => $content)
+    {
+        $data[$index] = preg_split( '(" |"\/)', $content);
+        $r = [];
+        foreach ($data[$index] as $ls => $vs)
+        {
+            $cut = preg_split( '(=)', $vs);
+            $r[$cut[0]] = isset($cut[1]) ? Str::after($cut[1], '"') : null;
+        }
 
-    $rep4 = fixKeys($rep5);
-    return $rep4;
+        $data[$index] = $r;
+
+    }
+    return $data;
 }
 
     function accepRepToArray($texto)

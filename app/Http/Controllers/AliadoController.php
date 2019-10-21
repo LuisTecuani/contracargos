@@ -7,6 +7,8 @@ use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Repsaliado;
+use App\RepsRechazadosAliado;
+use App\respuestaBanorteAliado;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\ContracargosAliado;
@@ -89,14 +91,46 @@ class AliadoController extends Controller
 
     }
 
-    public function store2(StoreUserRequest $request)
+    public function rechazados(ImportRepRequest $request)
     {
-        $Contracargos = new ContracargosAliado();
-        $Contracargos->autorizacion = $request->input('autorizacion');
-        $Contracargos->tarjeta = $request->input('terminacion');
-        $Contracargos->save();
+        $archivos = $request->file('files');
+        $total = count($archivos);
+        Session()->flash('message', 'Reps Registrados: ' . $total);
 
-        return redirect()->route("aliado.index");
+        foreach ($archivos as $file) {
+            $source = Str::before($file->getClientOriginalName(), '.');
+
+            $valid = DB::table('consultas.reps_rechazados_aliado as ra')
+                ->where('source_file', 'like', $source)->get();
+
+            if (count($valid) === 0) {
+                $rejected = processRep($file);
+
+                    foreach ($rejected as $row) {
+
+                        RepsRechazadosAliado::create([
+
+                            'tarjeta' => $row[0],
+
+                            'user_id' => $row[1],
+
+                            'fecha' => $row[2],
+
+                            'terminacion' => substr($row[0], -4, 4),
+
+                            'motivo' => trim($row['motivo']),
+
+                            'monto' => $row[count($row)-4],
+
+                            'source_file' => $source
+
+                        ]);
+                    }
+                }
+            }
+
+
+        return back();
     }
 
     public function import(ImportRepRequest $request)
@@ -147,8 +181,50 @@ class AliadoController extends Controller
 
     }
 
-    public function generateBanorte()
+    public function banorte(ImportRepRequest $request)
     {
 
+        $archivos = $request->file('files');
+        $total = count($archivos);
+        Session()->flash('message', 'Reps Registrados: ' . $total);
+        foreach ($archivos as $file) {
+            $source = Str::before($file->getClientOriginalName(), '.');
+
+            $valid = DB::table('consultas.respuestas_banorte_aliado as ra')
+                ->where('source_file', 'like', $source)->get();
+
+            if (count($valid) === 0) {
+                $processed = processXml($file);
+
+                foreach ($processed as $row) {
+
+                    RespuestaBanorteAliado::create([
+                        'comentarios' => $row['comentarios'],
+
+                        'detalle_mensaje' => $row['detalleMensaje'],
+
+                        'estatus' => $row['estatus'],
+
+                        'user_id' => $row['numContrato'],
+
+                        'num_control' => $row['numControl'],
+
+                        'tarjeta' => $row['numTarjeta'],
+
+                        'terminacion' => substr($row['numTarjeta'], -4, 4),
+
+                        'monto' => $row['total'],
+
+                        'fecha' => date('Y-m-d', strtotime(substr($row['numControl'], 0, 8))),
+
+                        'source_file' => $source,
+
+                    ]);
+                }
+            }
+        }
+
+
+        return back();
     }
 }

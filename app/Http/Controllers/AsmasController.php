@@ -67,7 +67,7 @@ class AsmasController extends Controller
         foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = DB::table('consultas.repsasmas')
+            $valid = DB::table('consultas.reps_aliado_rechazados')
                 ->where('source_file', 'like', $source)->get();
 
             if (count($valid) === 0) {

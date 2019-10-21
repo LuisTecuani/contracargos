@@ -52,7 +52,8 @@ Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
-Route::post('/aliado/store2', 'AliadoController@store2')->name('aliado.store2');
+Route::post('/aliado/rechazados', 'AliadoController@rechazados')->name('aliado.rechazados');
+Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
 /*
 |--------------------------------------------------------------------------
 | Asmas Routes
