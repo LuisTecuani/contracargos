@@ -17,11 +17,26 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-md-1"></div>
                 <div class="col-md-3">
                     <div class="card bg-light mt-2">
                         <form action="{{ route('importMediakey') }}" method="POST" enctype="multipart/form-data">
                             @include('contracargos.admin.import_rep')
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light mt-2">
+                        <form method="POST" action="{{ route('mediakey.banorte') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-header">
+                                Importa respuestas de cobro de banorte desde .XML
+                            </div>
+                            <div class="card-body">
+                                <input type="file" multiple="true" name="files[]" accept=".xml"
+                                       class="btn btn-secondary btn-lg btn-block">
+                                <br>
+                                <button class="btn btn-outline-success">Import Data</button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -29,6 +29,8 @@ Route::post('/mediakey', 'MediakeyController@store')->name('mediakey.store');
 Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediakey');
 Route::post('/mediakey/store2', 'MediakeyController@store2')->name('mediakey.store2');
 Route::get('/mediakey/last', 'MediakeyController@last')->name('mediakey.last');
+Route::post('/mediakey/banorte', 'MediakeyController@banorte')->name('mediakey.banorte');
+
 /*
 |--------------------------------------------------------------------------
 | Cellers Routes
@@ -52,7 +54,7 @@ Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
-Route::post('/aliado/rechazados', 'AliadoController@rechazados')->name('aliado.rechazados');
+Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
 Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
 /*
 |--------------------------------------------------------------------------

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRepsRechazadosAliadoTable extends Migration
+class CreateRespuestasBanorteMediakeyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateRepsRechazadosAliadoTable extends Migration
      */
     public function up()
     {
-        Schema::create('reps_rechazados_aliado', function (Blueprint $table) {
+        Schema::create('respuestas_banorte_mediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('tarjeta');
-            $table->integer('terminacion');
+            $table->string('comentarios');
+            $table->string('detalle_mensaje');
+            $table->string('estatus');
             $table->integer('user_id');
-            $table->date('fecha');
-            $table->string('motivo');
+            $table->string('num_control');
+            $table->string('tarjeta');
+            $table->integer('terminacion');
             $table->string('monto');
+            $table->date('fecha');
             $table->string('source_file');
-            $table->timestamps();
         });
     }
 
@@ -33,6 +35,6 @@ class CreateRepsRechazadosAliadoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reps_rechazados_aliado');
+        Schema::dropIfExists('respuestas_banorte_mediakey');
     }
 }

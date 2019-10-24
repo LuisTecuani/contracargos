@@ -23,7 +23,7 @@ function processRep($file)
     $accepted = [];
     foreach ($rows as $row => $cont) {
         if (Str::contains($cont, ['B036', 'P128'])) {
-            $accepted[$row] = preg_grep("/\S/", preg_split("/\s/", $cont));
+            $accepted[$row] = fixKeys(preg_grep("/\S/", preg_split("/\s/", $cont)));
         }else{
             $rejected[$row] = fixKeys(preg_grep("/\S/", preg_split("/\s/", $cont)));
             $rejected[$row]['motivo'] = substr($cont, 60, 50);
@@ -31,7 +31,8 @@ function processRep($file)
         }
     }
 
-    return $rejected;
+
+    return [$rejected, $accepted];
 }
 
 function processXml($file)

@@ -91,7 +91,7 @@ class AliadoController extends Controller
 
     }
 
-    public function rechazados(ImportRepRequest $request)
+    public function import(ImportRepRequest $request)
     {
         $archivos = $request->file('files');
         $total = count($archivos);
@@ -104,9 +104,9 @@ class AliadoController extends Controller
                 ->where('source_file', 'like', $source)->get();
 
             if (count($valid) === 0) {
-                $rejected = processRep($file);
+                $responses = processRep($file);
 
-                    foreach ($rejected as $row) {
+                    foreach ($responses[0] as $row) {
 
                         RepsRechazadosAliado::create([
 
@@ -126,6 +126,28 @@ class AliadoController extends Controller
 
                         ]);
                     }
+
+                foreach ($responses[1] as $row) {
+
+
+                    Repsaliado::create([
+
+                        'tarjeta' => $row[0],
+
+                        'user_id' => $row[1],
+
+                        'fecha' => $row[2],
+
+                        'terminacion' => substr($row[0], -4, 4),
+
+                        'autorizacion' => $row[5],
+
+                        'monto' => $row[8],
+
+                        'source_file' => $source
+
+                    ]);
+                }
                 }
             }
 
@@ -133,7 +155,7 @@ class AliadoController extends Controller
         return back();
     }
 
-    public function import(ImportRepRequest $request)
+    public function accepted(ImportRepRequest $request)
     {
 
         $archivos = $request->file('files');

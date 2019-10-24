@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRepsRechazadosAliadoTable extends Migration
+class CreateRepsRechazadosMediakeyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRepsRechazadosAliadoTable extends Migration
      */
     public function up()
     {
-        Schema::create('reps_rechazados_aliado', function (Blueprint $table) {
+        Schema::create('reps_rechazados_mediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('tarjeta');
             $table->integer('terminacion');
@@ -33,6 +33,6 @@ class CreateRepsRechazadosAliadoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reps_rechazados_aliado');
+        Schema::dropIfExists('reps_rechazados_mediakey');
     }
 }

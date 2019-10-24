@@ -23,10 +23,10 @@
                         </form>
                     </div>
                     <div class="col">
-                        <form method="POST" action="{{ route('aliado.rechazados') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('aliado.accepted') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-header">
-                                Importa respuestas rechazadas de cobranza (REP)
+                                Importa respuestas aceptadas de cobranza (REP)
                             </div>
                             <div class="card-body">
                                 <input type="file" multiple="true" name="files[]" accept=".rep"
