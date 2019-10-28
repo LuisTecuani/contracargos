@@ -218,12 +218,19 @@ class AliadoController extends Controller
             if (count($valid) === 0) {
                 $processed = processXml($file);
 
+
                 foreach ($processed as $row) {
+
+                    if (empty($row['codigoAutorizacion'])) {
+                        $row['codigoAutorizacion'] = null;
+                    }
 
                     RespuestaBanorteAliado::create([
                         'comentarios' => $row['comentarios'],
 
                         'detalle_mensaje' => $row['detalleMensaje'],
+
+                        'autorizacion' => $row['codigoAutorizacion'],
 
                         'estatus' => $row['estatus'],
 

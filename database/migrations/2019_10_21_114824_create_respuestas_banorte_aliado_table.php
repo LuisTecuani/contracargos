@@ -17,6 +17,7 @@ class CreateRespuestasBanorteAliadoTable extends Migration
                 $table->bigIncrements('id');
                 $table->string('comentarios');
                 $table->string('detalle_mensaje');
+                $table->string('autorizacion')->nullable();
                 $table->string('estatus');
                 $table->integer('user_id');
                 $table->string('num_control');

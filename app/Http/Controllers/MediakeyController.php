@@ -198,10 +198,16 @@ class MediakeyController extends Controller
 
                 foreach ($processed as $row) {
 
+                    if (empty($row['codigoAutorizacion'])) {
+                        $row['codigoAutorizacion'] = null;
+                    }
+
                     RespuestasBanorteMediakey::create([
                         'comentarios' => $row['comentarios'],
 
                         'detalle_mensaje' => $row['detalleMensaje'],
+
+                        'autorizacion' => $row['codigoAutorizacion'],
 
                         'estatus' => $row['estatus'],
 
@@ -218,7 +224,6 @@ class MediakeyController extends Controller
                         'fecha' => date('Y-m-d', strtotime(substr($row['numControl'], 0, 8))),
 
                         'source_file' => $source,
-
                     ]);
                 }
             }
