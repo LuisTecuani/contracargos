@@ -30,6 +30,8 @@ Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediak
 Route::post('/mediakey/store2', 'MediakeyController@store2')->name('mediakey.store2');
 Route::get('/mediakey/last', 'MediakeyController@last')->name('mediakey.last');
 Route::post('/mediakey/banorte', 'MediakeyController@banorte')->name('mediakey.banorte');
+Route::post('/mediakey/banorte-pdf', 'MediakeyController@banortePdf')->name('mediakey.banortePdf');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +58,8 @@ Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
 Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
+Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.banortePdf');
+
 /*
 |--------------------------------------------------------------------------
 | Asmas Routes

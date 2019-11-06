@@ -15,6 +15,7 @@ use App\ContracargosAliado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Smalot\PdfParser\Parser;
 
 
 class AliadoController extends Controller
@@ -176,7 +177,6 @@ class AliadoController extends Controller
 
                     foreach ($rep4 as $rep3) {
 
-
                         Repsaliado::create([
 
                             'tarjeta' => $rep3[0],
@@ -245,6 +245,55 @@ class AliadoController extends Controller
                         'monto' => $row['total'],
 
                         'fecha' => date('Y-m-d', strtotime(substr($row['numControl'], 0, 8))),
+
+                        'source_file' => $source,
+
+                    ]);
+                }
+            }
+        }
+
+
+        return back();
+    }
+
+    public function banortePdf(ImportRepRequest $request)
+    {
+
+        $archivos = $request->file('files');
+        $total = count($archivos);
+        Session()->flash('message', 'Reps Registrados: ' . $total);
+        foreach ($archivos as $file) {
+            $source = Str::before($file->getClientOriginalName(), '.');
+
+            $valid = DB::table('consultas.respuestas_banorte_aliado as ra')
+                ->where('source_file', 'like', $source)->get();
+
+            if (count($valid) === 0) {
+                $processed = processPdf($file);
+
+                foreach ($processed as $row) {
+
+                    RespuestaBanorteAliado::create([
+                        'comentarios' => $row[10],
+
+                        'detalle_mensaje' => $row[8],
+
+                        'autorizacion' => $row[11],
+
+                        'estatus' => $row[4],
+
+                        'user_id' => $row[1],
+
+                        'num_control' => $row[3],
+
+                        'tarjeta' => $row[5],
+
+                        'terminacion' => substr($row[5], -4, 4),
+
+                        'monto' => $row[6],
+
+                        'fecha' => date('Y-m-d', strtotime(substr($row[3], 0, 8))),
 
                         'source_file' => $source,
 

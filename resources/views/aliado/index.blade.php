@@ -50,6 +50,21 @@
                             </div>
                         </form>
                     </div>
+                    <div class="col">
+                        <form method="POST" action="{{ route('aliado.banortePdf') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-header">
+                                Importa respuestas de cobro de banorte desde .PDF
+                            </div>
+                            <div class="card-body">
+                                <input type="file" multiple="true" name="files[]" accept=".pdf"
+                                       class="btn btn-secondary btn-lg btn-block">
+                                <br>
+                                <button class="btn btn-outline-success">Import Data</button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
             </div>
             <a href="/aliado/last">ultima consulta</a>

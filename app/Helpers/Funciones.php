@@ -5,6 +5,8 @@
      * Reindexa un array o un array de arrays
      * */
 
+use Smalot\PdfParser\Parser;
+
 if (!function_exists('fixKeys')) {
     function fixKeys($array)
     {
@@ -50,6 +52,22 @@ function processXml($file)
         }
 
         $data[$index] = $r;
+
+    }
+    return $data;
+}
+
+function processPdf($file)
+{
+    $parser = new Parser();
+    $pdf    = $parser->parseFile($file->path());
+    $text = preg_split("[\n]",$pdf->getText());
+    $dataRaw = preg_grep("(\d{4}\s\*{4}\s\*{4}\s\d{4})", $text);
+    $data = [];
+    foreach ($dataRaw as $index => $content)
+    {
+
+        $data[$index] =  fixKeys(preg_grep("/\S/", preg_split("/\t/", $content)));
 
     }
     return $data;
