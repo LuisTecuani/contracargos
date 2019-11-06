@@ -28,6 +28,11 @@ Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
 Route::post('/mediakey', 'MediakeyController@store')->name('mediakey.store');
 Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediakey');
 Route::post('/mediakey/store2', 'MediakeyController@store2')->name('mediakey.store2');
+Route::get('/mediakey/last', 'MediakeyController@last')->name('mediakey.last');
+Route::post('/mediakey/banorte', 'MediakeyController@banorte')->name('mediakey.banorte');
+Route::post('/mediakey/banorte-pdf', 'MediakeyController@banortePdf')->name('mediakey.banortePdf');
+
+
 /*
 |--------------------------------------------------------------------------
 | Cellers Routes
@@ -39,6 +44,7 @@ Route::get('/cellers', 'CellersController@index')->name('cellers.index');
 Route::post('/cellers', 'CellersController@store')->name('cellers.store');
 Route::post('/cellers/import', 'CellersController@import')->name('importCellers');
 Route::post('/cellers/store2', 'CellersController@store2')->name('cellers.store2');
+Route::get('/cellers/last', 'CellersController@last')->name('cellers.last');
 /*
 |--------------------------------------------------------------------------
 | Aliado Routes
@@ -47,9 +53,13 @@ Route::post('/cellers/store2', 'CellersController@store2')->name('cellers.store2
 |
 */
 Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
+Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
-Route::post('/aliado/store2', 'AliadoController@store2')->name('aliado.store2');
+Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
+Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
+Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.banortePdf');
+
 /*
 |--------------------------------------------------------------------------
 | Asmas Routes
@@ -63,6 +73,16 @@ Route::post('/asmas/import', 'AsmasController@import')->name('importAsmas');
 Route::post('/asmas/store2', 'AsmasController@store2')->name('asmas.store2');
 /*
 |--------------------------------------------------------------------------
+| Sanborns Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('/sanborns', 'SanbornsController@index')->name('sanborns.index');
+Route::post('/sanborns/store', 'SanbornsController@store');
+
+/*
+|--------------------------------------------------------------------------
 | Pendiente
 |--------------------------------------------------------------------------
 |
@@ -71,4 +91,6 @@ Route::post('/asmas/store2', 'AsmasController@store2')->name('asmas.store2');
 Route::get('export', 'MyController@export')->name('export');
 Route::get('importExportView', 'MyController@importExportView');
 Route::post('import', 'MyController@import')->name('import');
+
+Route::get('/file_cobro', 'BanorteController@index');
 

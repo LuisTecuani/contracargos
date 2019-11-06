@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Repsmediakey;
+use App\Repsmediakey;
 use App\FileProcessor;
+use App\RespuestasBanorteMediakey;
 use Illuminate\Support\Str;
 use App\ContracargosMediakey;
+use App\RepsRechazadosMediakey;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\ImportRepRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\StoreAdminRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -37,7 +45,7 @@ class MediakeyController extends Controller
         $role = User::role();
 
         DB::select('update contracargos_mediakey c left join repsmediakey r on r.autorizacion=c.autorizacion 
-                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta'); 
+                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
 
         DB::select('update contracargos_mediakey c join mediakey.users u on u.id=c.user_id set c.email=u.email');
 
@@ -80,32 +88,120 @@ class MediakeyController extends Controller
 
     public function import(ImportRepRequest $request)
     {
-        $archivos = $request->file('files');
-        $total = count($archivos);
+        $files = $request->file('files');
+        $total = count($files);
         Session()->flash('message', 'Reps Registrados: ' . $total);
-        foreach ($archivos as $file) {
+
+        foreach($files as $file)
+        {
             $source = Str::before($file->getClientOriginalName(), '.');
-            $valid = DB::table('consultas.repsmediakey as ra')
+
+            $valid = DB::table('consultas.repsmediakey')
                 ->where('source_file', 'like', $source)->get();
-            if (count($valid) === 0) {
-                $rep10 = file_get_contents($file);
-                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                    $rep4 = accepRepToArray($rep10);
-                    foreach ($rep4 as $rep3) {
-                        $rep3[10] = Str::after($rep3[10], 'C0000000');
-                        RepsMediakey::create([
-                        'tarjeta' => $rep3[0],
-                        'terminacion' => substr($rep3[0], -4, 4),
-                        'user_id' => $rep3[10],
-                        'fecha' => $rep3[2],
-                        'autorizacion' => $rep3[5],
-                        'monto' => $rep3[8],
+
+            if (count($valid) === 0)
+            {
+                $responses = processRep($file);
+                foreach ($responses[1] as $row) {
+
+                    $row[10] = Str::after($row[10], 'C0000000');
+
+                    Repsmediakey::create([
+
+                        'tarjeta' => $row[0],
+
+                        'terminacion' => substr($row[0], -4, 4),
+
+                        'user_id' => $row[10],
+
+                        'fecha' => $row[2],
+
+                        'autorizacion' => $row[5],
+
+                        'monto' => $row[8],
+
                         'source_file' => $source
+
+                    ]);
+
+                }
+
+                foreach ($responses[0] as $row) {
+                    $row['id'] = Str::after($row[count($row)-2], 'C0000000');
+
+                    RepsRechazadosMediakey::create([
+
+                        'tarjeta' => $row[0],
+
+                        'user_id' => $row['id'],
+
+                        'fecha' => $row[2],
+
+                        'terminacion' => substr($row[0], -4, 4),
+
+                        'motivo' => trim($row['motivo']),
+
+                        'monto' => $row[count($row)-5],
+
+                        'source_file' => $source
+
                         ]);
                     }
+            }
+        }
+        return redirect()->route("$this->database.index");
+    }
+
+
+    public function banorte(ImportRepRequest $request)
+    {
+
+        $files = $request->file('files');
+        $total = count($files);
+        Session()->flash('message', 'Respuestas Registradas: ' . $total);
+        foreach ($files as $file) {
+            $source = Str::before($file->getClientOriginalName(), '.');
+
+            $valid = DB::table('consultas.respuestas_banorte_mediakey')
+                ->where('source_file', 'like', $source)->get();
+
+            if (count($valid) === 0) {
+                $processed = processXml($file);
+
+                foreach ($processed as $row) {
+
+                    if (empty($row['codigoAutorizacion'])) {
+                        $row['codigoAutorizacion'] = null;
+                    }
+
+                    RespuestasBanorteMediakey::create([
+                        'comentarios' => $row['comentarios'],
+
+                        'detalle_mensaje' => $row['detalleMensaje'],
+
+                        'autorizacion' => $row['codigoAutorizacion'],
+
+                        'estatus' => $row['estatus'],
+
+                        'user_id' => $row['numContrato'],
+
+                        'num_control' => $row['numControl'],
+
+                        'tarjeta' => $row['numTarjeta'],
+
+                        'terminacion' => substr($row['numTarjeta'], -4, 4),
+
+                        'monto' => $row['total'],
+
+                        'fecha' => date('Y-m-d', strtotime(substr($row['numControl'], 0, 8))),
+
+                        'source_file' => $source,
+                    ]);
                 }
             }
         }
+
+
         return back();
     }
 }

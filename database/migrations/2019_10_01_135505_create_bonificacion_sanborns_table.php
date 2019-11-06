@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ContracargosAsmas extends Migration
+class CreateBonificacionSanbornsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class ContracargosAsmas extends Migration
      */
     public function up()
     {
-        Schema::create('contracargos_asmas', function (Blueprint $table) {
+        Schema::create('bonificacion_sanborns', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('autorizacion');
-            $table->integer('tarjeta');
+            $table->integer('row_in_file');
+            $table->unsignedInteger('sanborns_id');
+            $table->string('email');
+            $table->integer('cantidad_cargos');
+            $table->string('monto');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class ContracargosAsmas extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('bonificacion_sanborns');
     }
 }

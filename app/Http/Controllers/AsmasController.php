@@ -6,6 +6,7 @@ use App\User;
 use App\Repsasmas;
 use App\FileProcessor;
 use App\ContracargosAsmas;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,65 @@ class AsmasController extends Controller
 
     public function index()
     {
+        $date = DB::table('aliado.user_tdc as ut')
+            ->selectRaw('user_id, ut.exp_month, ut.exp_year, concat(ut.exp_month, ut.exp_year) as date, 
+            date_format(str_to_date(concat(trim(trailing right(concat(ut.exp_month, right(ut.exp_year,2)), 2) from concat(ut.exp_month, right(ut.exp_year,2))),\'/\',right(concat(ut.exp_month, right(ut.exp_year,2)), 2)),"%m/%y"), "%m/%y") as i')
+            ->whereIn('user_id',  ["195770",
+"195794",
+"283602",
+"283606",
+"195790",
+"195795",
+"284254",
+"283691",
+"195471",
+"195784",
+"283821",
+"283182",
+"195481",
+"195488",
+"284161",
+"283174",
+"195782",
+"195789",
+"195489",
+"207948",
+"289635",
+"290567",
+"209474",
+"123926",
+"124180",
+"126234",
+"128096",
+"214808",
+"287410",
+"206473",
+"195825",
+"195524",
+"289633",
+"122900",
+"124690",
+"292784",
+"125202",
+"293442",
+"289940",
+"123158",
+"210962",
+"211265",
+"294386",
+"126740",
+"127568",
+"128357",
+"130819",
+"131115",
+"132121",
+"133497",
+"135585",
+"222646"])
+            ->limit(50)
+            ->get()->map(function ($item) {
+                return new Carbon($item->date);
+            });
         $role = User::role();
 
         $cards = DB::table("consultas.contracargos_asmas as cm")
@@ -35,6 +95,7 @@ class AsmasController extends Controller
             ->orWhere('rm.autorizacion', null)
             ->orderBy('cm.id')
             ->get();
+dd($date);
 
         $cards2 = DB::table("consultas.contracargos_asmas as cm")
             ->leftJoin("consultas.repsasmas as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
@@ -47,6 +108,7 @@ class AsmasController extends Controller
             ->get();
 
         return view("asmas.index", compact('cards', 'cards2', 'role'));
+        return view("asmas.index");
     }
 
     public function store(StoreAdminRequest $request)
@@ -81,49 +143,43 @@ class AsmasController extends Controller
     {
         $archivos = $request->file('files');
         $total = count($archivos);
+        Session()->flash('message', 'Reps Registrados: ' . $total);
 
         foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
-            if (substr($source, -3, 3) != 882) {
-                Session()->flash('message1', 'Verifique que el Archivo Rep Corresponda');
-                return back();
-            } else {
 
-                $valid = DB::table('consultas.repsasmas')
-                    ->where('source_file', 'like', $source)->get();
+            $valid = DB::table('consultas.reps_aliado_rechazados')
+                ->where('source_file', 'like', $source)->get();
 
-                if (count($valid) === 0) {
-                    $rep10 = file_get_contents($file);
+            if (count($valid) === 0) {
+                    $rep4 = processRep($file);
 
-                    if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                        $rep4 = accepRepToArray($rep10);
-
-                        foreach ($rep4 as $rep3) {
+                    foreach ($rep4 as $rep3) {
 
 
-                            Repsasmas::create([
+                        Repsasmas::create([
 
-                                'tarjeta' => $rep3[0],
+                            'tarjeta' => $rep3[0],
 
-                                'user_id' => $rep3[1],
+                            'user_id' => $rep3[1],
 
-                                'fecha' => $rep3[2],
+                            'fecha' => $rep3[2],
 
-                                'terminacion' => substr($rep3[0], -4, 4),
+                            'terminacion' => substr($rep3[0], -4, 4),
 
-                                'autorizacion' => $rep3[5],
+                            'autorizacion' => $rep3[5],
 
-                                'monto' => $rep3[8],
+                            'monto' => $rep3[8],
 
-                                'source_file' => $source
+                            'source_file' => $source
 
-                            ]);
-                        }
+                        ]);
                     }
-                }
             }
-            Session()->flash('message', 'Reps Registrados: ' . $total);
-            return back();
         }
+
+        return back();
+
     }
+
 }
