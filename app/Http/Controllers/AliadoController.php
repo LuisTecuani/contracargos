@@ -69,6 +69,20 @@ class AliadoController extends Controller
         return redirect()->route("aliado.index");
     }
 
+    public function last()
+    {
+        $emails = DB::table("consultas.contracargos_aliado as cm")
+            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
+            ->select('u.email')
+            ->whereDate('cm.created_at', today())
+            ->whereColumn('rm.terminacion', 'cm.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->groupBy("u.email")
+            ->get();
+        return view("aliado.last", compact('emails'));
+    }
+
     public function import(ImportRepRequest $request)
     {
         $archivos = $request->file('files');
@@ -78,7 +92,7 @@ class AliadoController extends Controller
         foreach ($archivos as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
 
-            $valid = DB::table('consultas.reps_rechazados_aliado as ra')
+            $valid = DB::table('consultas.repsaliado as ra')
                 ->where('source_file', 'like', $source)->get();
 
             if (count($valid) === 0) {
