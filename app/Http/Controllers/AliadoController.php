@@ -86,9 +86,11 @@ class AliadoController extends Controller
 
                     foreach ($responses[0] as $row) {
 
-                        RepsRechazadosAliado::create([
+                        Repsaliado::create([
 
                             'tarjeta' => $row[0],
+
+                            'estatus' => 'Rechazada',
 
                             'user_id' => $row[1],
 
@@ -96,7 +98,9 @@ class AliadoController extends Controller
 
                             'terminacion' => substr($row[0], -4, 4),
 
-                            'motivo' => trim($row['motivo']),
+                            'motivo_rechazo' => trim($row['motivo']),
+
+                            'autorizacion' => 'N/A',
 
                             'monto' => $row[count($row)-4],
 
@@ -112,6 +116,8 @@ class AliadoController extends Controller
 
                         'tarjeta' => $row[0],
 
+                        'estatus' => 'Aprobada',
+
                         'user_id' => $row[1],
 
                         'fecha' => $row[2],
@@ -121,6 +127,8 @@ class AliadoController extends Controller
                         'autorizacion' => $row[5],
 
                         'monto' => $row[8],
+
+                        'motivo_rechazo' => 'N/A',
 
                         'source_file' => $source
 
