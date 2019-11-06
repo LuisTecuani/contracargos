@@ -23,20 +23,6 @@
                         </form>
                     </div>
                     <div class="col">
-                        <form method="POST" action="{{ route('aliado.accepted') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="card-header">
-                                Importa respuestas aceptadas de cobranza (REP)
-                            </div>
-                            <div class="card-body">
-                                <input type="file" multiple="true" name="files[]" accept=".rep"
-                                       class="btn btn-secondary btn-lg btn-block">
-                                <br>
-                                <button class="btn btn-outline-success">Import Data</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col">
                         <form method="POST" action="{{ route('aliado.banorte') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-header">

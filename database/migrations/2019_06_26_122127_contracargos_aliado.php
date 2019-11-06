@@ -17,9 +17,9 @@ class ContracargosAliado extends Migration
             $table->bigIncrements('id');
             $table->string('autorizacion');
             $table->integer('tarjeta');
-            $table->string('user_id');
-            $table->string('email');
-            $table->string('fecha_rep');
+            $table->string('user_id')->nullable();
+            $table->string('email')->nullable();
+            $table->string('fecha_rep')->nullable();
             $table->timestamps();
         });
     }
