@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Repsmediakey;
-use App\Repsmediakey;
 use App\FileProcessor;
 use App\RespuestasBanorteMediakey;
 use Illuminate\Support\Str;
@@ -13,10 +12,6 @@ use App\RepsRechazadosMediakey;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\ImportRepRequest;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ImportRepRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\StoreAdminRequest;
