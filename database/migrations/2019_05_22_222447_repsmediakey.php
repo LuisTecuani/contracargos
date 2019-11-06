@@ -15,12 +15,14 @@ class Repsmediakey extends Migration
     {
         Schema::create('repsmediakey', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('estatus');
             $table->bigInteger('tarjeta');
             $table->integer('terminacion');
             $table->integer('user_id');
             $table->date('fecha');
-            $table->string('autorizacion');
-            $table->string('monto');
+            $table->string('autorizacion')->nullable();
+            $table->string('motivo_rechazo')->nullable();
+            $table->string('monto')->nullable();
             $table->string('source_file');
             $table->timestamps();
         });
