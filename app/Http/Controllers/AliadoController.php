@@ -104,7 +104,7 @@ class AliadoController extends Controller
 
                             'tarjeta' => $row[0],
 
-                            'estatus' => 'Rechazada',
+                            'estatus' => 'Declinada',
 
                             'user_id' => $row[1],
 
@@ -142,7 +142,7 @@ class AliadoController extends Controller
 
                         'monto' => $row[8],
 
-                        'motivo_rechazo' => 'N/A',
+                        'motivo_rechazo' => 'Aprobado',
 
                         'source_file' => $source
 
