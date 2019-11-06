@@ -15,11 +15,13 @@ class Repsaliado extends Migration
     {
         Schema::create('repsaliado', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('estatus');
             $table->bigInteger('tarjeta');
             $table->integer('terminacion');
             $table->integer('user_id');
             $table->date('fecha');
             $table->string('autorizacion');
+            $table->string('motivo_rechazo');
             $table->string('monto');
             $table->string('source_file');
             $table->timestamps();
