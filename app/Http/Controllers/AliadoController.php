@@ -34,7 +34,7 @@ class AliadoController extends Controller
 
         DB::select('update contracargos_aliado c join aliado.users u on u.id=c.user_id set c.email=u.email');
 
-        $cards = Contracargosaliado::get();
+        $cards = Contracargosaliado::whereDate('created_at', today())->get();
 
         $cards2 = Contracargosaliado::get();
 
