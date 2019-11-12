@@ -31,7 +31,7 @@
                         <td>{{$c->autorizacion}}</td>
                         <td>{{$c->tarjeta}}</td>
                     @if($c->fecha_rep == null)
-                        <td><b><a class="text-danger">Auotrizacion no Encontrada</a></b></td>
+                        <td><b><a class="text-danger">Atorizacion no encontrada</a></b></td>
                     @else
                         <td>{{$c->fecha_rep}}</td>
                     @endif
