@@ -38,7 +38,7 @@ class MediakeyController extends Controller
 
         DB::select('update contracargos_mediakey c join mediakey.users u on u.id=c.user_id set c.email=u.email');
 
-        $cards = ContracargosMediakey::get();
+        $cards = ContracargosMediakey::whereDate('created_at', today())->get();
 
         $cards2 = ContracargosMediakey::get();
 

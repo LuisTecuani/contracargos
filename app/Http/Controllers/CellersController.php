@@ -31,7 +31,7 @@ class CellersController extends Controller
 
         DB::select('update contracargos_cellers c join cellers.users u on u.id=c.user_id set c.email=u.email');
 
-        $cards = ContracargosCellers::get();
+        $cards = ContracargosCellers::whereDate('created_at', today())->get();
 
         $cards2 = ContracargosCellers::get();
 
