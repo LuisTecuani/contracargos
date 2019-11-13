@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-2 bg-light mt-2"></div>
                 <div class="col-md-10 mt-10">
-                    <h2><b>Registro de Cobros y Devoluciones Sanborns</b></h2>
+                    <h2><b>Cobros</b></h2>
                 </div>
             </div>
             <div class="container">
@@ -16,6 +16,24 @@
                     <div class="card-body">
                         <form action="{{ route('sanbornsCobroImport') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @include('contracargos.admin.import_sanborns')
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 bg-light mt-2"></div>
+                <div class="col-md-10 mt-10">
+                    <h2><b>Devos</b></h2>
+                </div>
+            </div>
+            <div class="container">
+                <div class="card bg-light mt-3">
+                    <div class="card-header">
+                        Devos
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('sanbornsDevolucionImport') }}" method="POST" enctype="multipart/form-data">
                             @include('contracargos.admin.import_sanborns')
                         </form>
                     </div>

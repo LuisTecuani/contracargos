@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ContracargosMediakey extends Migration
+class SanbornsCobros extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class ContracargosMediakey extends Migration
      */
     public function up()
     {
-        Schema::create('contracargos_mediakey', function (Blueprint $table) {
+        Schema::create('sanborns_cobros', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('autorizacion');
-            $table->integer('tarjeta');
-            $table->integer('user_id')->nullable();
-            $table->string('email')->nullable();
-            $table->date('fecha_rep')->nullable();
+            $table->bigInteger('cuenta');
+            $table->date('fecha');
+            $table->integer('importe');
+            $table->string('respuesta');
+            $table->integer('referencia');
+            $table->string('source');
             $table->timestamps();
         });
     }
@@ -34,3 +35,4 @@ class ContracargosMediakey extends Migration
         //
     }
 }
+
