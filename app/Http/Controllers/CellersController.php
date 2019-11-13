@@ -27,7 +27,7 @@ class CellersController extends Controller
         $role = User::role();
 
         DB::select('update contracargos_cellers c left join repscellers r on r.autorizacion=c.autorizacion 
-                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta'); 
+                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
 
         DB::select('update contracargos_cellers c join cellers.users u on u.id=c.user_id set c.email=u.email');
 
@@ -68,31 +68,45 @@ class CellersController extends Controller
 
     public function import(ImportRepRequest $request)
     {
-        $archivos = $request->file('files');
-        $total = count($archivos);
+        $files = $request->file('files');
+        $total = count($files);
         Session()->flash('message', 'Reps Registrados: ' . $total);
-        foreach ($archivos as $file) {
+        foreach ($files as $file) {
             $source = Str::before($file->getClientOriginalName(), '.');
-            $valid = DB::table('consultas.repscellers as ra')
+            $valid = DB::table('consultas.repscellers')
                 ->where('source_file', 'like', $source)->get();
             if (count($valid) === 0) {
-                $rep10 = file_get_contents($file);
-                if (Str::contains($rep10, 'REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS')) {
-                    $rep4 = accepRepToArray($rep10);
-                    foreach ($rep4 as $rep3) {
-                        Repscellers::create([
-                            'tarjeta' => $rep3[0],
-                            'user_id' => $rep3[1],
-                            'fecha' => $rep3[2],
-                            'terminacion' => substr($rep3[0], -4, 4),
-                            'autorizacion' => $rep3[5],
-                            'monto' => $rep3[8],
-                            'source_file' => $source
-                        ]);
-                    }
+                $responses = processRep($file);
+
+                foreach ($responses[1] as $row) {
+
+                    Repscellers::create([
+                        'tarjeta' => $row[0],
+                        'estatus' => 'Aprobada',
+                        'terminacion' => substr($row[0], -4, 4),
+                        'user_id' => $row[1],
+                        'fecha' => $row[2],
+                        'autorizacion' => $row[5],
+                        'monto' => $row[8],
+                        'source_file' => $source
+                    ]);
+                }
+
+                foreach ($responses[0] as $row) {
+
+                    Repscellers::create([
+                        'tarjeta' => $row[0],
+                        'estatus' => 'Rechazada',
+                        'user_id' => $row[1],
+                        'fecha' => $row[2],
+                        'terminacion' => substr($row[0], -4, 4),
+                        'motivo_rechazo' => trim($row['motivo']),
+                        'monto' => $row[count($row) - 4],
+                        'source_file' => $source
+                    ]);
                 }
             }
         }
-        return back();
+        return redirect()->route("cellers.index");
     }
 }

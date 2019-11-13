@@ -48,10 +48,13 @@ class AliadoController extends Controller
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
             $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
-            $Contracargos = new ContracargosAliado();
-            $Contracargos->autorizacion = $store[0];
-            $Contracargos->tarjeta = $store[1];
-            $Contracargos->save();
+            $exist = Contracargosaliado::where([['autorizacion', $store[0]],['tarjeta', $store[1]]])->first();
+            if (! $exist) {
+                $Contracargos = new ContracargosAliado();
+                $Contracargos->autorizacion = $store[0];
+                $Contracargos->tarjeta = $store[1];
+                $Contracargos->save();
+            }
         }
         Session()->flash('message', 'Datos Registrados');
 

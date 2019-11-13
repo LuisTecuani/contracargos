@@ -29,11 +29,8 @@ function processRep($file)
         }else{
             $rejected[$row] = fixKeys(preg_grep("/\S/", preg_split("/\s/", $cont)));
             $rejected[$row]['motivo'] = substr($cont, 60, 50);
-        //
         }
     }
-
-
     return [$rejected, $accepted];
 }
 
