@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SanbornsCobro extends Model
+class SanbornsDevolucionCobro extends Model
 {
     protected $guarded = [];
 
@@ -14,9 +14,8 @@ class SanbornsCobro extends Model
         'importe',
         'respuesta',
         'referencia',
-        'source',
-        'tipo'
+        'source'
     ];
 
-    protected $table = 'sanborns_cobros';
+    protected $table = 'sanborns_devoluciones_cobros';
 }

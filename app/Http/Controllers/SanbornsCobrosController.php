@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SanbornsDevolucionCobro;
 use App\User;
 use App\SanbornsCobro;
 use Illuminate\Support\Str;
@@ -76,7 +77,54 @@ class SanbornsCobrosController extends Controller
         return back();
     }
 
-    public function NumberChargesReturns()
+    public function storeChargesReturns(ImportSanbornsRequest $request){
+
+        $files = $request->file('files');
+        $total = count($files);
+        Session()->flash('message', 'Files Registrados: ' . $total);
+
+        foreach ($files as $file) {
+            $source = Str::before($file->getClientOriginalName(), '.');
+            $validation = SanbornsDevolucionCobro::where('source', $source)->get();
+            $returns =strpos($source, 'DEVWS');
+            $charges = strpos($source, 'CGOWS');
+
+            if (count($validation) < 1) {
+                $data = file_get_contents($file);
+                if ($charges !== false) {
+                    //dd('Registro de cargos');
+                    $dataFilter = SanbornsTxtToArray($data);
+                    foreach ($dataFilter as $dataInsert) {
+                        SanbornsDevolucionCobro::create([
+                            'cuenta' => substr($dataInsert, 0, 13),
+                            'fecha' => substr($dataInsert, 13, 8),
+                            'importe' => substr($dataInsert, 43, 8),
+                            'respuesta' => substr($dataInsert, 53, 2),
+                            'referencia' => substr($dataInsert, 55, 13),
+                            'source' => $source,
+                            'tipo' => "cargo"
+                        ]);
+                    }
+                } elseif ($returns !== false) {
+                    //dd('registro de devoluciones');
+                    $dataFilter = SanbornsTxtToArray($data);
+                    foreach ($dataFilter as $dataInsert) {
+                        SanbornsDevolucionCobro::create([
+                            'cuenta' => substr($dataInsert, 0, 13),
+                            'fecha' => substr($dataInsert, 13, 8),
+                            'importe' => substr($dataInsert, 43, 8),
+                            'referencia' => substr($dataInsert, 55, 13),
+                            'source' => $source,
+                            'tipo' => "devolucion"
+                        ]);
+                    }
+                }
+            }
+        }
+        return back();
+    }
+
+    public function numberChargesReturns()
     {
         SanbornsTotalDevoluciones::truncate();
         SanbornsTotalCobros::truncate();

@@ -43,5 +43,16 @@
             </form>
         </div>
         <div class="col-md-1 mt-1"></div>
+        <div class="col-md-1 bg-light"></div>
+        <div class="col-md-5 mt-4">
+            <h3><b>Cobros Y Devoluciones</b></h3>
+            <div class="card bg-light mt-1">
+                <div class="card-body">
+                    <form action="{{ route('sanbornsStoreChargesReturnsImport') }}" method="POST" enctype="multipart/form-data">
+                        @include('contracargos.admin.import_sanborns')
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
