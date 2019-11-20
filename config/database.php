@@ -15,6 +15,8 @@ return [
 
     'default' => env('DB_CONNECTION', 'mysql'),
 
+    'aliado_connection' => env('ALIADO_CONNECTION', 'aliado'),
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -38,6 +40,13 @@ return [
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+        // PHPunit testing aliado connection
+        'testing_aliado' => [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
         ],
 
         'mysql' => [
@@ -96,7 +105,7 @@ return [
             ]) : [],
         ],
 
-        'mysql3' => [
+        'aliado' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),

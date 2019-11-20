@@ -26,6 +26,13 @@ $factory->define(User::class, function (Faker $faker) {
     ];
 });
 
+$factory->state(User::class, 'admin', [])
+    ->afterCreatingState(User::class, 'admin', function (User $user) {
+        $user->roles()->save(
+            factory(Role::class, 'admin')->firstOrCreate()
+        );
+    });
+
 $factory->define(Repsaliado::class, function (Faker $faker) {
     $tarjeta = $faker->creditCardNumber;
     return [

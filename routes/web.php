@@ -57,8 +57,11 @@ Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
+
 Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
 Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.banortePdf');
+Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.banorte');
+Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
 
 /*
 |--------------------------------------------------------------------------

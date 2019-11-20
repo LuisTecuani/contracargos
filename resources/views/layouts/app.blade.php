@@ -26,9 +26,10 @@
         @include('inc.navbar')
 
         <main class="py-4">
-        </main>
-    </div>
             @yield('content')
-</body>
+        </main>
+
         @include('inc.footer')
+    </div>
+</body>
 </html>
