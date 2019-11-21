@@ -26,4 +26,6 @@ class UserTdcAliado extends Model
      * @var array
      */
     protected $fillable = [];
+
+
 }

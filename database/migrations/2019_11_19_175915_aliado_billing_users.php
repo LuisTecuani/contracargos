@@ -16,7 +16,7 @@ class AliadoBillingUsers extends Migration
         Schema::create('aliado_billing_users', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->string('procedence');
-            $table->string('bill_on')->nullable();
+            $table->string('exp_date')->nullable();
             $table->timestamps();
         });
     }

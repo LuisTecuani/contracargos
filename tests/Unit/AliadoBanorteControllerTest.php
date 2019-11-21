@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\AliadoBillingUsers;
+use App\RespuestaBanorteAliado;
 use App\User;
 use App\UserTdcAliado;
 use Illuminate\Http\UploadedFile;
@@ -25,19 +27,19 @@ class AliadoBanorteControllerTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_import_users_from_ftp_dashboard()
+    public function admins_can_import_users_from_ftp()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '125914',
+            'exp_month' => 10,
             'exp_year' => 2018,
         ]);
         $active = factory(UserTdcAliado::class)->create([
             'user_id' => '125942',
+            'exp_month' => 11,
             'exp_year' => 2028,
         ]);
-
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/SCAENT0897D191113ER01.ftp',
@@ -50,17 +52,20 @@ class AliadoBanorteControllerTest extends TestCase
         );
 
         $this->post('/aliado/banorte/ftp', [
-                'file' => $file
-            ]);
+            'file' => $file,
+            'procedence' => 'dashboard',
+        ]);
+
         $this->assertDatabaseHas('aliado_billing_users', [
-                'user_id' => $expired->user_id,
-                'procedence' => 'dashboard',
-                'bill_on' => 'prosa',
-            ]);
+            'user_id' => $expired->user_id,
+            'procedence' => 'dashboard',
+            'exp_date' => "18-10",
+        ]);
         $this->assertDatabaseHas('aliado_billing_users', [
-                'user_id' => $active->user_id,
-                'procedence' => 'dashboard',
-                'bill_on' => 'banorte',
-            ]);
+            'user_id' => $active->user_id,
+            'procedence' => 'dashboard',
+            'exp_date' => '28-11',
+        ]);
     }
+
 }
