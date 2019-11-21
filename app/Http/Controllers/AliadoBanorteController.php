@@ -38,13 +38,14 @@ class AliadoBanorteController extends Controller
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
+                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
             ]);
         }
 
-        $users = count($rows);
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/banorte/results', compact('users'));
+        return view('/aliado/banorte/results', compact('expUsers', 'vigUsers'));
     }
 
     public function billingRejected(Request $request)
@@ -73,19 +74,20 @@ class AliadoBanorteController extends Controller
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
+                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
             ]);
         }
-        $users = count($users);
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/banorte/results', compact('users'));
+        return view('/aliado/banorte/results', compact('expUsers', 'vigUsers'));
     }
 
     public function usersTextbox(Request $request)
     {
         $procedence = $request->procedence;
 
-        $ids = preg_split("[\r\n]",$request->ids);
+        $ids = preg_split("[\r\n]", $request->ids);
 
         foreach ($ids as $id) {
 
@@ -101,11 +103,30 @@ class AliadoBanorteController extends Controller
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
+                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
             ]);
         }
-        $users = count($ids);
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/banorte/results', compact('users'));
+        return view('/aliado/banorte/results', compact('expUsers', 'vigUsers'));
+    }
+
+    public function expDates()
+    {
+        return AliadoBillingUsers::select('user_id', 'exp_date')
+            ->where([
+                ['exp_date','<', now()->format('y-m')],
+                ['created_at', 'like', now()->format('Y-m-d').'%']])
+            ->get();
+    }
+
+    public function vigDates()
+    {
+        return AliadoBillingUsers::select('user_id', 'exp_date')
+            ->where([
+                ['exp_date','>=', now()->format('y-m')],
+                ['created_at', 'like', now()->format('Y-m-d').'%']])
+            ->get();
     }
 }

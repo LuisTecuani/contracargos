@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\AliadoBillingUsers;
 use App\UserTdcAliado;
 use App\Repsaliado;
 use App\RespuestaBanorteAliado;
@@ -60,5 +61,14 @@ $factory->define(RespuestaBanorteAliado::class, function (Faker $faker) {
         'monto' => 79,
         'fecha' => $date,
         'source_file' => "aliado-banorte-$date-Respuestas",
+    ];
+});
+
+$factory->define(AliadoBillingUsers::class, function (Faker $faker) {
+
+    return [
+        'user_id' => $faker->randomNumber(6),
+        'procedence' => $faker->name,
+        'exp_date' => $faker->date('y-m'),
     ];
 });

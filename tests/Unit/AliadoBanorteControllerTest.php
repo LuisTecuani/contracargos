@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\AliadoBillingUsers;
+use App\Http\Controllers\AliadoBanorteController;
 use App\RespuestaBanorteAliado;
 use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -122,7 +124,6 @@ class AliadoBanorteControllerTest extends TestCase
     public function admins_can_import_users_writing_in_text_box()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
@@ -148,5 +149,33 @@ class AliadoBanorteControllerTest extends TestCase
         $this->assertDatabaseHas('aliado_billing_users', [
             'user_id' => $active->user_id,
         ]);
+    }
+
+    /** @test */
+    public function expDates_method_divide_users_by_expired_and_vigent()
+    {
+        $this->signIn();
+        $expired1 = factory(AliadoBillingUsers::class)->create([
+            'exp_date' => '18-02'
+        ]);
+        $expired2 = factory(AliadoBillingUsers::class)->create([
+            'exp_date' => '17-12'
+        ]);
+        $vigent1 = factory(AliadoBillingUsers::class)->create([
+            'exp_date' => '27-01'
+        ]);
+        $vigent2 = factory(AliadoBillingUsers::class)->create([
+            'exp_date' => '29-1'
+        ]);
+        $vigent3 = factory(AliadoBillingUsers::class)->create([
+            'exp_date' => '26-12'
+        ]);
+
+        $expUsers = (new AliadoBanorteController())->expDates();
+
+        $vigUsers = (new AliadoBanorteController())->vigDates();
+
+        $this->assertCount(2, $expUsers);
+        $this->assertCount(3, $vigUsers);
     }
 }

@@ -12,7 +12,8 @@
             <div class="col-12">
                 <h3>Usuarios a cobrar</h3>
 
-                <h6>Total {{$users}}</h6>
+                <h6>Prosa {{$expUsers}}</h6><br>
+                <h6>Banorte {{$vigUsers}}</h6>
 
             </div>
 
