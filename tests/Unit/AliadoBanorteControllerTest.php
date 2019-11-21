@@ -118,4 +118,35 @@ class AliadoBanorteControllerTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function admins_can_import_users_writing_in_text_box()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $expired = factory(UserTdcAliado::class)->create([
+            'user_id' => '123456',
+            'exp_month' => 10,
+            'exp_year' => 2018,
+        ]);
+        $active = factory(UserTdcAliado::class)->create([
+            'user_id' => '654321',
+            'exp_month' => 11,
+            'exp_year' => 2028,
+        ]);
+
+
+        $this->post('/aliado/banorte/usersTextbox', [
+            'ids' => "123456\r\n654321",
+            'procedence' => 'Rechazos historicos',
+        ]);
+
+        $this->assertDatabaseHas('aliado_billing_users', [
+            'user_id' => $expired->user_id,
+            'procedence' => 'Rechazos historicos',
+            'exp_date' => "18-10",
+        ]);
+        $this->assertDatabaseHas('aliado_billing_users', [
+            'user_id' => $active->user_id,
+        ]);
+    }
 }

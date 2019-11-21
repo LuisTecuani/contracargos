@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="card bg-light mt-2">
-                            <form method="POST" action="{{ route('aliado.cobroBanorteFtp') }}"
+                            <form method="POST" action="{{ route('aliado.banorteUsersTextbox') }}"
                                   enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">

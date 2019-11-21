@@ -63,6 +63,7 @@ Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.
 Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.banorte');
 Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
 Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');
+Route::post('/aliado/banorte/usersTextbox', 'AliadoBanorteController@usersTextbox')->name('aliado.banorteUsersTextbox');
 
 /*
 |--------------------------------------------------------------------------

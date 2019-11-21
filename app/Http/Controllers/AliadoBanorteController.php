@@ -31,13 +31,14 @@ class AliadoBanorteController extends Controller
                 ->latest()
                 ->first();
 
+            $d = $dates->exp_month . substr($dates->exp_year, -2);
+
             AliadoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('my', $dates->exp_month . substr($dates->exp_year, -2))
-                    ->format("y-m"),
+                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
             ]);
         }
 
@@ -65,16 +66,45 @@ class AliadoBanorteController extends Controller
                 ->latest()
                 ->first();
 
+            $d = $dates->exp_month . substr($dates->exp_year, -2);
+
             AliadoBillingUsers::create([
                 'user_id' => $user->id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('my', $dates->exp_month . substr($dates->exp_year, -2))
-                    ->format("y-m"),
+                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
             ]);
         }
         $users = count($users);
+
+        return view('/aliado/banorte/results', compact('users'));
+    }
+
+    public function usersTextbox(Request $request)
+    {
+        $procedence = $request->procedence;
+
+        $ids = preg_split("[\r\n]",$request->ids);
+
+        foreach ($ids as $id) {
+
+            $dates = UserTdcAliado::select("exp_month", "exp_year")
+                ->where('user_id', '=', $id)
+                ->latest()
+                ->first();
+
+            $d = $dates->exp_month . substr($dates->exp_year, -2);
+
+            AliadoBillingUsers::create([
+                'user_id' => $id,
+
+                'procedence' => $procedence,
+
+                'exp_date' => substr($d, -2, 2).'-'.substr($d, 0, -2),
+            ]);
+        }
+        $users = count($ids);
 
         return view('/aliado/banorte/results', compact('users'));
     }
