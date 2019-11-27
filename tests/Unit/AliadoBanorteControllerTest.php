@@ -178,4 +178,44 @@ class AliadoBanorteControllerTest extends TestCase
         $this->assertCount(2, $expUsers);
         $this->assertCount(3, $vigUsers);
     }
+
+    /** @test */
+  /*  public function it_can_build_a_valid_ftp_file()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $expired1 = factory(UserTdcAliado::class)->create([
+            'user_id' => '123456',
+            'exp_month' => 10,
+            'exp_year' => 2018,
+        ]);
+        $expired2 = factory(UserTdcAliado::class)->create([
+            'user_id' => '123423',
+            'exp_month' => 1,
+            'exp_year' => 2017,
+        ]);
+        $vigent = factory(UserTdcAliado::class)->create([
+            'user_id' => '654321',
+            'exp_month' => 11,
+            'exp_year' => 2028,
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'user_id' => $expired1->user_id,
+            'exp_date' => '18-10',
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'user_id' => $expired2->user_id,
+            'exp_date' => '17-01',
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'user_id' => $vigent->user_id,
+            'exp_date' => '27-01',
+        ]);
+
+        $this->post('/aliado/banorte/ftpProsa');
+
+$date= 0
+        $this->assertFileExists("SCAENT0897D".$date."ER01.ftp",);
+
+    } */
 }

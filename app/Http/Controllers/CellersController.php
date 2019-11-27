@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\CellersUser;
 use App\User;
 use App\Repscellers;
-use App\FileProcessor;
 use Illuminate\Support\Str;
 use App\ContracargosCellers;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +16,9 @@ use App\Http\Requests\StoreAdminRequest;
 
 class CellersController extends Controller
 {
-    public function __construct(FileProcessor $filep)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->fileP = $filep;
     }
 
     public function index()
@@ -44,7 +43,7 @@ class CellersController extends Controller
         $arr = preg_split("[\r\n]", $autorizacionesS);
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
-            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
+            $store[0] = $this->autorizacionSeisDigit($store[0]);
             $Contracargos = new ContracargosCellers();
             $Contracargos->autorizacion = $store[0];
             $Contracargos->tarjeta = $store[1];
@@ -108,5 +107,31 @@ class CellersController extends Controller
             }
         }
         return redirect()->route("cellers.index");
+    }
+
+    public function last()
+    {
+        $emails = DB::table("contracargos_cellers as cc")
+            ->leftJoin("repscellers as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
+            ->select('email')
+            ->select('u.email')
+            ->whereDate('cc.created_at', today())
+            ->whereColumn('rm.terminacion', 'cc.tarjeta')
+            ->orWhere('rm.autorizacion', null)
+            ->groupBy("u.email")
+            ->get();
+
+        return view("cellers.last", compact('emails'));
+    }
+
+    public function autorizacionSeisDigit($aut) {
+        $len = strlen($aut);
+        while($len < 6){
+            $aut = "0$aut";
+            $len = strlen($aut);
+        }
+        $autseisd = $aut;
+        return $autseisd;
     }
 }

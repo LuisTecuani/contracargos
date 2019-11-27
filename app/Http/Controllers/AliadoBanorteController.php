@@ -7,6 +7,8 @@ use App\RespuestaBanorteAliado;
 use App\UserTdcAliado;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class AliadoBanorteController extends Controller
 {
@@ -112,12 +114,53 @@ class AliadoBanorteController extends Controller
         return view('/aliado/banorte/results', compact('expUsers', 'vigUsers'));
     }
 
+    public function ftpProsa()
+    {
+        $expUsers = $this->expDates();
+        $verified = $this->notInBlacklist($expUsers);
+        dd($verified);
+        $query = DB::table('aliado.user_tdc')
+            ->selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
+            ->whereIn('user_id', $verified);
+
+        $ftpText = DB::table('aliado.user_tdc')
+            ->selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ')")
+            ->whereIn('user_id', $verified)
+            ->get();
+
+
+return view('/aliado/banorte/paraFTP', compact('verified'));
+
+    }
+
+    public function notInBlacklist($ids)
+    {
+        return DB::table('aliado.users as u')
+            ->leftJoin('aliado.cancel_account_answers as ac', 'ac.user_id', '=', 'u.id')
+            ->leftJoin('aliado_blacklist as ab', 'ab.user_id', '=', 'u.id')
+            ->leftJoin('aliado.user_cancellations as au', 'au.user_id', '=', 'u.id')
+            ->select('u.id')
+            ->whereIn('u.id', $ids)
+            ->whereNull(['ac.user_id', 'ab.user_id','au.user_id', 'u.deleted_at'])
+            ->get();
+    }
+
+    public function notCancelled($ids)
+    {
+        return DB::table('aliado.users as u')
+            ->leftJoin('aliado.user_cancellations as au', 'au.user_id', '=', 'u.id')
+            ->select('u.id')
+            ->whereIn('u.id', $ids)
+            ->whereNull(['au.user_id', 'u.deleted_at'])
+            ->get();
+    }
+
     public function expDates()
     {
-        return AliadoBillingUsers::select('user_id', 'exp_date')
+        return AliadoBillingUsers::select('user_id')
             ->where([
-                ['exp_date','<', now()->format('y-m')],
-                ['created_at', 'like', now()->format('Y-m-d').'%']])
+                ['exp_date', '<', now()->format('y-m')],
+                ['created_at', 'like', now()->format('Y-m-d') . '%']])
             ->get();
     }
 
@@ -125,8 +168,8 @@ class AliadoBanorteController extends Controller
     {
         return AliadoBillingUsers::select('user_id', 'exp_date')
             ->where([
-                ['exp_date','>=', now()->format('y-m')],
-                ['created_at', 'like', now()->format('Y-m-d').'%']])
+                ['exp_date', '>=', now()->format('y-m')],
+                ['created_at', 'like', now()->format('Y-m-d') . '%']])
             ->get();
     }
 }

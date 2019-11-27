@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-4 bg-light mt-2">
                 <h1><b>Aliado banorte</b></h1>
-                @include('aliado._navLinks')
+                @include('aliado.banorte._navLinks')
             </div>
             <div class="col mt-5">
                 <h2><b>Herramienta para preparar el cobro del dia</b></h2>

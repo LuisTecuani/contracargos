@@ -17,6 +17,8 @@ return [
 
     'aliado_connection' => env('ALIADO_CONNECTION', 'aliado'),
 
+    'cellers_connection' => env('CELLERS_CONNECTION', 'cellers'),
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -44,6 +46,14 @@ return [
 
         // PHPunit testing aliado connection
         'testing_aliado' => [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+        // PHPunit testing cellers connection
+        'testing_cellers' => [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
@@ -87,7 +97,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        'mysql2' => [
+        'cellers' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),

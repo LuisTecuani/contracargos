@@ -57,6 +57,9 @@ Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
 Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
+Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliadoBlacklist.index');
+Route::post('/aliado/blacklist/insert', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
+
 
 Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
 Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.banortePdf');
@@ -64,6 +67,7 @@ Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.ban
 Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
 Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');
 Route::post('/aliado/banorte/usersTextbox', 'AliadoBanorteController@usersTextbox')->name('aliado.banorteUsersTextbox');
+Route::get('/aliado/banorte/ftpProsa', 'AliadoBanorteController@ftpProsa')->name('aliado.banorteFtpProsa');
 
 /*
 |--------------------------------------------------------------------------

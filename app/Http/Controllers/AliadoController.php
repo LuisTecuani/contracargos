@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AliadoBlacklist;
 use App\User;
 use App\Repsaliado;
 use App\FileProcessor;
 use App\RepsRechazadosAliado;
 use App\respuestaBanorteAliado;
+use http\Client\Request;
 use Illuminate\Support\Str;
 use App\Contracargosaliado;
 use Illuminate\Support\Facades\DB;
@@ -73,18 +75,18 @@ class AliadoController extends Controller
     }
 
     public function last()
-    {
-        $emails = DB::table("consultas.contracargos_aliado as cm")
-            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('u.email')
-            ->whereDate('cm.created_at', today())
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
-            ->groupBy("u.email")
-            ->get();
-        return view("aliado.last", compact('emails'));
-    }
+{
+    $emails = DB::table("consultas.contracargos_aliado as cm")
+        ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+        ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
+        ->select('u.email')
+        ->whereDate('cm.created_at', today())
+        ->whereColumn('rm.terminacion', 'cm.tarjeta')
+        ->orWhere('rm.autorizacion', null)
+        ->groupBy("u.email")
+        ->get();
+    return view("aliado.last", compact('emails'));
+}
 
     public function import(ImportRepRequest $request)
     {
