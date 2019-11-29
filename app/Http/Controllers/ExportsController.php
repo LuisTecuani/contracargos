@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Exporter;
 
-class ExportsController
+class ExportsController extends Controller
 {
-    private $exporter;
-
-    public function __construct(Exporter $exporter)
+    /**
+     * Show to create a new export.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
-        $this->exporter = $exporter;
+        return view('exports.index');
     }
 
-    public function export()
+    /**
+     * Download the export as a CSV file.
+     *
+     * @param string $filename
+     * @param mixed $export
+     */
+    protected function download(string $filename, $export)
     {
-        return $this->exporter->download(new UsersExport, 'users.xlsx');
+
+        return $export->download($filename);
     }
 }
+

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserTdcAliadoTable extends Migration
+class CreateAliadoUserCancellationsTable extends Migration
 {
     /**
      * The database schema.
@@ -28,18 +28,12 @@ class CreateUserTdcAliadoTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('user_tdc', function (Blueprint $table) {
+        $this->schema->create('user_cancellations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('name');
-            $table->string('bank')->nullable()->comment('Visa, Master Card, American Express, Discover or Other');
-            $table->string('number');
-            $table->string('csv')->nullable();
-            $table->string('exp_month')->nullable();
-            $table->string('exp_year')->nullable();
-            $table->string('address')->nullable();
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('reason_id')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
     /**
@@ -49,6 +43,6 @@ class CreateUserTdcAliadoTable extends Migration
      */
     public function down()
     {
-       //
+//
     }
 }

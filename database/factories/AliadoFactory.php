@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\AliadoBillingUsers;
+use App\AliadoUser;
 use App\UserTdcAliado;
 use App\Repsaliado;
 use App\RespuestaBanorteAliado;
@@ -70,5 +71,15 @@ $factory->define(AliadoBillingUsers::class, function (Faker $faker) {
         'user_id' => $faker->randomNumber(6),
         'procedence' => $faker->name,
         'exp_date' => $faker->date('y-m'),
+        'number' => $faker->creditCardNumber,
+    ];
+});
+
+$factory->define(AliadoUser::class, function (Faker $faker) {
+
+    return [
+        'id' => $faker->randomNumber(6),
+        'name' => $faker->name,
+        'email' => $faker->email,
     ];
 });

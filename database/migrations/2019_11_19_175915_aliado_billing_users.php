@@ -17,6 +17,7 @@ class AliadoBillingUsers extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('procedence');
             $table->string('exp_date')->nullable();
+            $table->bigInteger('number');
             $table->timestamps();
         });
     }

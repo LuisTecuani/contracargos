@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\AliadoBillingUsers;
+use App\AliadoBlacklist;
+use App\AliadoCancelAccountAnswer;
+use App\AliadoUser;
+use App\AliadoUserCancellation;
+use App\Exports\AliadoBanorteExport;
 use App\RespuestaBanorteAliado;
 use App\UserTdcAliado;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class AliadoBanorteController extends Controller
@@ -28,19 +34,22 @@ class AliadoBanorteController extends Controller
         foreach ($rows as $row) {
             $id = substr($row, 9, 6);
 
-            $dates = UserTdcAliado::select("exp_month", "exp_year")
+            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
 
-            $d = $dates->exp_month . substr($dates->exp_year, -2);
+            $d = $data->exp_month . substr($data->exp_year, -2);
 
             AliadoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
+
+                'number' => $data->number
             ]);
         }
 
@@ -64,19 +73,22 @@ class AliadoBanorteController extends Controller
 
         foreach ($users as $user) {
 
-            $dates = UserTdcAliado::select("exp_month", "exp_year")
+            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
                 ->where('user_id', '=', $user->id)
                 ->latest()
                 ->first();
 
-            $d = $dates->exp_month . substr($dates->exp_year, -2);
+            $d = $data->exp_month . substr($data->exp_year, -2);
 
             AliadoBillingUsers::create([
                 'user_id' => $user->id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
+
+                'number' => $data->number
             ]);
         }
         $expUsers = count($this->expDates());
@@ -93,19 +105,22 @@ class AliadoBanorteController extends Controller
 
         foreach ($ids as $id) {
 
-            $dates = UserTdcAliado::select("exp_month", "exp_year")
+            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
 
-            $d = $dates->exp_month . substr($dates->exp_year, -2);
+            $d = $data->exp_month . substr($data->exp_year, -2);
 
             AliadoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => substr($d, -2, 2) . '-' . substr($d, 0, -2),
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
+
+                'number' => $data->number
             ]);
         }
         $expUsers = count($this->expDates());
@@ -117,32 +132,18 @@ class AliadoBanorteController extends Controller
     public function ftpProsa()
     {
         $expUsers = $this->expDates();
-        $verified = $this->notInBlacklist($expUsers);
-        dd($verified);
-        $query = DB::table('aliado.user_tdc')
-            ->selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
-            ->whereIn('user_id', $verified);
+        $verified = $this->notInBlacklists($expUsers);
 
-        $ftpText = DB::table('aliado.user_tdc')
-            ->selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ')")
-            ->whereIn('user_id', $verified)
-            ->get();
-
-
-return view('/aliado/banorte/paraFTP', compact('verified'));
+        return view('/aliado/banorte/paraFTP', compact('verified'));
 
     }
 
-    public function notInBlacklist($ids)
+    public function notInBlacklists($ids)
     {
-        return DB::table('aliado.users as u')
-            ->leftJoin('aliado.cancel_account_answers as ac', 'ac.user_id', '=', 'u.id')
-            ->leftJoin('aliado_blacklist as ab', 'ab.user_id', '=', 'u.id')
-            ->leftJoin('aliado.user_cancellations as au', 'au.user_id', '=', 'u.id')
-            ->select('u.id')
-            ->whereIn('u.id', $ids)
-            ->whereNull(['ac.user_id', 'ab.user_id','au.user_id', 'u.deleted_at'])
-            ->get();
+        return AliadoUser::select('id')->whereIn('id',$ids)->whereNull('deleted_at')->get()
+            ->diff(AliadoCancelAccountAnswer::select('user_id as id')->get())
+            ->diff(AliadoBlacklist::select('user_id as id')->get())
+            ->diff(AliadoUserCancellation::select('user_id as id')->get());
     }
 
     public function notCancelled($ids)
@@ -170,6 +171,20 @@ return view('/aliado/banorte/paraFTP', compact('verified'));
             ->where([
                 ['exp_date', '>=', now()->format('y-m')],
                 ['created_at', 'like', now()->format('Y-m-d') . '%']])
+            ->get();
+    }
+
+
+    public function ftpText($verified)
+    {
+        $query = DB::table('aliado.user_tdc')
+            ->selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
+            ->whereIn('user_id', $verified);
+
+        $ftpText = DB::table('aliado.user_tdc')
+            ->selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ')")
+            ->whereIn('user_id', $verified)
+            ->union($query)
             ->get();
     }
 }

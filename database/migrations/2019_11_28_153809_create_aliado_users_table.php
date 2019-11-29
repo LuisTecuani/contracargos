@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCellersUsersTable extends Migration
+class CreateAliadoUsersTable extends Migration
 {
     /**
      * The database schema.
@@ -19,7 +19,7 @@ class CreateCellersUsersTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = Schema::connection(config('database.cellers_connection'));
+        $this->schema = Schema::connection(config('database.aliado_connection'));
     }
     /**
      * Run the migrations.

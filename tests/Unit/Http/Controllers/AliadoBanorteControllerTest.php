@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Http\Controllers;
 
 use App\AliadoBillingUsers;
+use App\AliadoUser;
 use App\Http\Controllers\AliadoBanorteController;
 use App\RespuestaBanorteAliado;
 use App\UserTdcAliado;
@@ -124,6 +125,8 @@ class AliadoBanorteControllerTest extends TestCase
     public function admins_can_import_users_writing_in_text_box()
     {
         $this->signIn();
+
+        $this->withoutExceptionHandling();
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
@@ -179,43 +182,35 @@ class AliadoBanorteControllerTest extends TestCase
         $this->assertCount(3, $vigUsers);
     }
 
-    /** @test */
-  /*  public function it_can_build_a_valid_ftp_file()
+    /** @test  */
+    public function it_can_build_a_valid_ftp_file()
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-        $expired1 = factory(UserTdcAliado::class)->create([
-            'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $expired2 = factory(UserTdcAliado::class)->create([
-            'user_id' => '123423',
-            'exp_month' => 1,
-            'exp_year' => 2017,
-        ]);
-        $vigent = factory(UserTdcAliado::class)->create([
-            'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
-        factory(AliadoBillingUsers::class)->create([
-            'user_id' => $expired1->user_id,
+
+        $user1 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '18-10',
         ]);
-        factory(AliadoBillingUsers::class)->create([
-            'user_id' => $expired2->user_id,
+        $user2 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '17-01',
         ]);
-        factory(AliadoBillingUsers::class)->create([
-            'user_id' => $vigent->user_id,
+        $user3 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '27-01',
         ]);
 
-        $this->post('/aliado/banorte/ftpProsa');
+        factory(AliadoUser::class)->create([
+            'id' => $user1->user_id,
+        ]);
+        factory(AliadoUser::class)->create([
+            'id' => $user2->user_id,
+        ]);
+        factory(AliadoUser::class)->create([
+            'id' => $user3->user_id,
+        ]);
 
-$date= 0
-        $this->assertFileExists("SCAENT0897D".$date."ER01.ftp",);
+        $this->get('/aliado/banorte/ftpProsa');
 
-    } */
+        $this->assertFileExists("SCAENT0897D" . $date . "ER01.ftp",);
+
+    }
 }

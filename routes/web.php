@@ -68,7 +68,7 @@ Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.
 Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');
 Route::post('/aliado/banorte/usersTextbox', 'AliadoBanorteController@usersTextbox')->name('aliado.banorteUsersTextbox');
 Route::get('/aliado/banorte/ftpProsa', 'AliadoBanorteController@ftpProsa')->name('aliado.banorteFtpProsa');
-
+Route::get('/aliado/banorte/csvBilling', 'Exports\AliadoBanorteController@export')->name('aliado.banorteCsvBilling');
 /*
 |--------------------------------------------------------------------------
 | Asmas Routes
