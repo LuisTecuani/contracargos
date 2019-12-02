@@ -21,7 +21,7 @@ class SanbornsDevolucionesCobros extends Migration
             $table->string('respuesta')->nullable();
             $table->integer('referencia');
             $table->string('source');
-            $table->string('tipo');
+            $table->string('tipo')->nullable();
             $table->timestamps();
         });
     }

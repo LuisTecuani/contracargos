@@ -14,7 +14,8 @@ class SanbornsDevolucionCobro extends Model
         'importe',
         'respuesta',
         'referencia',
-        'source'
+        'source',
+        'tipo'
     ];
 
     protected $table = 'sanborns_devoluciones_cobros';

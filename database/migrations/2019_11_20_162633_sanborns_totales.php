@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class SanbornsDevoluciones extends Migration
+class SanbornsTotales extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class SanbornsDevoluciones extends Migration
      */
     public function up()
     {
-        Schema::create('sanborns_devoluciones', function (Blueprint $table) {
+        Schema::create('sanborns_totales', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('cuenta');
-            $table->date('fecha');
-            $table->integer('importe');
-            $table->integer('referencia');
-            $table->string('source');
+            $table->bigInteger('veces_cobrado');
+            $table->bigInteger('total_cobros');
+            $table->bigInteger('veces_devuelto')->nullable();
+            $table->bigInteger('total_devoluciones')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class SanbornsDevoluciones extends Migration
      */
     public function down()
     {
-        //
+
     }
 }
