@@ -133,6 +133,17 @@ class AliadoBanorteController extends Controller
     {
         $expUsers = $this->expDates();
         $verified = $this->notInBlacklists($expUsers);
+     //   $text = $this->ftpText($verified);
+
+        return view('/aliado/banorte/paraFTP', compact('verified'));
+
+    }
+
+    public function csvBanorte()
+    {
+        $vigUsers = $this->vigDates();
+        $verified = $this->notInBlacklists($vigUsers);
+
 
         return view('/aliado/banorte/paraFTP', compact('verified'));
 
@@ -167,7 +178,7 @@ class AliadoBanorteController extends Controller
 
     public function vigDates()
     {
-        return AliadoBillingUsers::select('user_id', 'exp_date')
+        return AliadoBillingUsers::select('user_id')
             ->where([
                 ['exp_date', '>=', now()->format('y-m')],
                 ['created_at', 'like', now()->format('Y-m-d') . '%']])
@@ -177,14 +188,13 @@ class AliadoBanorteController extends Controller
 
     public function ftpText($verified)
     {
-        $query = DB::table('aliado.user_tdc')
-            ->selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
+        $query = UserTdcAliado::selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
             ->whereIn('user_id', $verified);
 
-        $ftpText = DB::table('aliado.user_tdc')
-            ->selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ')")
+        $ftpText = UserTdcAliado::selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ') as row")
             ->whereIn('user_id', $verified)
             ->union($query)
             ->get();
+        dd($ftpText);
     }
 }

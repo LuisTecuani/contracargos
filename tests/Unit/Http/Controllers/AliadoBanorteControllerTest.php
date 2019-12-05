@@ -187,7 +187,6 @@ class AliadoBanorteControllerTest extends TestCase
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-
         $user1 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '18-10',
         ]);
@@ -197,7 +196,6 @@ class AliadoBanorteControllerTest extends TestCase
         $user3 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '27-01',
         ]);
-
         factory(AliadoUser::class)->create([
             'id' => $user1->user_id,
         ]);
@@ -210,7 +208,7 @@ class AliadoBanorteControllerTest extends TestCase
 
         $this->get('/aliado/banorte/ftpProsa');
 
-        $this->assertFileExists("SCAENT0897D" . $date . "ER01.ftp",);
+        $this->assertFileExists("SCAENT0897D" . now()->format('ymd') . "ER01.ftp",);
 
     }
 }
