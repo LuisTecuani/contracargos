@@ -56,7 +56,9 @@ class MediakeyController extends Controller
                     $Contracargos = new $this->model2;
                     $Contracargos->autorizacion = $store[0];
                     $Contracargos->tarjeta = $store[1];
-                    $Contracargos->save();}}
+                    $Contracargos->save();
+            }
+        }
 
         Session()->flash('message', 'Datos Registrados');
 

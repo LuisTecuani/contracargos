@@ -97,13 +97,15 @@ Route::post('/asmas/store2', 'AsmasController@store2')->name('asmas.store2');
 | Sanborns Routes
 |--------------------------------------------------------------------------
 |
-|
+|storeChargesReturns
 */
 Route::get('/sanborns', 'SanbornsController@index')->name('sanborns.index');
 Route::post('/sanborns/store', 'SanbornsController@store');
 Route::get('/sanbornscobro', 'SanbornsCobrosController@index')->name('sanbornscobro.index');
-Route::post('/sanbornscobro/store', 'SanbornsCobrosController@storeCharges')->name('sanbornsCobroImport');
-Route::post('/sanbornscobro/storereturns', 'SanbornsCobrosController@storeReturns')->name('sanbornsDevolucionImport');
+Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@storeChargesReturns')->name('sanbornsStoreChargesReturnsImport');
+Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
+Route::post('sanbornscobro/searchdetails', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
+
 /*
 |--------------------------------------------------------------------------
 | Pendiente

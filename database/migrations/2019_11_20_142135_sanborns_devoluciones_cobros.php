@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class SanbornsCobros extends Migration
+class SanbornsDevolucionesCobros extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class SanbornsCobros extends Migration
      */
     public function up()
     {
-        Schema::create('sanborns_cobros', function (Blueprint $table) {
+        Schema::create('sanborns_devoluciones_cobros', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('cuenta');
             $table->date('fecha');
             $table->integer('importe');
-            $table->string('respuesta');
+            $table->string('respuesta')->nullable();
             $table->integer('referencia');
             $table->string('source');
+            $table->string('tipo')->nullable();
             $table->timestamps();
         });
     }
@@ -35,4 +36,3 @@ class SanbornsCobros extends Migration
         //
     }
 }
-
