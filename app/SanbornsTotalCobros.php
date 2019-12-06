@@ -11,14 +11,10 @@ class SanbornsTotalCobros extends Model
 
     protected $fillable = [
         'cuenta',
-        'veces_cobros',
+        'veces_cobrado',
         'total_cobros'
     ];
 
     protected $table = 'sanborns_total_cobros';
 
-    public function total()
-    {
-        return $this->hasOne(SanbornsTotalDevoluciones::class,'cuenta', 'cuenta');
-    }
 }

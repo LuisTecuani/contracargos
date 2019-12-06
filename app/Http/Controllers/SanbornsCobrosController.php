@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SanbornsSearchesRequest;
 use App\User;
 use App\FileProcessor;
 use App\SanbornsTotal;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\SanbornsTotalCobros;
+use App\SanbornsCheckAccounts;
 use App\SanbornsDevolucionCobro;
 use App\SanbornsTotalDevoluciones;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ImportSanbornsRequest;
+use App\Http\Requests\SanbornsSearchesRequest;
 
 
 class SanbornsCobrosController extends Controller
@@ -23,7 +25,11 @@ class SanbornsCobrosController extends Controller
     public function index()
     {
         $role = User::role();
-        return view("sanbornscobro.index", compact('role'));
+        $SearchedData = SanbornsCheckAccounts::with('returns', 'charges')->first();
+
+        dd($SearchedData);
+
+        return view("sanbornscobro.index", compact('role', 'SearchedData'));
     }
 
     public function storeChargesReturns(ImportSanbornsRequest $request){
@@ -89,16 +95,21 @@ class SanbornsCobrosController extends Controller
     }
 
     public function search(SanbornsSearchesRequest $request){
-        $result[0] = null;
-        $data= $request->input('sanborns_id');
-        $dataArray= preg_split('[\r\n]', $data);
-
-          for ($i=0; $i <count($dataArray) ; $i++) { 
-            $dataArray[$i]=(int)$dataArray[$i];
-            $result[$i] = SanbornsTotalCobros::with('total')
-            ->where('cuenta', [$dataArray[$i]])->get();
+        SanbornsCheckAccounts::truncate();
+        $accounts = $request->input('sanborns_id');
+        $arrayAccounts = preg_split("[\r\n]", $accounts);
+        foreach ($arrayAccounts as $array){
+            $SanbornsCheckAccounts = new SanbornsCheckAccounts();
+            $SanbornsCheckAccounts->sanborns_id = $array;
+            $SanbornsCheckAccounts->save();
         }
-        // dd($result);
-        return view("sanbornscobro.index", compact('result'));
+        return redirect()->route("sanbornscobro.index");
+    }
+
+    public function searchDetails(Request $request){
+        $sanborns_id = $request->input('sanborns_id');
+        $details = SanbornsDevolucionCobro::where('cuenta', $sanborns_id)->get();
+        //dd($details);
+        return view("sanbornscobro.details", compact('details'));
     }
 }

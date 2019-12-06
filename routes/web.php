@@ -83,6 +83,8 @@ Route::post('/sanborns/store', 'SanbornsController@store');
 Route::get('/sanbornscobro', 'SanbornsCobrosController@index')->name('sanbornscobro.index');
 Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@storeChargesReturns')->name('sanbornsStoreChargesReturnsImport');
 Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
+Route::post('sanbornscobro/searchdetails', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
+
 /*
 |--------------------------------------------------------------------------
 | Pendiente
