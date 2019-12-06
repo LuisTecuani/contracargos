@@ -47,6 +47,15 @@ Route::post('/cellers/store2', 'CellersController@store2')->name('cellers.store2
 Route::get('/cellers/last', 'CellersController@last')->name('cellers.last');
 Route::post('/cellers/banorte-pdf', 'CellersController@banortePdf')->name('cellers.banortePdf');
 
+
+Route::post('/cellers/banorte', 'CellersController@banorte')->name('cellers.banorte');
+Route::get('/cellers/banorte', 'CellersBanorteController@index')->name('cellers.banorte');
+Route::post('/cellers/banorte/ftp', 'CellersBanorteController@Ftp')->name('cellers.cobroBanorteFtp');
+Route::post('/cellers/banorte/billingRejected', 'CellersBanorteController@billingRejected')->name('cellers.banorteBillingRejected');
+Route::post('/cellers/banorte/usersTextbox', 'CellersBanorteController@usersTextbox')->name('cellers.banorteUsersTextbox');
+Route::get('/cellers/banorte/ftpProsa', 'CellersBanorteController@ftpProsa')->name('cellers.banorteFtpProsa');
+Route::get('/cellers/banorte/csvBanorte', 'CellersBanorteController@csvBanorte')->name('cellers.banorteCsvBanorte');
+Route::get('/cellers/banorte/csvBilling', 'Exports\CellersBanorteController@export')->name('cellers.banorteCsvBilling');
 /*
 |--------------------------------------------------------------------------
 | Aliado Routes
