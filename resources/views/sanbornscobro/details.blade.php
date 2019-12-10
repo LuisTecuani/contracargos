@@ -34,7 +34,11 @@
                             <td>{{ $detail->respuesta }}</td>
                             <td>{{ $detail->referencia }}</td>
                             <td>{{ $detail->source }}</td>
-                            <td>{{ $detail->tipo }}</td>
+                            @if($detail->tipo == 'Cobro')
+                                <td class="text-success">{{ $detail->tipo }}</td>
+                            @else
+                                <td class="text-danger">{{ $detail->tipo }}</td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>

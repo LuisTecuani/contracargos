@@ -1,5 +1,5 @@
 <div class="col-md-8 bg-light">
-    @if(isset($SearchedData))
+    @if(isset($searchedData))
         <table class="table mt-lg-4">
             <thead class="thead-dark">
             <tr>
@@ -12,11 +12,19 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($SearchedData as $result)
+            @foreach($searchedData as $result)
                 <tr>
                     <td>{{ $result->sanborns_id }}</td>
-                    <td>{{ $result->charges->veces_cobrado }}</td>
-                    <td>{{ $result->charges->total_cobros }}</td>
+                    @if(isset($result->charges->veces_cobrado))
+                        <td>{{ $result->charges->veces_cobrado }}</td>
+                    @else
+                        <td>NULL</td>
+                    @endif
+                    @if(isset($result->charges->total_cobros))
+                        <td>{{ $result->charges->total_cobros }}</td>
+                    @else
+                        <td>NULL</td>
+                    @endif
                     @if(isset($result->returns->veces_devuelto))
                         <td>{{ $result->returns->veces_devuelto }}</td>
                     @else
@@ -28,11 +36,10 @@
                         <td>NULL</td>
                     @endif
                     <td>
-                        <form action="{{ route('searchDetails', ['sanborns_id' => $result->sanborns_id]) }}" method="POST">
+                        <form action="{{ route('searchDetails', ['sanborns_id' => $result->sanborns_id]) }}"
+                              method="POST">
                             @csrf
-                            <button class="btn btn-primary btn-block" type="submit">
-                                Ver
-                            </button>
+                            <button class="btn btn-primary btn-block" type="submit">Ver</button>
                         </form>
                     </td>
                 </tr>

@@ -25,11 +25,11 @@ class SanbornsCobrosController extends Controller
     public function index()
     {
         $role = User::role();
-        $SearchedData = SanbornsCheckAccounts::with('returns', 'charges')->first();
+        $searchedData = SanbornsCheckAccounts::with('charges', 'returns')->get();
 
-        dd($SearchedData);
+        //dd($SearchedData);
 
-        return view("sanbornscobro.index", compact('role', 'SearchedData'));
+        return view("sanbornscobro.index", compact('role', 'searchedData'));
     }
 
     public function storeChargesReturns(ImportSanbornsRequest $request){
