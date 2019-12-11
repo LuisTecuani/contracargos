@@ -27,9 +27,7 @@ class SanbornsCobrosController extends Controller
         $role = User::role();
         $searchedData = SanbornsCheckAccounts::with('charges', 'returns')->get();
 
-        //dd($SearchedData);
-
-        return view("sanbornscobro.index", compact('role', 'searchedData'));
+        return view("sanbornscobro.index", compact('role','searchedData'));
     }
 
     public function storeChargesReturns(ImportSanbornsRequest $request){
@@ -84,13 +82,11 @@ class SanbornsCobrosController extends Controller
         SanbornsTotalCobros::truncate();
 
         DB::select('INSERT INTO sanborns_total_devoluciones (cuenta, veces_devuelto, total_devoluciones) 
-                    SELECT cuenta, COUNT(*), sum(importe)
-                    FROM sanborns_devoluciones_cobros
+                    SELECT cuenta, COUNT(*), sum(importe) FROM sanborns_devoluciones_cobros
                     where respuesta is null group by cuenta');
 
         DB::select('INSERT INTO sanborns_total_cobros(cuenta, veces_cobrado, total_cobros)
-                    SELECT cuenta, COUNT(*), sum(importe) 
-                    FROM sanborns_devoluciones_cobros 
+                    SELECT cuenta, COUNT(*), sum(importe) FROM sanborns_devoluciones_cobros 
                     where respuesta = "00" group by cuenta');
     }
 
@@ -109,7 +105,7 @@ class SanbornsCobrosController extends Controller
     public function searchDetails(Request $request){
         $sanborns_id = $request->input('sanborns_id');
         $details = SanbornsDevolucionCobro::where('cuenta', $sanborns_id)->get();
-        //dd($details);
+
         return view("sanbornscobro.details", compact('details'));
     }
 }

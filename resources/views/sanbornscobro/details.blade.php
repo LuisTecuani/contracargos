@@ -31,7 +31,13 @@
                             <td>{{ $detail->cuenta }}</td>
                             <td>{{ $detail->fecha }}</td>
                             <td>{{ $detail->importe }}</td>
-                            <td>{{ $detail->respuesta }}</td>
+                            @if($detail->respuesta == 00)
+                                <td class="text-success">{{ $detail->respuesta }}</td>
+                            @elseif($detail->respuesta != 00)
+                                <td class="text-danger">{{ $detail->respuesta }}</td>
+                            @else
+                                <td>NULL</td>
+                            @endif
                             <td>{{ $detail->referencia }}</td>
                             <td>{{ $detail->source }}</td>
                             @if($detail->tipo == 'Cobro')
@@ -46,6 +52,13 @@
             @endif
         </div>
         <div class="col-md-2 bg-light"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-9 bg-light"></div>
+        <div class="col-md-2 bg-light">
+            <button type="button" class="btn btn-primary btn-lg" >REGRESAR</button>
+        </div>
+        <div class="col-md-1 bg-light"></div>
     </div>
 
 

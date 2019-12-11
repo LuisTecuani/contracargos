@@ -24,7 +24,7 @@ class SanbornsSearchesRequest extends FormRequest
     public function rules()
     {
             return [
-                'sanborns_id' => 'required', // |regex:/(?\d\n\r)/i
+                'sanborns_id' => 'regex:/^(?:\d{0,9}(?:[\r\n]\d{0,9})*)?$/i|required',
             ];
     }
 }
