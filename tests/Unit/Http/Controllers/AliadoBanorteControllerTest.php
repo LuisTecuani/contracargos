@@ -182,7 +182,7 @@ class AliadoBanorteControllerTest extends TestCase
         $this->assertCount(3, $vigUsers);
     }
 
-    /** @test  */
+    /** incomplete test test  */
     public function it_can_build_a_valid_ftp_file()
     {
         $this->signIn();

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\AliadoBlacklist;
+use App\AliadoUser;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AliadoBlacklistController extends Controller
 {
@@ -20,13 +19,11 @@ class AliadoBlacklistController extends Controller
         $emails = preg_split("[\r\n]", $emailsS);
         foreach ($emails as $email) {
 
-
             $exist = AliadoBlacklist::where('email', $email)->first();
-            if (! $exist) {
+            if (!$exist) {
                 $bList = new AliadoBlacklist();
-                $user = DB::table('aliado.users')
-                    ->select('id')
-                    ->where('email',$email)
+                $user = AliadoUser::select('id')
+                    ->where('email', $email)
                     ->first();
                 $bList->email = $email;
                 $bList->user_id = $user->id ?? null;
