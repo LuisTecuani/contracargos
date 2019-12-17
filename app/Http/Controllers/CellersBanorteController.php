@@ -36,7 +36,7 @@ class CellersBanorteController extends Controller
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date)) {
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
                 $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
                 . '-' . substr($data->exp_date, 0, -2))
                     ->format('y-m');
@@ -78,7 +78,7 @@ class CellersBanorteController extends Controller
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date)) {
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
                 $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
                     . '-' . substr($data->exp_date, 0, -2))
                     ->format('y-m');
@@ -115,7 +115,7 @@ class CellersBanorteController extends Controller
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date)) {
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
                 $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
                     . '-' . substr($data->exp_date, 0, -2))
                     ->format('y-m');

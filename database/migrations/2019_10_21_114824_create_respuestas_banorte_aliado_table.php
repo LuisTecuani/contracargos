@@ -15,8 +15,8 @@ class CreateRespuestasBanorteAliadoTable extends Migration
     {
         Schema::create('respuestas_banorte_aliado', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('comentarios');
-                $table->string('detalle_mensaje');
+                $table->string('comentarios')->nullable();
+                $table->string('detalle_mensaje')->nullable();
                 $table->string('autorizacion')->nullable();
                 $table->string('estatus');
                 $table->integer('user_id');

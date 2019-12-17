@@ -5,7 +5,7 @@ namespace Tests\Unit\Http\Controllers;
 use App\AliadoBillingUsers;
 use App\AliadoUser;
 use App\Http\Controllers\AliadoBanorteController;
-use App\RespuestaBanorteAliado;
+use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -84,19 +84,19 @@ class AliadoBanorteControllerTest extends TestCase
             'exp_year' => 2028,
         ]);
         // rejected on date
-        factory(RespuestaBanorteAliado::class)->create([
+        factory(RespuestasBanorteAliado::class)->create([
             'user_id' => $expired->user_id,
             'fecha' => '2019-11-19',
             'detalle_mensaje' => 'Fondos insuficientes',
         ]);
         // rejected not on date
-        factory(RespuestaBanorteAliado::class)->create([
+        factory(RespuestasBanorteAliado::class)->create([
             'user_id' => $active->user_id,
             'fecha' => '2019-10-19',
             'detalle_mensaje' => 'Supera el monto límite permitido',
         ]);
         // not rejected on date
-        factory(RespuestaBanorteAliado::class)->create([
+        factory(RespuestasBanorteAliado::class)->create([
             'user_id' => '111111',
             'fecha' => '2019-11-19',
             'detalle_mensaje' => 'Aprobado',

@@ -6,7 +6,7 @@ use App\AliadoBillingUsers;
 use App\AliadoUser;
 use App\UserTdcAliado;
 use App\Repsaliado;
-use App\RespuestaBanorteAliado;
+use App\RespuestasBanorteAliado;
 use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
 
@@ -34,7 +34,7 @@ $factory->define(Repsaliado::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(RespuestaBanorteAliado::class, function (Faker $faker) {
+$factory->define(RespuestasBanorteAliado::class, function (Faker $faker) {
     $estatus = Arr::random(['Aprobada', 'Declinada']);
     if ($estatus == 'Declinada') {
         $dMensaje = Arr::random([

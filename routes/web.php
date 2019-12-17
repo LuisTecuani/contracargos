@@ -64,16 +64,21 @@ Route::get('/cellers/banorte/csvBilling', 'Exports\CellersBanorteController@expo
 |
 */
 Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
+Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
+Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
+Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliado.blacklist.index');
+Route::get('/aliado/responses', 'AliadoResponsesController@index')->name('aliado.responses.index');
+Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps')->name('aliado.responses.storeReps');
+Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')->name('aliado.responses.storePdf');
+
+
 Route::get('/aliado/last', 'AliadoController@last')->name('aliado.last');
 Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
-Route::post('/aliado/import', 'AliadoController@import')->name('importAliado');
 Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
-Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliadoBlacklist.index');
 Route::post('/aliado/blacklist/insert', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
 
 
 Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
-Route::post('/aliado/banorte-pdf', 'AliadoController@banortePdf')->name('aliado.banortePdf');
 Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.banorte');
 Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
 Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');

@@ -8,7 +8,7 @@ use App\AliadoCancelAccountAnswer;
 use App\AliadoUser;
 use App\AliadoUserCancellation;
 use App\Exports\AliadoBanorteExport;
-use App\RespuestaBanorteAliado;
+use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use DateTime;
 use Illuminate\Http\Request;
@@ -65,7 +65,7 @@ class AliadoBanorteController extends Controller
 
         $date = $request->date;
 
-        $users = RespuestaBanorteAliado::select('user_id as id')
+        $users = RespuestasBanorteAliado::select('user_id as id')
             ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->where(
                 'fecha', 'like', $date
