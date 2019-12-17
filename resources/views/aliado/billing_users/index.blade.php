@@ -5,7 +5,8 @@
         <div class="row">
             <div class="col-md-4 bg-light mt-2">
                 <h1><b>Cobro aliado</b></h1>
-            @include('aliado.file_making._navLinks')
+                @include('aliado._navLinks')
+                @include('aliado.file_making._navLinks')
             </div>
         </div>
         <div class="row">

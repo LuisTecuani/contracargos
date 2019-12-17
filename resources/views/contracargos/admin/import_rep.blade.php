@@ -6,5 +6,5 @@
     <input type="file" multiple="true" name="files[]" accept=".rep"
            class="btn btn-secondary btn-lg btn-block">
     <br>
-    <button class="btn btn-outline-success">Import User Data</button>
+    <button class="btn btn-outline-primary">Import User Data</button>
 </div>

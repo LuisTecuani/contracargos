@@ -12,7 +12,7 @@ use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
 
-class AliadoBanorteControllerTest extends TestCase
+class AliadoFileMakingControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -20,11 +20,12 @@ class AliadoBanorteControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
+        $this->withoutExceptionHandling();
 
-        $this->get('/aliado/banorte')
+        $this->get('/aliado/file_making')
             ->assertOk()
             ->assertSessionHasNoErrors()
-            ->assertViewIs('aliado.banorte.index');
+            ->assertViewIs('aliado.file_making.index');
     }
 
     /** incomplete test test  */

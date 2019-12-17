@@ -4,7 +4,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 bg-light mt-2">
-                <h1><b>Aliado banorte</b></h1>
+                <h1><b>Creacion de archivos Aliado para el cobro</b></h1>
+                @include('aliado._navLinks')
                 @include('aliado.file_making._navLinks')
             </div>
             <div class="col mt-5">
@@ -12,7 +13,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="card bg-light mt-2">
-                            <form method="POST" action="{{ route('aliado.cobroBanorteFtp') }}"
+                            <form method="POST" action="{{ route('aliado.billing_users.storeFtp') }}"
                                   enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
@@ -34,7 +35,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="card bg-light mt-2">
-                            <form method="POST" action="{{ route('aliado.banorteBillingRejected') }}"
+                            <form method="POST" action="{{ route('aliado.billing_users.storeRejected') }}"
                                   enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
@@ -56,7 +57,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="card bg-light mt-2">
-                            <form method="POST" action="{{ route('aliado.banorteUsersTextbox') }}"
+                            <form method="POST" action="{{ route('aliado.billing_users.storeTextbox') }}"
                                   enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
