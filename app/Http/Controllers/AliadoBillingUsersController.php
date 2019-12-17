@@ -12,7 +12,10 @@ class AliadoBillingUsersController extends Controller
 {
     public function index()
     {
-        return view("aliado.billing_users.index");
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
+
+        return view('aliado/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
     public function storeFtp(Request $request)

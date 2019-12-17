@@ -21,6 +21,7 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
+        $this->withoutExceptionHandling();
 
         factory(AliadoBillingUsers::class)->create();
 
