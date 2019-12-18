@@ -28,25 +28,27 @@ class CreateCellersUsersTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('celex_id')->unique()->nullable();
-            $table->string('type')->nullable();
-            $table->string('customer_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('email')->unique();
-            $table->string('phone')->unique()->nullable();
-            $table->string('location')->nullable();
-            $table->string('birthday')->nullable();
-            $table->string('password', 60)->nullable();
-            $table->string('one_time_access_password', 10)->nullable();
-            $table->timestamp('first_login')->nullable();
-            $table->timestamp('last_login')->nullable();
-            $table->integer('cancelled_by')->unsigned()->nullable();
-            $table->rememberToken()->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (! $this->schema->hasTable('users')) {
+            $this->schema->create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('celex_id')->unique()->nullable();
+                $table->string('type')->nullable();
+                $table->string('customer_id')->nullable();
+                $table->string('name')->nullable();
+                $table->string('email')->unique();
+                $table->string('phone')->unique()->nullable();
+                $table->string('location')->nullable();
+                $table->string('birthday')->nullable();
+                $table->string('password', 60)->nullable();
+                $table->string('one_time_access_password', 10)->nullable();
+                $table->timestamp('first_login')->nullable();
+                $table->timestamp('last_login')->nullable();
+                $table->integer('cancelled_by')->unsigned()->nullable();
+                $table->rememberToken()->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
     /**
      * Reverse the migrations.

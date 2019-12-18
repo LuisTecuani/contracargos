@@ -28,13 +28,15 @@ class CreateAliadoUserCancellationsTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('user_cancellations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('reason_id')->nullable();
-            $table->text('notes')->nullable();
-            $table->timestamps();
-        });
+        if (! $this->schema->hasTable('user_cancellations')) {
+            $this->schema->create('user_cancellations', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('user_id');
+                $table->unsignedInteger('reason_id')->nullable();
+                $table->text('notes')->nullable();
+                $table->timestamps();
+            });
+        }
     }
     /**
      * Reverse the migrations.

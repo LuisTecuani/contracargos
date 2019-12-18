@@ -28,15 +28,17 @@ class CreateCellersTdcsTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('tdc', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('number');
-            $table->string('exp_date')->nullable();
-            $table->string('csv')->nullable();
-            $table->string('provider_id')->nullable();
-            $table->timestamps();
-        });
+        if (! $this->schema->hasTable('tdc')) {
+            $this->schema->create('tdc', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id')->unsigned();
+                $table->string('number');
+                $table->string('exp_date')->nullable();
+                $table->string('csv')->nullable();
+                $table->string('provider_id')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

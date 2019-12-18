@@ -32,22 +32,6 @@ class AliadoController extends Controller
         return view("aliado.index");
     }
 
-    /* public function index()
-    {
-        $role = User::role();
-
-        DB::select('update contracargos_aliado c left join repsaliado r on r.autorizacion=c.autorizacion
-                set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
-
-        DB::select('update contracargos_aliado c join aliado.users u on u.id=c.user_id set c.email=u.email');
-
-        $cards = Contracargosaliado::whereDate('created_at', today())->get();
-
-        $cards2 = Contracargosaliado::get();
-
-        return view("aliado.index", compact('cards', 'cards2', 'role'));
-    } */
-
     public function store(StoreAdminRequest $request)
     {
         $autorizacionesS = $request->input('autorizaciones');

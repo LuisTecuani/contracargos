@@ -28,14 +28,16 @@ class CreateAliadoCancelAccountAnswersTable extends Migration
      */
     public function up()
     {
-        $this->schema->create('cancel_account_answers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('question_id')->unsigned()->nullable();
-            $table->boolean('answer')->nullable();
-            $table->string('comments')->nullable();
-            $table->timestamps();
-        });
+        if (! $this->schema->hasTable('cancel_account_answers')) {
+            $this->schema->create('cancel_account_answers', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id')->unsigned();
+                $table->integer('question_id')->unsigned()->nullable();
+                $table->boolean('answer')->nullable();
+                $table->string('comments')->nullable();
+                $table->timestamps();
+            });
+        }
     }
     /**
      * Reverse the migrations.
