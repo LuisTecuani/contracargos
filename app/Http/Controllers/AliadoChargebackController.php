@@ -104,7 +104,7 @@ class AliadoChargebackController extends Controller
         foreach ($processedText[2] as $index => $cont) {
             $chargebacks[$index]['date'] = $cont;
         }
-        
+
         foreach ($chargebacks as $row) {
             $card = substr($row['card'], -4, 4);
             $exist = ContracargosAliadoBanorte::where([['autorizacion', $row['authorization']],['tarjeta', $card]])->first();
