@@ -34,6 +34,38 @@ function processRep($file)
     return [$rejected, $accepted];
 }
 
+function processTxt($file)
+{
+    $text = preg_split("[\n]", $file);
+    $authorization = [];
+    $card = [];
+    $date = [];
+
+    $rows = preg_grep("/(\d{6})/", $text);
+    foreach ($rows as $index => $content) {
+        preg_match("/(\d{6})/", $content, $r);
+        $authorization[$index] = $r[0];
+    }
+    $authorization = array_values($authorization);
+
+    $rows = preg_grep("/(\d{2}\/\d{2}\/\d{4})/", $text);
+    foreach ($rows as $index => $content) {
+        preg_match("/(\d{2}\/\d{2}\/\d{4})/", $content, $r);
+        $date[$index] = $r[0];
+    }
+    $date = array_values($date);
+
+    $rows = preg_grep("/(\d{4}x{8}.{5})/", $text);
+    foreach ($rows as $index => $content) {
+        $noSpaces = str_replace(' ', '', $content);
+        preg_match("/(\d{4}x{8}\d{4})/", $noSpaces, $r);
+        $card[$index] = $r[0];
+    }
+    $card = array_values($card);
+
+    return [$authorization, $card, $date];
+}
+
 function processXml($file)
 {
     $dataRaw = preg_grep("(Cargo afiliacion)", preg_split("[>]", file_get_contents($file)));

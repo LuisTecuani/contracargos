@@ -22,14 +22,31 @@ $factory->define(UserTdcAliado::class, function (Faker $faker) {
 });
 
 $factory->define(Repsaliado::class, function (Faker $faker) {
+    $estatus = Arr::random(['Aprobada', 'Declinada']);
+    if ($estatus == 'Declinada') {
+        $dMensaje = Arr::random([
+            'Imposible autorizar en este momento',
+            'Declinado general',
+            'Fondos insuficientes',
+            'Supera el monto límite permitido'
+        ]);
+    } else {
+        $dMensaje = 'Aprobado';
+        $aut = $faker->randomNumber(6);
+    }
+    $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
+    $date = $faker->date($format = 'Y-m-d');
     return [
+        'detalle_mensaje' => $dMensaje,
+        'autorizacion' => $aut ?? null,
+        'estatus' => $estatus,
+        'user_id' => $uId,
+        'num_control' => DateTime::createFromFormat('Ymd', $date) . $uId,
         'tarjeta' => $tarjeta,
         'terminacion' => substr($tarjeta, -4, 4),
-        'user_id' => $faker->randomNumber(6),
-        'fecha' => $faker->date('Y-m-d'),
-        'autorizacion' => $faker->randomNumber(6),
-        'monto' => $faker->randomNumber(4),
+        'monto' => 79,
+        'fecha' => $date,
         'source_file' => Str::random(24),
     ];
 });

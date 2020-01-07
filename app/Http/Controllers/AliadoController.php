@@ -32,26 +32,7 @@ class AliadoController extends Controller
         return view("aliado.index");
     }
 
-    public function store(StoreAdminRequest $request)
-    {
-        $autorizacionesS = $request->input('autorizaciones');
-        $arr = preg_split("[\r\n]", $autorizacionesS);
-        foreach ($arr as $a) {
-            $store = preg_split("[,]", $a);
-            $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
-            $exist = Contracargosaliado::where([['autorizacion', $store[0]],['tarjeta', $store[1]]])->first();
-            if (! $exist) {
-                $Contracargos = new ContracargosAliado();
-                $Contracargos->autorizacion = $store[0];
-                $Contracargos->tarjeta = $store[1];
-                $Contracargos->save();
-            }
-        }
-        Session()->flash('message', 'Datos Registrados');
 
-        return redirect()->route("aliado.index");
-
-    }
 
     public function store2(StoreUserRequest $request)
     {
@@ -62,20 +43,6 @@ class AliadoController extends Controller
 
         return redirect()->route("aliado.index");
     }
-
-    public function last()
-{
-    $emails = DB::table("consultas.contracargos_aliado as cm")
-        ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-        ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-        ->select('u.email')
-        ->whereDate('cm.created_at', today())
-        ->whereColumn('rm.terminacion', 'cm.tarjeta')
-        ->orWhere('rm.autorizacion', null)
-        ->groupBy("u.email")
-        ->get();
-    return view("aliado.last", compact('emails'));
-}
 
     public function banorte(ImportRepRequest $request)
     {
