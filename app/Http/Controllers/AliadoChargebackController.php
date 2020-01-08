@@ -19,15 +19,8 @@ class AliadoChargebackController extends Controller
 
     public function index()
     {
-        DB::select('update contracargos_aliado c left join repsaliado r on r.autorizacion=c.autorizacion
-            set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
-
-        DB::select('update contracargos_aliado c join aliado.users u on u.id=c.user_id set c.email=u.email');
-
-        DB::select('update contracargos_aliado_banorte c left join respuestas_banorte_aliado r on r.autorizacion=c.autorizacion
-            set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
-
-        DB::select('update contracargos_aliado_banorte c join aliado.users u on u.id=c.user_id set c.email=u.email');
+        $this->update();
+        (New AliadoBanorteChargebackController)->update();
 
         $query = ContracargosaliadoBanorte::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
             ->whereDate('created_at', today());
@@ -86,37 +79,34 @@ class AliadoChargebackController extends Controller
 
     }
 
-
-    public function storeTxt(Request $request)
+    public function update()
     {
-        $text = $request->input('text');
 
-        $chargebackDate = $request->chargeback_date;
+        $contracargos = ContracargosAliado::with('reps')
+            ->whereNull('user_id')
+            ->get();
 
-        $processedText = processTxt($text);
-        $chargebacks = [];
-        foreach ($processedText[0] as $index => $cont) {
-            $chargebacks[$index]['authorization'] = $cont;
-        }
-        foreach ($processedText[1] as $index => $cont) {
-            $chargebacks[$index]['card'] = $cont;
-        }
-        foreach ($processedText[2] as $index => $cont) {
-            $chargebacks[$index]['date'] = $cont;
-        }
-
-        foreach ($chargebacks as $row) {
-            $card = substr($row['card'], -4, 4);
-            $exist = ContracargosAliadoBanorte::where([['autorizacion', $row['authorization']],['tarjeta', $card]])->first();
-            if (! $exist) {
-                $Contracargos = new ContracargosAliadoBanorte();
-                $Contracargos->autorizacion = $row['authorization'];
-                $Contracargos->tarjeta = $card;
-                $Contracargos->fecha_consumo = $row['date'];
-                $Contracargos->fecha_contracargo = $chargebackDate;
-                $Contracargos->save();
+        foreach ($contracargos as $contracargo) {
+            foreach ($contracargo->reps as $rep) {
+                if($contracargo->tarjeta == $rep->terminacion) {
+                    ContracargosAliado::where('id', $contracargo->id)
+                        ->update([
+                            'user_id' => $rep->user_id,
+                            'fecha_rep' => $rep->fecha]);
+                }
             }
         }
-        return back();
+
+        $noEmails = ContracargosAliado::with('user')
+            ->whereNull('email')
+            ->get();
+
+        foreach ($noEmails as $row) {
+            if($row->user) {
+                ContracargosAliado::where('id', $row->id)
+                    ->update(['email' => $row->user->email]);
+            }
+        }
+
     }
 }

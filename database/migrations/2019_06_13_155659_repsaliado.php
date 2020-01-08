@@ -20,7 +20,7 @@ class Repsaliado extends Migration
             $table->integer('terminacion');
             $table->integer('user_id');
             $table->date('fecha');
-            $table->string('autorizacion');
+            $table->string('autorizacion')->nullable();
             $table->string('motivo_rechazo');
             $table->string('monto');
             $table->string('source_file');

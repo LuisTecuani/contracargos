@@ -32,17 +32,15 @@ $factory->define(Repsaliado::class, function (Faker $faker) {
         ]);
     } else {
         $dMensaje = 'Aprobado';
-        $aut = $faker->randomNumber(6);
     }
     $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
     $date = $faker->date($format = 'Y-m-d');
     return [
-        'detalle_mensaje' => $dMensaje,
-        'autorizacion' => $aut ?? null,
+        'motivo_rechazo' => $dMensaje,
+        'autorizacion' => $faker->randomNumber(6),
         'estatus' => $estatus,
         'user_id' => $uId,
-        'num_control' => DateTime::createFromFormat('Ymd', $date) . $uId,
         'tarjeta' => $tarjeta,
         'terminacion' => substr($tarjeta, -4, 4),
         'monto' => 79,
@@ -62,7 +60,6 @@ $factory->define(RespuestasBanorteAliado::class, function (Faker $faker) {
         ]);
     } else {
         $dMensaje = 'Aprobado';
-        $aut = $faker->randomNumber(6);
     }
     $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
@@ -70,7 +67,7 @@ $factory->define(RespuestasBanorteAliado::class, function (Faker $faker) {
     return [
         'comentarios' => 'Cargo unico',
         'detalle_mensaje' => $dMensaje,
-        'autorizacion' => $aut ?? null,
+        'autorizacion' => $faker->randomNumber(6),
         'estatus' => $estatus,
         'user_id' => $uId,
         'num_control' => DateTime::createFromFormat('Ymd', $date) . $uId,

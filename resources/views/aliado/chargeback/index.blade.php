@@ -15,6 +15,9 @@
             </div>
             <div class="col-md mt-2">
                 <form method="POST" action="{{ route('aliadoChargeback.store') }}">
+                    <div class="card-header">
+                        Importa contracargos PROSA, inserta autorizaciones junto a terminacion de tarjeta.
+                    </div>
                     @include('contracargos.admin.input_data')
                 </form>
             </div>
@@ -22,10 +25,10 @@
         <div class="row">
             <div class="col-md">
                 <div class="card bg-light mt-2">
-                    <form action="{{ route('aliadoChargeback.storeTxt') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('aliadoBanorteChargeback.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
-                            Importa contracargos inserta texto
+                            Importa contracargos BANORTE, inserta texto cortado de imagenes procesadas.
                         </div>
                         <textarea class="w-100" name="text" id="text"
                                   title="insert text"

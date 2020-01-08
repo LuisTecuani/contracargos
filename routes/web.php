@@ -64,11 +64,13 @@ Route::get('/cellers/banorte/csvBilling', 'Exports\CellersBanorteController@expo
 |
 */
 Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
+
 Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
 Route::post('/aliado/chargeback/store', 'AliadoChargebackController@store')->name('aliadoChargeback.store');
 Route::get('/aliado/chargeback/show', 'AliadoChargebackController@show')->name('aliadoChargeback.show');
 Route::post('/aliado/chargeback/storeTxt', 'AliadoChargebackController@storeTxt')->name('aliadoChargeback.storeTxt');
 
+Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackController@store')->name('aliadoBanorteChargeback.store');
 
 Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliado.blacklist.index');
 Route::post('/aliado/blacklist/store', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
@@ -77,10 +79,6 @@ Route::get('/aliado/responses', 'AliadoResponsesController@index')->name('aliado
 Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps')->name('aliado.responses.storeReps');
 Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')->name('aliado.responses.storePdf');
 
-
-Route::post('/aliado', 'AliadoController@store')->name('aliado.store');
-Route::post('/aliado/accepted', 'AliadoController@accepted')->name('aliado.accepted');
-
 Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
 
 Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
@@ -88,8 +86,6 @@ Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@stor
 Route::post('/aliado/billing_users/storeRejected', 'AliadoBillingUsersController@storeRejected')->name('aliado.billing_users.storeRejected');
 Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
 
-
-Route::post('/aliado/banorte', 'AliadoController@banorte')->name('aliado.banorte');
 Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.banorte');
 Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
 Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');
