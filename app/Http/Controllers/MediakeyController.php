@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\User;
@@ -19,6 +20,19 @@ use App\Http\Requests\StoreAdminRequest;
 
 class MediakeyController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        return view("mediakey.index");
+    }
+
+    /*
     public function __construct(FileProcessor $filep)
     {
         $this->middleware('auth');
@@ -33,7 +47,7 @@ class MediakeyController extends Controller
     {
         $role = User::role();
 
-        DB::select('update contracargos_mediakey c left join repsmediakey r on r.autorizacion=c.autorizacion 
+        DB::select('update contracargos_mediakey c left join repsmediakey r on r.autorizacion=c.autorizacion
                 set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
 
         DB::select('update contracargos_mediakey c join mediakey.users u on u.id=c.user_id set c.email=u.email');
@@ -224,4 +238,6 @@ class MediakeyController extends Controller
 
         return back();
     }
+
+    */
 }

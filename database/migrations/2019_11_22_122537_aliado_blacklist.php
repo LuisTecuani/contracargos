@@ -15,7 +15,7 @@ class AliadoBlacklist extends Migration
     {
         Schema::create('aliado_blacklist', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->integer('user_id')->nullable();
             $table->timestamps();
         });

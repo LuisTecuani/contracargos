@@ -25,6 +25,34 @@ Route::get('/home', 'HomeController@index')->name('home');
 |
 */
 Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
+
+Route::get('/mediakey/chargeback', 'MediakeyChargebackController@index')->name('mediakey.chargeback.index');
+Route::post('/mediakey/chargeback/store', 'MediakeyChargebackController@store')->name('mediakeyChargeback.store');
+Route::get('/mediakey/chargeback/show', 'MediakeyChargebackController@show')->name('mediakeyChargeback.show');
+Route::post('/mediakey/chargeback/storeTxt', 'MediakeyChargebackController@storeTxt')->name('mediakeyChargeback.storeTxt');
+
+Route::post('/mediakey/banorte/chargeback/store', 'MediakeyBanorteChargebackController@store')->name('mediakeyBanorteChargeback.store');
+
+Route::get('/mediakey/blacklist', 'MediakeyBlacklistController@index')->name('mediakey.blacklist.index');
+Route::post('/mediakey/blacklist/store', 'MediakeyBlacklistController@store')->name('mediakeyBlacklist.store');
+
+Route::get('/mediakey/responses', 'MediakeyResponsesController@index')->name('mediakey.responses.index');
+Route::post('/mediakey/responses/storeReps', 'MediakeyResponsesController@storeReps')->name('mediakey.responses.storeReps');
+Route::post('/mediakey/responses/storePdf', 'MediakeyResponsesController@storePdf')->name('mediakey.responses.storePdf');
+
+Route::get('/mediakey/file_making', 'MediakeyFileMakingController@index')->name('mediakey.file_making.index');
+
+Route::get('/mediakey/billing_users', 'MediakeyBillingUsersController@index')->name('mediakey.billing_users.index');
+Route::post('/mediakey/billing_users/storeFtp', 'MediakeyBillingUsersController@storeFtp')->name('mediakey.billing_users.storeFtp');
+Route::post('/mediakey/billing_users/storeRejected', 'MediakeyBillingUsersController@storeRejected')->name('mediakey.billing_users.storeRejected');
+Route::post('/mediakey/billing_users/storeTextbox', 'MediakeyBillingUsersController@storeTextbox')->name('mediakey.billing_users.storeTextbox');
+
+
+
+
+
+
+
 Route::post('/mediakey', 'MediakeyController@store')->name('mediakey.store');
 Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediakey');
 Route::post('/mediakey/store2', 'MediakeyController@store2')->name('mediakey.store2');
