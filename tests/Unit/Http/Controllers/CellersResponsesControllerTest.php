@@ -42,11 +42,11 @@ class CellersResponsesControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('repscellers', [
-            'user_id' => '288781',
-            'autorizacion' => '062932'
+            'user_id' => '237',
+            'autorizacion' => '319870'
         ]);
         $this->assertDatabaseHas('repscellers', [
-            'user_id' => '234993',
+            'user_id' => '184',
             'motivo_rechazo' => 'Rechazada'
         ]);
     }
@@ -58,8 +58,8 @@ class CellersResponsesControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/cellers-banorte-2019-11-08-1_Respuestas.pdf',
-                'cellers-banorte-2019-11-08-1_Respuestas.pdf',
+                __DIR__ . '/files/aliado-banorte-2019-11-08-1_Respuestas.pdf',
+                'aliado-banorte-2019-11-08-1_Respuestas.pdf',
                 'application/pdf',
                 20416,
                 null,

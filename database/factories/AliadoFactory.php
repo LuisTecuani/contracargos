@@ -38,7 +38,7 @@ $factory->define(Repsaliado::class, function (Faker $faker) {
     $date = $faker->date($format = 'Y-m-d');
     return [
         'motivo_rechazo' => $dMensaje,
-        'autorizacion' => '1'.$faker->randomNumber(5),
+        'autorizacion' => "'1'$faker->randomNumber(5)",
         'estatus' => $estatus,
         'user_id' => $uId,
         'tarjeta' => $tarjeta,

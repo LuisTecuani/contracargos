@@ -16,6 +16,6 @@ class CellersBillingUsers extends Model
      */
     public function cards() : HasMany
     {
-        return $this->hasMany(CellersTdc::class, 'user_id', 'user_id')->latest();
+        return $this->hasMany(UserTdcCellers::class, 'user_id', 'user_id')->latest();
     }
 }

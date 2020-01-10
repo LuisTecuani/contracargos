@@ -48,6 +48,19 @@ Route::get('/cellers/chargeback/show', 'CellersChargebackController@show')->name
 
 Route::post('/cellers/banorte/chargeback/store', 'CellersBanorteChargebackController@store')->name('cellersBanorteChargeback.store');
 
+Route::get('/cellers/responses', 'CellersResponsesController@index')->name('cellers.responses.index');
+Route::post('/cellers/responses/storeReps', 'CellersResponsesController@storeReps')->name('cellers.responses.storeReps');
+Route::post('/cellers/responses/storePdf', 'CellersResponsesController@storePdf')->name('cellers.responses.storePdf');
+
+Route::get('/cellers/file_making', 'CellersFileMakingController@index')->name('cellers.file_making.index');
+
+
+Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
+Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
+Route::post('/cellers/billing_users/storeRejected', 'CellersBillingUsersController@storeRejected')->name('cellers.billing_users.storeRejected');
+Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
+
+
 
 Route::post('/cellers', 'CellersController@store')->name('cellers.store');
 Route::post('/cellers/import', 'CellersController@import')->name('importCellers');

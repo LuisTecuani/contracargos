@@ -7,7 +7,7 @@ use App\CellersBlacklist;
 use App\CellersCancelAccountAnswer;
 use App\CellersUser;
 use App\CellersUserCancellation;
-use App\CellersTdc;
+use App\UserTdcCellers;
 use App\RespuestasBanorteCellers;
 use DateTime;
 use Illuminate\Http\Request;
@@ -31,7 +31,7 @@ class CellersBanorteController extends Controller
         foreach ($rows as $row) {
             $id = substr($row, 9, 6);
 
-            $data = CellersTdc::select("exp_date", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
@@ -73,7 +73,7 @@ class CellersBanorteController extends Controller
 
         foreach ($users as $user) {
 
-            $data = CellersTdc::select("exp_date", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $user->id)
                 ->latest()
                 ->first();
@@ -110,7 +110,7 @@ class CellersBanorteController extends Controller
 
         foreach ($ids as $id) {
 
-            $data = CellersTdc::select("exp_date", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
@@ -198,10 +198,10 @@ class CellersBanorteController extends Controller
 
     public function ftpText($verified)
     {
-        $query = CellersTdc::selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
+        $query = UserTdcCellers::selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
             ->whereIn('user_id', $verified);
 
-        $ftpText = CellersTdc::selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ') as row")
+        $ftpText = UserTdcCellers::selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ') as row")
             ->whereIn('user_id', $verified)
             ->union($query)
             ->get();
