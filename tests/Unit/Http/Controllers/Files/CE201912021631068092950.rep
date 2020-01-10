@@ -1,0 +1,82 @@
+
+16:32                                                                          SISTEMA LOCAL DE CARGOS AUTOMATICOS                                                                   02/DEC/2019
+                                                                          REPORTE DETALLADO DE TRANSACCIONES RECHAZADAS                                                                         
+CCPA0203                                                            PERIODO DE CORTE 02/DEC/2019 04:26  Al 02/DEC/2019 04:26                                                      PAG:         1
+________________________________________________________________________________________________________________________________________________________________________________________________
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Afiliaci�n: 8092950   AFF*CELLERS CLUB                                                                         Banco: 30 BANCO AUTOFIN                                                          
+                                                                                                                                                                                                
+Numero de cuenta    Referencia              Fecha-hora    Rechazo                                                    Transacci�n                       Monto       Comisi�n Numero Contrato     
+------------------- ----------------------- ------------- -- ------------------------------------------------------- -- -------------------- --------------- -------------- --------------------
+   5288439102973841 184                     191202 163159 05 Rechazada                                               00 VENTAS                         90.00           1.38 C184                
+
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Totales:                                                                                                                                                                                        
+                                                                                                                                                                                                
+Total de Operaciones Rechazadas:                1                                                                                                                                               
+Monto de las Operaciones       :           $90.00                                                                                                                                               
+Importe de la Comisi�n         :            $1.38                                                                                                                                               
+Iva de la Comisi�n             :             $.22                                                                                                                                               
+Total                          :           $88.40                                                                                                                                               
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Fin de Reporte.                                                                                                                                                                                 
+                                                                                                                                                                                                
+
+16:32                                                     SISTEMA LOCAL DE CARGOS AUTOMATICOS                                               02/DEC/2019
+                                                      REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                                                     
+CCPA0204                                       PERIODO DE CORTE 02/DEC/2019 04:26  Al 02/DEC/2019 04:26                                  PAG:         1
+_______________________________________________________________________________________________________________________________________________________
+                                                                                                                                                       
+                                                                                                                                                       
+                                                                                                                                                       
+Afiliaci�n: 8092950   AFF*CELLERS CLUB                                Banco: 30 BANCO AUTOFIN                                                          
+                                                                                                                                                       
+Numero de cuenta    Referencia              Fecha-hora    Autz Autorizaci�n Transacci�n                       Monto       Comisi�n Numero Contrato     
+------------------- ----------------------- ------------- ---- ------------ -- -------------------- --------------- -------------- --------------------
+   5288430349746298 237                     191202 163159 P128 319870       00 VENTAS                         90.00           1.38 C237                
+   4053060026438798 244                     191202 163159 P128 282968       00 VENTAS                         90.00           1.38 C244                
+               
+                                                                                                                                                                                                                         
+Totales:                                                                                                                                               
+                                                                                                                                                       
+Total de Operaciones Aceptadas:               82                                                                                                       
+Monto de las Operaciones      :        $7,380.00                                                                                                       
+Importe de la Comisi�n        :          $113.16                                                                                                       
+Iva de la Comisi�n            :           $18.11                                                                                                       
+Total                         :        $7,248.73                                                                                                       
+                                                                                                                                                       
+                                                                                                                                                       
+Fin de Reporte.                                                                                                                                        
+                                                                                                                                                       
+
+16:32                     SISTEMA LOCAL DE CARGOS AUTOMATICOS              02/DEC/2019
+                     REPORTE DETALLADO DE TRANSACCIONES PROCESADAS                    
+CCPA0205       PERIODO DE CORTE 02/DEC/2019 04:26  Al 02/DEC/2019 04:26 PAG:         1
+______________________________________________________________________________________
+                                                                                      
+                                                                                      
+                                                                                      
+Afiliaci�n: 8092950 AFF*CELLERS CLUB                                                  
+Banco     : 30 BANCO AUTOFIN                                                          
+                                                                                      
+                                                                                      
+                                 Transacciones       Transacciones             Periodo
+                                    Rechazadas           Aceptadas            De corte
+                               ---------------     ---------------       -------------
+                                                                                      
+Total de Operaciones     :                   1                  82                  83
+Monto de las Operaciones :              $90.00           $7,380.00           $7,470.00
+Importe de la Comisi�n   :               $1.38             $113.16             $114.54
+Iva de la Comisi�n       :                $.22              $18.11              $18.33
+                                                                                      
+Total a Depositar        :                               $7,248.73           $7,337.13
+                                                                                      
+                                                                                      
+                                                                                      
+Fin de Reporte.                                                                       
+                                                                                      
+                                                                                      

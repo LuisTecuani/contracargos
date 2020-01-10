@@ -10,8 +10,13 @@ class CellersControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function last_method_returns_unique_emails_searched_today()
+    public function admins_can_browse_to_the_index_page()
     {
-$this->assertTrue(true);
+        $this->signIn();
+
+        $this->get('/cellers')
+            ->assertOk()
+            ->assertSessionHasNoErrors()
+            ->assertViewIs('cellers.index');
     }
 }

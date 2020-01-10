@@ -24,9 +24,14 @@ class CellersController extends Controller
 
     public function index()
     {
+        return view("cellers.index");
+    }
+
+  /*  public function index()
+    {
         $role = User::role();
 
-        DB::select('update contracargos_cellers c left join repscellers r on r.autorizacion=c.autorizacion 
+        DB::select('update contracargos_cellers c left join repscellers r on r.autorizacion=c.autorizacion
                 set c.user_id=r.user_id, c.fecha_rep=r.fecha where c.user_id is null and r.terminacion=c.tarjeta');
 
         DB::select('update contracargos_cellers c join cellers.users u on u.id=c.user_id set c.email=u.email');
@@ -37,7 +42,7 @@ class CellersController extends Controller
 
         return view("cellers.index", compact('cards', 'cards2', 'role'));
     }
-
+*/
     public function store(StoreAdminRequest $request)
     {
         $autorizacionesS = $request->input('autorizaciones');

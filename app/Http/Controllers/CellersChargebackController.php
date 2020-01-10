@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\ContracargosAliado;
-use App\ContracargosAliadoBanorte;
+use App\ContracargosCellers;
+use App\ContracargosCellersBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AliadoChargebackController extends Controller
+class CellersChargebackController extends Controller
 {
     public function __construct(FileProcessor $filep)
     {
@@ -20,33 +20,33 @@ class AliadoChargebackController extends Controller
     public function index()
     {
         $this->update();
-        (New AliadoBanorteChargebackController)->update();
+        (New CellersBanorteChargebackController)->update();
 
-        $query = ContracargosAliadoBanorte::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
+        $query = ContracargosCellersBanorte::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
             ->whereDate('created_at', today());
 
-        $cards = ContracargosAliado::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
+        $cards = ContracargosCellers::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
         ->whereDate('created_at', today())
             ->union($query)->get();
 
-        return view("aliado.chargeback.index", compact('cards'));
+        return view("cellers.chargeback.index", compact('cards'));
     }
 
 
     public function show()
     {
-        $query = DB::table("contracargos_aliado_banorte as cc")
-            ->leftJoin("respuestas_banorte_aliado as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
+        $query = DB::table("contracargos_cellers_banorte as cc")
+            ->leftJoin("respuestas_banorte_cellers as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
             ->select('email')
             ->select('u.email')
             ->whereDate('cc.created_at', today())
             ->whereColumn('rm.terminacion', 'cc.tarjeta')
             ->orWhere('rm.autorizacion', null);
 
-        $emails = DB::table("consultas.contracargos_aliado as cm")
-            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
+        $emails = DB::table("consultas.contracargos_cellers as cm")
+            ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
+            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
             ->select('u.email')
             ->whereDate('cm.created_at', today())
             ->whereColumn('rm.terminacion', 'cm.tarjeta')
@@ -55,7 +55,7 @@ class AliadoChargebackController extends Controller
             ->groupBy("u.email")
             ->get();
 
-        return view("aliado.chargeback.last", compact('emails'));
+        return view("cellers.chargeback.last", compact('emails'));
     }
 
     public function store(StoreAdminRequest $request)
@@ -65,9 +65,9 @@ class AliadoChargebackController extends Controller
         foreach ($arr as $a) {
             $store = preg_split("[,]", $a);
             $store[0] = $this->fileP->autorizacionSeisDigit($store[0]);
-            $exist = ContracargosAliado::where([['autorizacion', $store[0]],['tarjeta', $store[1]]])->first();
+            $exist = ContracargosCellers::where([['autorizacion', $store[0]],['tarjeta', $store[1]]])->first();
             if (! $exist) {
-                $Contracargos = new ContracargosAliado();
+                $Contracargos = new ContracargosCellers();
                 $Contracargos->autorizacion = $store[0];
                 $Contracargos->tarjeta = $store[1];
                 $Contracargos->save();
@@ -75,21 +75,21 @@ class AliadoChargebackController extends Controller
         }
         Session()->flash('message', 'Datos Registrados');
 
-        return redirect()->route("aliado.index");
+        return redirect()->route("cellers.index");
 
     }
 
     public function update()
     {
 
-        $contracargos = ContracargosAliado::with('reps')
+        $contracargos = ContracargosCellers::with('reps')
             ->whereNull('user_id')
             ->get();
 
         foreach ($contracargos as $contracargo) {
             foreach ($contracargo->reps as $rep) {
                 if($contracargo->tarjeta == $rep->terminacion) {
-                    ContracargosAliado::where('id', $contracargo->id)
+                    ContracargosCellers::where('id', $contracargo->id)
                         ->update([
                             'user_id' => $rep->user_id,
                             'fecha_rep' => $rep->fecha]);
@@ -97,13 +97,13 @@ class AliadoChargebackController extends Controller
             }
         }
 
-        $noEmails = ContracargosAliado::with('user')
+        $noEmails = ContracargosCellers::with('user')
             ->whereNull('email')
             ->get();
 
         foreach ($noEmails as $row) {
             if($row->user) {
-                ContracargosAliado::where('id', $row->id)
+                ContracargosCellers::where('id', $row->id)
                     ->update(['email' => $row->user->email]);
             }
         }

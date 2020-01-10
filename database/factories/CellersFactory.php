@@ -38,7 +38,7 @@ $factory->define(Repscellers::class, function (Faker $faker) {
         'terminacion' => substr($tarjeta, -4, 4),
         'user_id' => $faker->randomNumber(6),
         'fecha' => $faker->date('Y-m-d'),
-        'autorizacion' => $faker->randomNumber(6),
+        'autorizacion' => '2'.$faker->randomNumber(5),
         'monto' => $faker->randomNumber(4),
         'source_file' => Str::random(24),
     ];
@@ -57,7 +57,7 @@ $factory->define(CellersBillingUsers::class, function (Faker $faker) {
 $factory->define(ContracargosCellers::class, function (Faker $faker) {
 
     return [
-        'autorizacion' => $faker->randomNumber(6),
+        'autorizacion' => '2'.$faker->randomNumber(5),
         'tarjeta' => $faker->randomNumber(4),
     ];
 });
@@ -73,7 +73,7 @@ $factory->define(RespuestasBanorteCellers::class, function (Faker $faker) {
         ]);
     } else {
         $dMensaje = 'Aprobado';
-        $aut = $faker->randomNumber(6);
+        $aut = '2'.$faker->randomNumber(5);
     }
     $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
