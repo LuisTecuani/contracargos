@@ -98,9 +98,9 @@ class MediakeyChargebackController extends Controller
         }
 
         $noEmails = ContracargosMediakey::with('user')
+            ->whereNull('email')
+            ->get();
 
-            ->first();
-dd($noEmails);
         foreach ($noEmails as $row) {
             if($row->user) {
                 ContracargosMediakey::where('id', $row->id)

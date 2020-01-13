@@ -27,7 +27,7 @@ class MediakeyBillingUsersController extends Controller
         $rows = preg_grep("/(7816873)/", file($file));;
 
         foreach ($rows as $row) {
-            $id = substr($row, 9, 6);
+            $id = substr($row, 79, 8);
 
             $data = UserTdcMediakey::select("month", "year", "number")
                 ->where('user_id', '=', $id)

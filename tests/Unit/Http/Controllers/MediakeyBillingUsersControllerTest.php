@@ -36,19 +36,19 @@ class MediakeyBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
         $expired = factory(UserTdcMediakey::class)->create([
-            'user_id' => '125914',
+            'user_id' => '12649',
             'month' => 10,
             'year' => 2018,
         ]);
         $active = factory(UserTdcMediakey::class)->create([
-            'user_id' => '125942',
+            'user_id' => '35386',
             'month' => 11,
             'year' => 2028,
         ]);
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/SCAENT0897D191113ER01.ftp',
-                'SCAENT0897D191113ER01.ftp',
+                __DIR__ . '/files/SCAENT6873D190530ER02.ftp',
+                'SCAENT6873D190530ER02.ftp',
                 'text/plain',
                 20416,
                 null,
