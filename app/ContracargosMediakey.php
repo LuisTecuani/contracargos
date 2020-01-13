@@ -16,7 +16,6 @@ class ContracargosMediakey extends Model
         'tarjeta', 'user_id', 'email', 'fecha_rep'
     ];
 
-
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
     ];

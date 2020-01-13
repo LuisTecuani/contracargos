@@ -33,5 +33,6 @@
         <server name="DB_DATABASE" value=":memory:"/>
         <server name="ALIADO_CONNECTION" value="testing_aliado"/>
         <server name="CELLERS_CONNECTION" value="testing_cellers"/>
+        <server name="MEDIAKEY_CONNECTION" value="testing_mediakey"/>
     </php>
 </phpunit>

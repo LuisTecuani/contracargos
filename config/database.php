@@ -19,6 +19,8 @@ return [
 
     'cellers_connection' => env('CELLERS_CONNECTION', 'cellers'),
 
+    'mediakey_connection' => env('MEDIAKEY_CONNECTION', 'mediakey'),
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -60,6 +62,16 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+
+        // PHPunit testing mediakey connection
+        'testing_mediakey' => [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => '',
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+        ],
+
+
         'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -79,7 +91,7 @@ return [
             ]) : [],
         ],
 
-        'mysql1' => [
+        'mediakey' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
