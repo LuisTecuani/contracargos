@@ -1,18 +1,16 @@
 <div class="pt-4">
     <ul class="nav flex-column">
         <li class="nav-item pt-2">
-            <a href="/cellers/last" class="btn btn-outline-success">Emails ultima consulta</a>
+            <a href="/cellers/chargeback" class="btn btn-outline-success">Contracargos Cellers</a>
         </li>
         <li class="nav-item pt-2">
-            <a href="/cellers/banorte" class="btn btn-outline-success">Cobros cellers banorte</a>
+            <a href="/cellers/file_making" class="btn btn-outline-success">Creacion de files para cobro Cellers</a>
         </li>
         <li class="nav-item pt-2">
-            <a href="/cellers/blacklist" class="btn btn-outline-success">Blacklist</a>
+            <a href="/cellers/blacklist" class="btn btn-outline-success">Añadir emails a la Blacklist</a>
         </li>
         <li class="nav-item pt-2">
-            <button class="btn btn-outline-success" href="#">
-                <del>Link</del>
-            </button>
+            <a href="/cellers/responses" class="btn btn-outline-success">Procesamiento de files de respuestas de cobro</a>
         </li>
     </ul>
 </div>

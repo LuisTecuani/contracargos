@@ -19,5 +19,4 @@ class AliadoControllerTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertViewIs('aliado.index');
     }
-
 }

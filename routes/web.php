@@ -69,12 +69,34 @@ Route::post('/mediakey/banorte-pdf', 'MediakeyController@banortePdf')->name('med
 |
 */
 Route::get('/cellers', 'CellersController@index')->name('cellers.index');
+
+Route::get('/cellers/chargeback', 'CellersChargebackController@index')->name('cellers.chargeback.index');
+Route::post('/cellers/chargeback/store', 'CellersChargebackController@store')->name('cellersChargeback.store');
+Route::get('/cellers/chargeback/show', 'CellersChargebackController@show')->name('cellersChargeback.show');
+
+Route::post('/cellers/banorte/chargeback/store', 'CellersBanorteChargebackController@store')->name('cellersBanorteChargeback.store');
+
+Route::get('/cellers/responses', 'CellersResponsesController@index')->name('cellers.responses.index');
+Route::post('/cellers/responses/storeReps', 'CellersResponsesController@storeReps')->name('cellers.responses.storeReps');
+Route::post('/cellers/responses/storePdf', 'CellersResponsesController@storePdf')->name('cellers.responses.storePdf');
+
+Route::get('/cellers/file_making', 'CellersFileMakingController@index')->name('cellers.file_making.index');
+
+
+Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
+Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
+Route::post('/cellers/billing_users/storeRejected', 'CellersBillingUsersController@storeRejected')->name('cellers.billing_users.storeRejected');
+Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
+
+
+
 Route::post('/cellers', 'CellersController@store')->name('cellers.store');
 Route::post('/cellers/import', 'CellersController@import')->name('importCellers');
 Route::post('/cellers/store2', 'CellersController@store2')->name('cellers.store2');
 Route::get('/cellers/last', 'CellersController@last')->name('cellers.last');
 Route::post('/cellers/banorte-pdf', 'CellersController@banortePdf')->name('cellers.banortePdf');
 
+Route::get('/cellers/blacklist', 'CellersBlacklistController@index')->name('cellers.blacklist.index');
 
 Route::post('/cellers/banorte', 'CellersController@banorte')->name('cellers.banorte');
 Route::get('/cellers/banorte', 'CellersBanorteController@index')->name('cellers.banorte');
@@ -96,7 +118,6 @@ Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
 Route::post('/aliado/chargeback/store', 'AliadoChargebackController@store')->name('aliadoChargeback.store');
 Route::get('/aliado/chargeback/show', 'AliadoChargebackController@show')->name('aliadoChargeback.show');
-Route::post('/aliado/chargeback/storeTxt', 'AliadoChargebackController@storeTxt')->name('aliadoChargeback.storeTxt');
 
 Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackController@store')->name('aliadoBanorteChargeback.store');
 
@@ -146,16 +167,4 @@ Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@stor
 Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
 Route::post('sanbornscobro/searchdetails', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
 
-/*
-|--------------------------------------------------------------------------
-| Pendiente
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('export', 'MyController@export')->name('export');
-Route::get('importExportView', 'MyController@importExportView');
-Route::post('import', 'MyController@import')->name('import');
-
-Route::get('/file_cobro', 'BanorteController@index');
 

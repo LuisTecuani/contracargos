@@ -3,24 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\CellersBillingUsers;
-use App\CellersBlacklist;
-use App\CellersCancelAccountAnswer;
-use App\CellersUser;
-use App\CellersUserCancellation;
-use App\UserTdcCellers;
 use App\RespuestasBanorteCellers;
+use App\UserTdcCellers;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class CellersBanorteController extends Controller
+class CellersBillingUsersController extends Controller
 {
     public function index()
     {
-        return view('cellers.banorte.index');
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
+
+        return view('cellers/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
-    public function ftp(Request $request)
+    public function storeFtp(Request $request)
     {
         $procedence = $request->procedence;
 
@@ -38,7 +36,7 @@ class CellersBanorteController extends Controller
 
             if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
                 $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                . '-' . substr($data->exp_date, 0, -2))
+                    . '-' . substr($data->exp_date, 0, -2))
                     ->format('y-m');
             } else {
                 $date = 1111;
@@ -58,10 +56,11 @@ class CellersBanorteController extends Controller
         $expUsers = count($this->expDates());
         $vigUsers = count($this->vigDates());
 
-        return view('/cellers/banorte/results', compact('expUsers', 'vigUsers'));
+        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
-    public function billingRejected(Request $request)
+
+    public function storeRejected(Request $request)
     {
         $procedence = $request->procedence;
 
@@ -99,10 +98,10 @@ class CellersBanorteController extends Controller
         $expUsers = count($this->expDates());
         $vigUsers = count($this->vigDates());
 
-        return view('/cellers/banorte/results', compact('expUsers', 'vigUsers'));
+        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
-    public function usersTextbox(Request $request)
+    public function storeTextbox(Request $request)
     {
         $procedence = $request->procedence;
 
@@ -133,49 +132,14 @@ class CellersBanorteController extends Controller
                 'number' => $data->number
             ]);
         }
+
         $expUsers = count($this->expDates());
         $vigUsers = count($this->vigDates());
 
-        return view('/cellers/banorte/results', compact('expUsers', 'vigUsers'));
+        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
-    public function ftpProsa()
-    {
-        $expUsers = $this->expDates();
-        $verified = $this->notInBlacklists($expUsers);
-        //   $text = $this->ftpText($verified);
 
-        return view('/cellers/banorte/paraFTP', compact('verified'));
-
-    }
-
-    public function csvBanorte()
-    {
-        $vigUsers = $this->vigDates();
-        $verified = $this->notInBlacklists($vigUsers);
-
-
-        return view('/cellers/banorte/paraFTP', compact('verified'));
-
-    }
-
-  /*  public function notInBlacklists($ids)
-    {
-        return CellersUser::select('id')->whereIn('id',$ids)->whereNull('deleted_at')->get()
-            ->diff(CellersCancelAccountAnswer::select('user_id as id')->get())
-            ->diff(CellersBlacklist::select('user_id as id')->get())
-            ->diff(CellersUserCancellation::select('user_id as id')->get());
-    }
-
-    public function notCancelled($ids)
-    {
-        return DB::table('cellers.users as u')
-            ->leftJoin('cellers.user_cancellations as au', 'au.user_id', '=', 'u.id')
-            ->select('u.id')
-            ->whereIn('u.id', $ids)
-            ->whereNull(['au.user_id', 'u.deleted_at'])
-            ->get();
-    } */
 
     public function expDates()
     {
@@ -196,15 +160,4 @@ class CellersBanorteController extends Controller
     }
 
 
-    public function ftpText($verified)
-    {
-        $query = UserTdcCellers::selectRaw("concat('801089727', user_id,'                 ', number,'   00000000079.0000', user_id, '              ')")
-            ->whereIn('user_id', $verified);
-
-        $ftpText = UserTdcCellers::selectRaw("concat(DATE_FORMAT(CURDATE(), '%d%m%Y'),'100101',LPAD(count(user_id), 6, '0'),LPAD(count(user_id)*79, 13, '0'),'.00                                                   ') as row")
-            ->whereIn('user_id', $verified)
-            ->union($query)
-            ->get();
-        dd($ftpText);
-    }
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CellersTdc extends Model
+class UserTdcCellers extends Model
 {
     /**
      * Specify the connection, since this implements multitenant solution

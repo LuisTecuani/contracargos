@@ -4,7 +4,7 @@ namespace Tests\Unit\Http\Controllers;
 
 use App\CellersBillingUsers;
 use App\CellersUser;
-use App\Http\Controllers\CellersBanorteController;
+use App\Http\Controllers\CellersBillingUsersController;
 use App\RespuestasBanorteCellers;
 use App\UserTdcCellers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,7 +12,8 @@ use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
 
-class CellersBanorteControllerTest extends TestCase
+
+class CellersBillingUsersControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -21,24 +22,26 @@ class CellersBanorteControllerTest extends TestCase
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-        $this->get('/cellers/banorte')
+
+        factory(CellersBillingUsers::class)->create();
+
+        $this->get('/cellers/billing_users')
             ->assertOk()
             ->assertSessionHasNoErrors()
-            ->assertViewIs('cellers.banorte.index');
+            ->assertViewIs('cellers.billing_users.index');
     }
 
     /** @test */
     public function admins_can_import_users_from_ftp()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '77',
             'exp_date' => 1018,
         ]);
         $active = factory(UserTdcCellers::class)->create([
             'user_id' => '1223',
-            'exp_date' => 128,
+            'exp_date' => 1128,
         ]);
         $file = UploadedFile::createFromBase(
             (new UpFile(
@@ -51,7 +54,7 @@ class CellersBanorteControllerTest extends TestCase
             ))
         );
 
-        $this->post('/cellers/banorte/ftp', [
+        $this->post('/cellers/billing_users/storeFtp', [
             'file' => $file,
             'procedence' => 'dashboard',
         ]);
@@ -64,8 +67,9 @@ class CellersBanorteControllerTest extends TestCase
         $this->assertDatabaseHas('cellers_billing_users', [
             'user_id' => $active->user_id,
             'procedence' => 'dashboard',
-            'exp_date' => '28-01',
+            'exp_date' => '28-11',
         ]);
+
     }
 
     /** @test */
@@ -101,7 +105,7 @@ class CellersBanorteControllerTest extends TestCase
         ]);
 
 
-        $this->post('/cellers/banorte/billingRejected', [
+        $this->post('/cellers/billing_users/storeRejected', [
             'date' => '2019-11-19',
             'procedence' => 'Rechazados por saldo',
         ]);
@@ -135,7 +139,7 @@ class CellersBanorteControllerTest extends TestCase
         ]);
 
 
-        $this->post('/cellers/banorte/usersTextbox', [
+        $this->post('/cellers/billing_users/storeTextbox', [
             'ids' => "123456\r\n654321",
             'procedence' => 'Rechazos historicos',
         ]);
@@ -154,7 +158,6 @@ class CellersBanorteControllerTest extends TestCase
     public function expDates_method_divide_users_by_expired_and_vigent()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired1 = factory(CellersBillingUsers::class)->create([
             'exp_date' => '18-02'
         ]);
@@ -171,15 +174,15 @@ class CellersBanorteControllerTest extends TestCase
             'exp_date' => '26-12'
         ]);
 
-        $expUsers = (new CellersBanorteController())->expDates();
+        $expUsers = (new CellersBillingUsersController())->expDates();
 
-        $vigUsers = (new CellersBanorteController())->vigDates();
+        $vigUsers = (new CellersBillingUsersController())->vigDates();
 
         $this->assertCount(2, $expUsers);
         $this->assertCount(3, $vigUsers);
     }
 
-    /** @ incompleted test  */
+    /** incomplete test test  */
     public function it_can_build_a_valid_ftp_file()
     {
         $this->signIn();
@@ -205,7 +208,7 @@ class CellersBanorteControllerTest extends TestCase
 
         $this->get('/cellers/banorte/ftpProsa');
 
-        $this->assertFileExists("SCAENT2950D" . now()->format('ymd') . "ER01.ftp",);
+        $this->assertFileExists("SCAENT0897D" . now()->format('ymd') . "ER01.ftp",);
 
     }
 }

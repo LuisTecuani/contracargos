@@ -6,32 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ContracargosCellers extends Model
+class ContracargosCellersBanorte extends Model
 {
-    /**
-     * Specify the connection, since this implements multitenant solution
-     * Called via constructor to faciliate testing
-     *
-     * @param array $attributes
-     */
-    public function __construct($attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->setConnection(config('database.default'));
-    }
-
     protected $guarded = [];
 
-    protected $table = 'contracargos_cellers';
+    protected $table = 'contracargos_cellers_banorte';
 
-    protected $fillable = ['autorizacion',
+    protected $fillable = ['autorizacion', 'fecha_consumo',
         'tarjeta', 'user_id', 'email', 'fecha_rep'
     ];
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d'
     ];
-
 
     /**
      * Define a one-to-many relationship.
@@ -40,7 +27,7 @@ class ContracargosCellers extends Model
      */
     public function reps() : HasMany
     {
-        return $this->HasMany(Repscellers::class, 'autorizacion', 'autorizacion');
+        return $this->HasMany(RespuestasBanorteCellers::class, 'autorizacion', 'autorizacion');
     }
 
     /**
