@@ -36,19 +36,17 @@ class CellersBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
         $expired = factory(UserTdcCellers::class)->create([
-            'user_id' => '125914',
-            'exp_month' => 10,
-            'exp_year' => 2018,
+            'user_id' => '77',
+            'exp_date' => 1018,
         ]);
         $active = factory(UserTdcCellers::class)->create([
-            'user_id' => '125942',
-            'exp_month' => 11,
-            'exp_year' => 2028,
+            'user_id' => '1223',
+            'exp_date' => 1128,
         ]);
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/SCAENT0897D191113ER01.ftp',
-                'SCAENT0897D191113ER01.ftp',
+                __DIR__ . '/files/SCAENT2950D191205ER01.ftp',
+                'SCAENT2950D191205ER01.ftp',
                 'text/plain',
                 20416,
                 null,
@@ -81,13 +79,11 @@ class CellersBillingUsersControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
+            'exp_date' => 1018,
         ]);
         $active = factory(UserTdcCellers::class)->create([
             'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
+            'exp_date' => 1128,
         ]);
         // rejected on date
         factory(RespuestasBanorteCellers::class)->create([
@@ -135,13 +131,11 @@ class CellersBillingUsersControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
+            'exp_date' => 1018,
         ]);
         $active = factory(UserTdcCellers::class)->create([
             'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
+            'exp_date' => 1128,
         ]);
 
 

@@ -24,25 +24,30 @@ class CellersBillingUsersController extends Controller
 
         $file = $request->file('file');
 
-        $rows = preg_grep("/(801089727)/", file($file));;
+        $rows = preg_grep("/(809295030)/", file($file));;
 
         foreach ($rows as $row) {
             $id = substr($row, 9, 6);
 
-            $data = UserTdcCellers::select("exp_month", "exp_year", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
 
-            $d = $data->exp_month . substr($data->exp_year, -2);
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
+                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
+                    . '-' . substr($data->exp_date, 0, -2))
+                    ->format('y-m');
+            } else {
+                $date = 1111;
+            }
 
             CellersBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                    . '-' . substr($d, 0, -2))->format('y-m'),
+                'exp_date' => $date,
 
                 'number' => $data->number
             ]);
@@ -59,30 +64,33 @@ class CellersBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = $request->date;
-
         $users = RespuestasBanorteCellers::select('user_id as id')
             ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->where(
-                'fecha', 'like', $date
+                'fecha', 'like', $request->date
             )->get();
 
         foreach ($users as $user) {
 
-            $data = UserTdcCellers::select("exp_month", "exp_year", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $user->id)
                 ->latest()
                 ->first();
 
-            $d = $data->exp_month . substr($data->exp_year, -2);
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
+                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
+                    . '-' . substr($data->exp_date, 0, -2))
+                    ->format('y-m');
+            } else {
+                $date = 1111;
+            }
 
             CellersBillingUsers::create([
                 'user_id' => $user->id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                    . '-' . substr($d, 0, -2))->format('y-m'),
+                'exp_date' => $date,
 
                 'number' => $data->number
             ]);
@@ -101,24 +109,30 @@ class CellersBillingUsersController extends Controller
 
         foreach ($ids as $id) {
 
-            $data = UserTdcCellers::select("exp_month", "exp_year", "number")
+            $data = UserTdcCellers::select("exp_date", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
 
-            $d = $data->exp_month . substr($data->exp_year, -2);
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
+                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
+                    . '-' . substr($data->exp_date, 0, -2))
+                    ->format('y-m');
+            } else {
+                $date = 1111;
+            }
 
             CellersBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                    . '-' . substr($d, 0, -2))->format('y-m'),
+                'exp_date' => $date,
 
                 'number' => $data->number
             ]);
         }
+
         $expUsers = count($this->expDates());
         $vigUsers = count($this->vigDates());
 
