@@ -47,20 +47,6 @@ Route::post('/mediakey/billing_users/storeFtp', 'MediakeyBillingUsersController@
 Route::post('/mediakey/billing_users/storeRejected', 'MediakeyBillingUsersController@storeRejected')->name('mediakey.billing_users.storeRejected');
 Route::post('/mediakey/billing_users/storeTextbox', 'MediakeyBillingUsersController@storeTextbox')->name('mediakey.billing_users.storeTextbox');
 
-
-
-
-
-
-
-Route::post('/mediakey', 'MediakeyController@store')->name('mediakey.store');
-Route::post('/mediakey/import', 'MediakeyController@import')->name('importMediakey');
-Route::post('/mediakey/store2', 'MediakeyController@store2')->name('mediakey.store2');
-Route::get('/mediakey/last', 'MediakeyController@last')->name('mediakey.last');
-Route::post('/mediakey/banorte', 'MediakeyController@banorte')->name('mediakey.banorte');
-Route::post('/mediakey/banorte-pdf', 'MediakeyController@banortePdf')->name('mediakey.banortePdf');
-
-
 /*
 |--------------------------------------------------------------------------
 | Cellers Routes
@@ -82,30 +68,14 @@ Route::post('/cellers/responses/storePdf', 'CellersResponsesController@storePdf'
 
 Route::get('/cellers/file_making', 'CellersFileMakingController@index')->name('cellers.file_making.index');
 
-
 Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
 Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
 Route::post('/cellers/billing_users/storeRejected', 'CellersBillingUsersController@storeRejected')->name('cellers.billing_users.storeRejected');
 Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
 
 
-
-Route::post('/cellers', 'CellersController@store')->name('cellers.store');
-Route::post('/cellers/import', 'CellersController@import')->name('importCellers');
-Route::post('/cellers/store2', 'CellersController@store2')->name('cellers.store2');
-Route::get('/cellers/last', 'CellersController@last')->name('cellers.last');
-Route::post('/cellers/banorte-pdf', 'CellersController@banortePdf')->name('cellers.banortePdf');
-
 Route::get('/cellers/blacklist', 'CellersBlacklistController@index')->name('cellers.blacklist.index');
 
-Route::post('/cellers/banorte', 'CellersController@banorte')->name('cellers.banorte');
-Route::get('/cellers/banorte', 'CellersBanorteController@index')->name('cellers.banorte');
-Route::post('/cellers/banorte/ftp', 'CellersBanorteController@Ftp')->name('cellers.cobroBanorteFtp');
-Route::post('/cellers/banorte/billingRejected', 'CellersBanorteController@billingRejected')->name('cellers.banorteBillingRejected');
-Route::post('/cellers/banorte/usersTextbox', 'CellersBanorteController@usersTextbox')->name('cellers.banorteUsersTextbox');
-Route::get('/cellers/banorte/ftpProsa', 'CellersBanorteController@ftpProsa')->name('cellers.banorteFtpProsa');
-Route::get('/cellers/banorte/csvBanorte', 'CellersBanorteController@csvBanorte')->name('cellers.banorteCsvBanorte');
-Route::get('/cellers/banorte/csvBilling', 'Exports\CellersBanorteController@export')->name('cellers.banorteCsvBilling');
 /*
 |--------------------------------------------------------------------------
 | Aliado Routes
@@ -135,24 +105,6 @@ Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@stor
 Route::post('/aliado/billing_users/storeRejected', 'AliadoBillingUsersController@storeRejected')->name('aliado.billing_users.storeRejected');
 Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
 
-Route::get('/aliado/banorte', 'AliadoBanorteController@index')->name('aliado.banorte');
-Route::post('/aliado/banorte/ftp', 'AliadoBanorteController@Ftp')->name('aliado.cobroBanorteFtp');
-Route::post('/aliado/banorte/billingRejected', 'AliadoBanorteController@billingRejected')->name('aliado.banorteBillingRejected');
-Route::post('/aliado/banorte/usersTextbox', 'AliadoBanorteController@usersTextbox')->name('aliado.banorteUsersTextbox');
-Route::get('/aliado/banorte/ftpProsa', 'AliadoBanorteController@ftpProsa')->name('aliado.banorteFtpProsa');
-Route::get('/aliado/banorte/csvBanorte', 'AliadoBanorteController@csvBanorte')->name('aliado.banorteCsvBanorte');
-Route::get('/aliado/banorte/csvBilling', 'Exports\AliadoBanorteController@export')->name('aliado.banorteCsvBilling');
-/*
-|--------------------------------------------------------------------------
-| Asmas Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('/asmas', 'AsmasController@index')->name('asmas.index');
-Route::post('/asmas', 'AsmasController@store')->name('asmas.store');
-Route::post('/asmas/import', 'AsmasController@import')->name('importAsmas');
-Route::post('/asmas/store2', 'AsmasController@store2')->name('asmas.store2');
 /*
 |--------------------------------------------------------------------------
 | Sanborns Routes

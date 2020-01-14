@@ -18,6 +18,14 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: #ffffff url({{ asset('images/image1.jpg') }}) no-repeat right top;
+            background-size: cover;
+
+    }
+
+    </style>
 </head>
 <body>
 

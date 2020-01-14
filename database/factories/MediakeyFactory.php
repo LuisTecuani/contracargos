@@ -38,7 +38,7 @@ $factory->define(Repsmediakey::class, function (Faker $faker) {
     $date = $faker->date($format = 'Y-m-d');
     return [
         'motivo_rechazo' => $dMensaje,
-        'autorizacion' => $faker->randomNumber(6),
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'estatus' => $estatus,
         'user_id' => $uId,
         'tarjeta' => $tarjeta,
@@ -67,7 +67,7 @@ $factory->define(RespuestasBanorteMediakey::class, function (Faker $faker) {
     return [
         'comentarios' => 'Cargo unico',
         'detalle_mensaje' => $dMensaje,
-        'autorizacion' => $faker->randomNumber(6),
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'estatus' => $estatus,
         'user_id' => $uId,
         'num_control' => DateTime::createFromFormat('Ymd', $date) . $uId,

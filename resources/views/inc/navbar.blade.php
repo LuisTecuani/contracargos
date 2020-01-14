@@ -17,9 +17,6 @@
                     <a href="{{route('aliado.index')}}" class="nav-link">Aliado</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('asmas.index')}}" class="nav-link">Asmas</a>
-                </li>
-                <li class="nav-item">
                     <a href="{{route('cellers.index')}}" class="nav-link">Cellers</a>
                 </li>
                 <li class="nav-item">
