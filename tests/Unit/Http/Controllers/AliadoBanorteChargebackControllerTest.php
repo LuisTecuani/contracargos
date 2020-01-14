@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Http\Controllers;
 
-use App\AliadoUser;
 use App\RespuestasBanorteAliado;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -6,7 +6,6 @@ use App\ContracargosMediakey;
 use App\ContracargosMediakeyBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MediakeyChargebackController extends Controller
@@ -26,7 +25,7 @@ class MediakeyChargebackController extends Controller
             ->whereDate('created_at', today());
 
         $cards = ContracargosMediakey::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
-        ->whereDate('created_at', today())
+            ->whereDate('created_at', today())
             ->union($query)->get();
 
         return view("mediakey.chargeback.index", compact('cards'));

@@ -21,7 +21,6 @@ class CellersBillingUsersControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         factory(CellersBillingUsers::class)->create();
 
@@ -76,7 +75,6 @@ class CellersBillingUsersControllerTest extends TestCase
     public function admins_can_import_rejected_users_from_respuestas_banorte()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
             'exp_date' => 1018,
@@ -128,7 +126,6 @@ class CellersBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
 
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
             'exp_date' => 1018,

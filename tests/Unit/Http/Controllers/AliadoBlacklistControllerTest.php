@@ -25,7 +25,6 @@ class AliadoBlacklistControllerTest extends TestCase
     public function admin_can_persist_emails_on_aliado_blacklist()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $fakeUser = factory(AliadoUser::class)->create([
             'email' => 'verapatino@hotmail.com'
         ]);
@@ -37,7 +36,7 @@ class AliadoBlacklistControllerTest extends TestCase
         $this->assertDatabaseHas('aliado_blacklist', [
             'email' => 'dilaurys95@hotmail.com',
             'user_id' => null,
-            ]);
+        ]);
         $this->assertDatabaseHas('aliado_blacklist', [
             'email' => 'verapatino@hotmail.com',
             'user_id' => $fakeUser->id,

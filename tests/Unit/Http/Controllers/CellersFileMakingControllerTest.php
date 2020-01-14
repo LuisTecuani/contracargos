@@ -4,12 +4,7 @@ namespace Tests\Unit\Http\Controllers;
 
 use App\CellersBillingUsers;
 use App\CellersUser;
-use App\Http\Controllers\CellersBanorteController;
-use App\RespuestasBanorteCellers;
-use App\UserTdcCellers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
 
 class CellersFileMakingControllerTest extends TestCase
@@ -20,7 +15,6 @@ class CellersFileMakingControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $this->get('/cellers/file_making')
             ->assertOk()

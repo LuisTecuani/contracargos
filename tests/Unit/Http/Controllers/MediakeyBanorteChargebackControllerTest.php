@@ -16,7 +16,6 @@ class MediakeyBanorteChargebackControllerTest extends TestCase
     public function method_store_persist_data_on_contracargos_table()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $charge1 = factory(RespuestasBanorteMediakey::class)->create([
             'terminacion' => '0552',
             'autorizacion' => '671712',

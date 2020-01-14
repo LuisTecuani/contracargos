@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 class MediakeyController extends Controller

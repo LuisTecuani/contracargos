@@ -6,7 +6,6 @@ use App\ContracargosCellers;
 use App\ContracargosCellersBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CellersChargebackController extends Controller
@@ -26,7 +25,7 @@ class CellersChargebackController extends Controller
             ->whereDate('created_at', today());
 
         $cards = ContracargosCellers::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
-        ->whereDate('created_at', today())
+            ->whereDate('created_at', today())
             ->union($query)->get();
 
         return view("cellers.chargeback.index", compact('cards'));

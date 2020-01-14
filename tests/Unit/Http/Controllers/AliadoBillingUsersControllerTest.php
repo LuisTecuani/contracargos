@@ -21,7 +21,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         factory(AliadoBillingUsers::class)->create();
 
@@ -78,7 +77,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function admins_can_import_rejected_users_from_respuestas_banorte()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
@@ -132,7 +130,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
 
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
@@ -192,7 +189,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function it_can_build_a_valid_ftp_file()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user1 = factory(AliadoBillingUsers::class)->create([
             'exp_date' => '18-10',
         ]);

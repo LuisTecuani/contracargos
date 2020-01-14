@@ -55,7 +55,6 @@ class MediakeyResponsesControllerTest extends TestCase
     public function storePdf_method_persist_billing_info_on_RespuestasBanorteMediakey_model()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/aliado-banorte-2019-11-08-1_Respuestas.pdf',

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 class AliadoController extends Controller
 {
     public function __construct()

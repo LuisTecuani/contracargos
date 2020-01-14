@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Http\Controllers;
 
-use App\CellersUser;
 use App\RespuestasBanorteCellers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;

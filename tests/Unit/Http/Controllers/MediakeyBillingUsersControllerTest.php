@@ -21,7 +21,6 @@ class MediakeyBillingUsersControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         factory(MediakeyBillingUsers::class)->create();
 
@@ -78,7 +77,6 @@ class MediakeyBillingUsersControllerTest extends TestCase
     public function admins_can_import_rejected_users_from_respuestas_banorte()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcMediakey::class)->create([
             'user_id' => '123456',
             'month' => 10,
@@ -132,7 +130,6 @@ class MediakeyBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
 
-        $this->withoutExceptionHandling();
         $expired = factory(UserTdcMediakey::class)->create([
             'user_id' => '123456',
             'month' => 10,

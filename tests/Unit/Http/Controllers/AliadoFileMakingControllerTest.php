@@ -4,12 +4,7 @@ namespace Tests\Unit\Http\Controllers;
 
 use App\AliadoBillingUsers;
 use App\AliadoUser;
-use App\Http\Controllers\AliadoBanorteController;
-use App\RespuestasBanorteAliado;
-use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
 
 class AliadoFileMakingControllerTest extends TestCase
@@ -20,7 +15,6 @@ class AliadoFileMakingControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $this->get('/aliado/file_making')
             ->assertOk()
