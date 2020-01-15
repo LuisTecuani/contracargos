@@ -62,6 +62,9 @@ Route::get('/cellers/chargeback/show', 'CellersChargebackController@show')->name
 
 Route::post('/cellers/banorte/chargeback/store', 'CellersBanorteChargebackController@store')->name('cellersBanorteChargeback.store');
 
+Route::get('/cellers/blacklist', 'CellersBlacklistController@index')->name('cellers.blacklist.index');
+Route::post('/cellers/blacklist/store', 'CellersBlacklistController@store')->name('cellersBlacklist.store');
+
 Route::get('/cellers/responses', 'CellersResponsesController@index')->name('cellers.responses.index');
 Route::post('/cellers/responses/storeReps', 'CellersResponsesController@storeReps')->name('cellers.responses.storeReps');
 Route::post('/cellers/responses/storePdf', 'CellersResponsesController@storePdf')->name('cellers.responses.storePdf');

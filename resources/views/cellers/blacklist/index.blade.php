@@ -1,19 +1,27 @@
 @extends('layouts.app')
-@section('title',"Aliado")
+@section('title',"Cellers")
 @section('content')
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <ul>
-                    @foreach($users as $user1)
-                        {{$user1}}
-                        @foreach($user1 as $user)
-
-                        <li>{{$user->user_id}},{{$user->tarjeta}},{{$user->fecha}}</li>
-                        @endforeach
-                        @endforeach
-                </ul>
-
+                <h1><b>Blacklist Cellers</b></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mt-2">
+                @include('cellers._navLinks')
+            </div>
+            <div class="col-md mt-2">
+                <form method="POST" action="{{ route('cellersBlacklist.store') }}">
+                    @csrf
+                    <div class="form-group">
+    <textarea class="w-100" name="emails" id="email" pattern="\d"
+              title="email debe escribirse sin comas o espacios extra, separados unicamente por el salto de linea"
+              rows="10" placeholder="Enter emails"
+              required></textarea>
+                        <button type="submit" class="btn btn-outline-primary">Registrar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
