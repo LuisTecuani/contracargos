@@ -48,7 +48,6 @@ class MediakeyChargebackControllerTest extends TestCase
     public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $chargebackProsaToday = factory(ContracargosMediakey::class)->create();
         $chargebackBanorteToday = factory(ContracargosMediakeyBanorte::class)->create();
         $chargebackProsaPast = factory(ContracargosMediakey::class)->create([

@@ -5,6 +5,7 @@ namespace Tests\Unit\Http\Controllers;
 use App\MediakeyBillingUsers;
 use App\MediakeyUser;
 use App\Http\Controllers\MediakeyBillingUsersController;
+use App\Repsmediakey;
 use App\RespuestasBanorteMediakey;
 use App\UserTdcMediakey;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,6 +75,58 @@ class MediakeyBillingUsersControllerTest extends TestCase
     }
 
     /** @test */
+    public function admins_can_import_rejected_users_from_repsmediakey()
+    {
+        $this->signIn();
+        $expired = factory(UserTdcMediakey::class)->create([
+            'user_id' => '123456',
+            'month' => 10,
+            'year' => 2018,
+        ]);
+        $active = factory(UserTdcMediakey::class)->create([
+            'user_id' => '654321',
+            'month' => 11,
+            'year' => 2028,
+        ]);
+        // rejected on date
+        factory(Repsmediakey::class)->create([
+            'user_id' => $expired->user_id,
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Fondos insuficientes',
+        ]);
+        // rejected not on date
+        factory(Repsmediakey::class)->create([
+            'user_id' => $active->user_id,
+            'fecha' => '2019-10-19',
+            'motivo_rechazo' => 'Supera el monto límite permitido',
+        ]);
+        // not rejected on date
+        factory(Repsmediakey::class)->create([
+            'user_id' => '111111',
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Aprobado',
+        ]);
+
+
+        $this->post('/mediakey/billing_users/storeRejectedProsa', [
+            'date' => '2019-11-19',
+            'procedence' => 'Rechazados por saldo',
+        ]);
+
+        $this->assertDatabaseHas('mediakey_billing_users', [
+            'user_id' => $expired->user_id,
+            'procedence' => 'Rechazados por saldo',
+            'exp_date' => "18-10",
+        ]);
+        $this->assertDatabaseMissing('mediakey_billing_users', [
+            'user_id' => $active->user_id,
+        ]);
+        $this->assertDatabaseMissing('mediakey_billing_users', [
+            'user_id' => '111111'
+        ]);
+    }
+
+    /** @test */
     public function admins_can_import_rejected_users_from_respuestas_banorte()
     {
         $this->signIn();
@@ -107,7 +160,7 @@ class MediakeyBillingUsersControllerTest extends TestCase
         ]);
 
 
-        $this->post('/mediakey/billing_users/storeRejected', [
+        $this->post('/mediakey/billing_users/storeRejectedBanorte', [
             'date' => '2019-11-19',
             'procedence' => 'Rechazados por saldo',
         ]);
@@ -129,7 +182,6 @@ class MediakeyBillingUsersControllerTest extends TestCase
     public function admins_can_import_users_writing_in_text_box()
     {
         $this->signIn();
-
         $expired = factory(UserTdcMediakey::class)->create([
             'user_id' => '123456',
             'month' => 10,
@@ -178,7 +230,6 @@ class MediakeyBillingUsersControllerTest extends TestCase
         ]);
 
         $expUsers = (new MediakeyBillingUsersController())->expDates();
-
         $vigUsers = (new MediakeyBillingUsersController())->vigDates();
 
         $this->assertCount(2, $expUsers);

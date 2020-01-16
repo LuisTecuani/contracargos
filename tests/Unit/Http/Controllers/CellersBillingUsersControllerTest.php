@@ -5,6 +5,7 @@ namespace Tests\Unit\Http\Controllers;
 use App\CellersBillingUsers;
 use App\CellersUser;
 use App\Http\Controllers\CellersBillingUsersController;
+use App\Repscellers;
 use App\RespuestasBanorteCellers;
 use App\UserTdcCellers;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -72,6 +73,56 @@ class CellersBillingUsersControllerTest extends TestCase
     }
 
     /** @test */
+    public function admins_can_import_rejected_users_from_repscellers()
+    {
+        $this->signIn();
+        $expired = factory(UserTdcCellers::class)->create([
+            'user_id' => '123456',
+            'exp_date' => 1018,
+        ]);
+        $active = factory(UserTdcCellers::class)->create([
+            'user_id' => '654321',
+            'exp_date' => 1128,
+        ]);
+        // rejected on date
+        factory(Repscellers::class)->create([
+            'user_id' => $expired->user_id,
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Fondos insuficientes',
+        ]);
+        // rejected not on date
+        factory(Repscellers::class)->create([
+            'user_id' => $active->user_id,
+            'fecha' => '2019-10-19',
+            'motivo_rechazo' => 'Supera el monto límite permitido',
+        ]);
+        // not rejected on date
+        factory(Repscellers::class)->create([
+            'user_id' => '111111',
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Aprobado',
+        ]);
+
+
+        $this->post('/cellers/billing_users/storeRejectedProsa', [
+            'date' => '2019-11-19',
+            'procedence' => 'Rechazados por saldo',
+        ]);
+
+        $this->assertDatabaseHas('cellers_billing_users', [
+            'user_id' => $expired->user_id,
+            'procedence' => 'Rechazados por saldo',
+            'exp_date' => "18-10",
+        ]);
+        $this->assertDatabaseMissing('cellers_billing_users', [
+            'user_id' => $active->user_id,
+        ]);
+        $this->assertDatabaseMissing('cellers_billing_users', [
+            'user_id' => '111111'
+        ]);
+    }
+
+    /** @test */
     public function admins_can_import_rejected_users_from_respuestas_banorte()
     {
         $this->signIn();
@@ -103,7 +154,7 @@ class CellersBillingUsersControllerTest extends TestCase
         ]);
 
 
-        $this->post('/cellers/billing_users/storeRejected', [
+        $this->post('/cellers/billing_users/storeRejectedBanorte', [
             'date' => '2019-11-19',
             'procedence' => 'Rechazados por saldo',
         ]);
@@ -125,7 +176,6 @@ class CellersBillingUsersControllerTest extends TestCase
     public function admins_can_import_users_writing_in_text_box()
     {
         $this->signIn();
-
         $expired = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
             'exp_date' => 1018,
@@ -172,7 +222,6 @@ class CellersBillingUsersControllerTest extends TestCase
         ]);
 
         $expUsers = (new CellersBillingUsersController())->expDates();
-
         $vigUsers = (new CellersBillingUsersController())->vigDates();
 
         $this->assertCount(2, $expUsers);

@@ -44,7 +44,8 @@ Route::get('/mediakey/file_making', 'MediakeyFileMakingController@index')->name(
 
 Route::get('/mediakey/billing_users', 'MediakeyBillingUsersController@index')->name('mediakey.billing_users.index');
 Route::post('/mediakey/billing_users/storeFtp', 'MediakeyBillingUsersController@storeFtp')->name('mediakey.billing_users.storeFtp');
-Route::post('/mediakey/billing_users/storeRejected', 'MediakeyBillingUsersController@storeRejected')->name('mediakey.billing_users.storeRejected');
+Route::post('/mediakey/billing_users/storeRejectedProsa', 'MediakeyBillingUsersController@storeRejectedProsa')->name('mediakey.billing_users.storeRejectedProsa');
+Route::post('/mediakey/billing_users/storeRejectedBanorte', 'MediakeyBillingUsersController@storeRejectedBanorte')->name('mediakey.billing_users.storeRejectedBanorte');
 Route::post('/mediakey/billing_users/storeTextbox', 'MediakeyBillingUsersController@storeTextbox')->name('mediakey.billing_users.storeTextbox');
 
 /*
@@ -73,7 +74,8 @@ Route::get('/cellers/file_making', 'CellersFileMakingController@index')->name('c
 
 Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
 Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
-Route::post('/cellers/billing_users/storeRejected', 'CellersBillingUsersController@storeRejected')->name('cellers.billing_users.storeRejected');
+Route::post('/cellers/billing_users/storeRejectedProsa', 'CellersBillingUsersController@storeRejectedProsa')->name('cellers.billing_users.storeRejectedProsa');
+Route::post('/cellers/billing_users/storeRejectedBanorte', 'CellersBillingUsersController@storeRejectedBanorte')->name('cellers.billing_users.storeRejectedBanorte');
 Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
 
 
@@ -105,7 +107,8 @@ Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('ali
 
 Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
 Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@storeFtp')->name('aliado.billing_users.storeFtp');
-Route::post('/aliado/billing_users/storeRejected', 'AliadoBillingUsersController@storeRejected')->name('aliado.billing_users.storeRejected');
+Route::post('/aliado/billing_users/storeRejectedProsa', 'AliadoBillingUsersController@storeRejectedProsa')->name('aliado.billing_users.storeRejectedProsa');
+Route::post('/aliado/billing_users/storeRejectedBanorte', 'AliadoBillingUsersController@storeRejectedBanorte')->name('aliado.billing_users.storeRejectedBanorte');
 Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
 
 /*

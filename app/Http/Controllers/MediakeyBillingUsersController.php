@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MediakeyBillingUsers;
+use App\Repsmediakey;
 use App\RespuestasBanorteMediakey;
 use App\UserTdcMediakey;
 use DateTime;
@@ -55,7 +56,45 @@ class MediakeyBillingUsersController extends Controller
     }
 
 
-    public function storeRejected(Request $request)
+    public function storeRejectedProsa(Request $request)
+    {
+        $procedence = $request->procedence;
+
+        $date = $request->date;
+
+        $users = Repsmediakey::select('user_id as id')
+            ->whereIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->where(
+                'fecha', 'like', $date
+            )->get();
+
+        foreach ($users as $user) {
+
+            $data = UserTdcMediakey::select("month", "year", "number")
+                ->where('user_id', '=', $user->id)
+                ->latest()
+                ->first();
+
+            $d = $data->month . substr($data->year, -2);
+
+            MediakeyBillingUsers::create([
+                'user_id' => $user->id,
+
+                'procedence' => $procedence,
+
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
+
+                'number' => $data->number
+            ]);
+        }
+        $expUsers = count($this->expDates());
+        $vigUsers = count($this->vigDates());
+
+        return view('/mediakey/billing_users/index', compact('expUsers', 'vigUsers'));
+    }
+
+    public function storeRejectedBanorte(Request $request)
     {
         $procedence = $request->procedence;
 

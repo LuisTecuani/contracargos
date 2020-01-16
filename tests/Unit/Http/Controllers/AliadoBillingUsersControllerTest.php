@@ -5,6 +5,7 @@ namespace Tests\Unit\Http\Controllers;
 use App\AliadoBillingUsers;
 use App\AliadoUser;
 use App\Http\Controllers\AliadoBillingUsersController;
+use App\Repsaliado;
 use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +22,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-
         factory(AliadoBillingUsers::class)->create();
 
         $this->get('/aliado/billing_users')
@@ -106,8 +106,58 @@ class AliadoBillingUsersControllerTest extends TestCase
             'detalle_mensaje' => 'Aprobado',
         ]);
 
+        $this->post('/aliado/billing_users/storeRejectedBanorte', [
+            'date' => '2019-11-19',
+            'procedence' => 'Rechazados por saldo',
+        ]);
 
-        $this->post('/aliado/billing_users/storeRejected', [
+        $this->assertDatabaseHas('aliado_billing_users', [
+            'user_id' => $expired->user_id,
+            'procedence' => 'Rechazados por saldo',
+            'exp_date' => "18-10",
+        ]);
+        $this->assertDatabaseMissing('aliado_billing_users', [
+            'user_id' => $active->user_id,
+        ]);
+        $this->assertDatabaseMissing('aliado_billing_users', [
+            'user_id' => '111111'
+        ]);
+    }
+
+    /** @test */
+    public function admins_can_import_rejected_users_from_repsaliado()
+    {
+        $this->signIn();
+        $expired = factory(UserTdcAliado::class)->create([
+            'user_id' => '123456',
+            'exp_month' => 10,
+            'exp_year' => 2018,
+        ]);
+        $active = factory(UserTdcAliado::class)->create([
+            'user_id' => '654321',
+            'exp_month' => 11,
+            'exp_year' => 2028,
+        ]);
+        // rejected on date
+        factory(Repsaliado::class)->create([
+            'user_id' => $expired->user_id,
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Fondos insuficientes',
+        ]);
+        // rejected not on date
+        factory(Repsaliado::class)->create([
+            'user_id' => $active->user_id,
+            'fecha' => '2019-10-19',
+            'motivo_rechazo' => 'Supera el monto límite permitido',
+        ]);
+        // not rejected on date
+        factory(Repsaliado::class)->create([
+            'user_id' => '111111',
+            'fecha' => '2019-11-19',
+            'motivo_rechazo' => 'Aprobado',
+        ]);
+
+        $this->post('/aliado/billing_users/storeRejectedProsa', [
             'date' => '2019-11-19',
             'procedence' => 'Rechazados por saldo',
         ]);
@@ -129,7 +179,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function admins_can_import_users_writing_in_text_box()
     {
         $this->signIn();
-
         $expired = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
@@ -178,7 +227,6 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
 
         $expUsers = (new AliadoBillingUsersController())->expDates();
-
         $vigUsers = (new AliadoBillingUsersController())->vigDates();
 
         $this->assertCount(2, $expUsers);

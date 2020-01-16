@@ -49,7 +49,6 @@ class AliadoChargebackControllerTest extends TestCase
     public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $chargebackProsaToday = factory(ContracargosAliado::class)->create();
         $chargebackBanorteToday = factory(ContracargosAliadoBanorte::class)->create();
         $chargebackProsaPast = factory(ContracargosAliado::class)->create([
