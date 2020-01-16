@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Http\Controllers;
 
-use App\CellersUser;
-use App\Http\Controllers\CellersChargebackController;
+use App\ContracargosCellers;
+use App\ContracargosCellersBanorte;
 use App\Repscellers;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -44,16 +44,25 @@ class CellersChargebackControllerTest extends TestCase
         ]);
     }
 
-    /** test */
-    public function method_show_displays_emails_from_last_entry()
+    /** @test */
+    public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
-        $user = factory(CellersUser::class)->create();
-        $charge = factory(Repscellers::class)->create([
-            'user_id' => $user->id,
+        $this->withoutExceptionHandling();
+        $chargebackProsaToday = factory(ContracargosCellers::class)->create();
+        $chargebackBanorteToday = factory(ContracargosCellersBanorte::class)->create();
+        $chargebackProsaPast = factory(ContracargosCellers::class)->create([
+            'created_at' => '2020-01-15 11:57:34'
         ]);
-        $chargeback = new CellersChargebackController();
+        $chargebackBanortePast = factory(ContracargosCellersBanorte::class)->create([
+            'created_at' => '2020-01-15 11:57:34'
+        ]);
 
+        $this->get('/cellers/chargeback/show')
+            ->assertViewIs('cellers.chargeback.last')
+            ->assertSee($chargebackProsaToday->email)
+            ->assertSee($chargebackBanorteToday->email)
+            ->assertDontSee($chargebackProsaPast->email)
+            ->assertDontSee($chargebackBanortePast->email);
     }
-
 }

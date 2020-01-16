@@ -3,10 +3,11 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\CellersUser;
+use App\ContracargosCellers;
+use App\ContracargosCellersBanorte;
 use App\UserTdcCellers;
 use App\CellersBillingUsers;
 use App\Repscellers;
-use App\ContracargosCellers;
 use App\RespuestasBanorteCellers;
 use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
@@ -90,5 +91,32 @@ $factory->define(RespuestasBanorteCellers::class, function (Faker $faker) {
         'monto' => 79,
         'fecha' => $date,
         'source_file' => "aliado-banorte-$date-Respuestas",
+    ];
+});
+
+
+$factory->define(ContracargosCellersBanorte::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'fecha_consumo' => $date,
+        'fecha_contracargo' => '17-01-2020',
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
+    ];
+});
+
+$factory->define(ContracargosCellers::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
     ];
 });

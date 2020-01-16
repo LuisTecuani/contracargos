@@ -6,6 +6,8 @@ use App\AliadoBillingUsers;
 use App\AliadoUser;
 use App\UserTdcAliado;
 use App\Repsaliado;
+use App\ContracargosAliado;
+use App\ContracargosAliadoBanorte;
 use App\RespuestasBanorteAliado;
 use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
@@ -95,5 +97,31 @@ $factory->define(AliadoUser::class, function (Faker $faker) {
         'id' => $faker->randomNumber(6),
         'name' => $faker->name,
         'email' => $faker->email,
+    ];
+});
+
+$factory->define(ContracargosAliadoBanorte::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'fecha_consumo' => $date,
+        'fecha_contracargo' => '17-01-2020',
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
+    ];
+});
+
+$factory->define(ContracargosAliado::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
     ];
 });

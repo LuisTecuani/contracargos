@@ -6,7 +6,6 @@ use App\ContracargosAliado;
 use App\ContracargosAliadoBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Support\Facades\DB;
 
 class AliadoChargebackController extends Controller
 {
@@ -34,24 +33,13 @@ class AliadoChargebackController extends Controller
 
     public function show()
     {
-        $query = DB::table("contracargos_aliado_banorte as cc")
-            ->leftJoin("respuestas_banorte_aliado as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('email')
-            ->select('u.email')
-            ->whereDate('cc.created_at', today())
-            ->whereColumn('rm.terminacion', 'cc.tarjeta')
-            ->orWhere('rm.autorizacion', null);
+        $query = ContracargosAliadoBanorte::select('email')
+            ->whereDate('created_at', today());
 
-        $emails = DB::table("consultas.contracargos_aliado as cm")
-            ->leftJoin("consultas.repsaliado as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("aliado.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('u.email')
-            ->whereDate('cm.created_at', today())
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
+        $emails = ContracargosAliado::select('email')
+            ->whereDate('created_at', today())
             ->union($query)
-            ->groupBy("u.email")
+            ->groupBy("email")
             ->get();
 
         return view("aliado.chargeback.last", compact('emails'));

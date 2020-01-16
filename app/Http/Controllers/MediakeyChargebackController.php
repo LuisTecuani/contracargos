@@ -6,7 +6,6 @@ use App\ContracargosMediakey;
 use App\ContracargosMediakeyBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Support\Facades\DB;
 
 class MediakeyChargebackController extends Controller
 {
@@ -34,25 +33,15 @@ class MediakeyChargebackController extends Controller
 
     public function show()
     {
-        $query = DB::table("contracargos_mediakey_banorte as cc")
-            ->leftJoin("respuestas_banorte_mediakey as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
-            ->leftJoin("mediakey.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('email')
-            ->select('u.email')
-            ->whereDate('cc.created_at', today())
-            ->whereColumn('rm.terminacion', 'cc.tarjeta')
-            ->orWhere('rm.autorizacion', null);
+        $query = ContracargosMediakeyBanorte::select('email')
+            ->whereDate('created_at', today());
 
-        $emails = DB::table("consultas.contracargos_mediakey as cm")
-            ->leftJoin("consultas.repsmediakey as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("mediakey.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('u.email')
-            ->whereDate('cm.created_at', today())
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
+        $emails = ContracargosMediakey::select('email')
+            ->whereDate('created_at', today())
             ->union($query)
-            ->groupBy("u.email")
+            ->groupBy("email")
             ->get();
+
 
         return view("mediakey.chargeback.last", compact('emails'));
     }

@@ -6,7 +6,6 @@ use App\ContracargosCellers;
 use App\ContracargosCellersBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use Illuminate\Support\Facades\DB;
 
 class CellersChargebackController extends Controller
 {
@@ -34,25 +33,15 @@ class CellersChargebackController extends Controller
 
     public function show()
     {
-        $query = DB::table("contracargos_cellers_banorte as cc")
-            ->leftJoin("respuestas_banorte_cellers as rm", 'rm.autorizacion', '=', 'cc.autorizacion')
-            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('email')
-            ->select('u.email')
-            ->whereDate('cc.created_at', today())
-            ->whereColumn('rm.terminacion', 'cc.tarjeta')
-            ->orWhere('rm.autorizacion', null);
+        $query = ContracargosCellersBanorte::select('email')
+            ->whereDate('created_at', today());
 
-        $emails = DB::table("consultas.contracargos_cellers as cm")
-            ->leftJoin("consultas.repscellers as rm", 'rm.autorizacion', '=', 'cm.autorizacion')
-            ->leftJoin("cellers.users as u", 'u.id', '=', 'rm.user_id')
-            ->select('u.email')
-            ->whereDate('cm.created_at', today())
-            ->whereColumn('rm.terminacion', 'cm.tarjeta')
-            ->orWhere('rm.autorizacion', null)
+        $emails = ContracargosCellers::select('email')
+            ->whereDate('created_at', today())
             ->union($query)
-            ->groupBy("u.email")
+            ->groupBy("email")
             ->get();
+
 
         return view("cellers.chargeback.last", compact('emails'));
     }

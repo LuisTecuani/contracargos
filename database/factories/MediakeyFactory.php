@@ -2,6 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\ContracargosMediakey;
+use App\ContracargosMediakeyBanorte;
 use App\MediakeyBillingUsers;
 use App\MediakeyUser;
 use App\UserTdcMediakey;
@@ -95,5 +97,31 @@ $factory->define(MediakeyUser::class, function (Faker $faker) {
         'id' => $faker->randomNumber(6),
         'name' => $faker->name,
         'email' => $faker->email,
+    ];
+});
+
+$factory->define(ContracargosMediakeyBanorte::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'fecha_consumo' => $date,
+        'fecha_contracargo' => '17-01-2020',
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
+    ];
+});
+
+$factory->define(ContracargosMediakey::class, function (Faker $faker) {
+
+    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    return [
+        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'tarjeta' => $faker->randomNumber(4),
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
     ];
 });

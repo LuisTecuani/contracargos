@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Http\Controllers;
 
-use App\MediakeyUser;
-use App\Http\Controllers\MediakeyChargebackController;
+use App\ContracargosMediakey;
+use App\ContracargosMediakeyBanorte;
 use App\Repsmediakey;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -44,17 +44,25 @@ class MediakeyChargebackControllerTest extends TestCase
         ]);
     }
 
-    /** test */
-    public function method_show_displays_emails_from_last_entry()
+    /** @test */
+    public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-        $user = factory(MediakeyUser::class)->create();
-        $charge = factory(Repsmediakey::class)->create([
-            'user_id' => $user->id,
+        $chargebackProsaToday = factory(ContracargosMediakey::class)->create();
+        $chargebackBanorteToday = factory(ContracargosMediakeyBanorte::class)->create();
+        $chargebackProsaPast = factory(ContracargosMediakey::class)->create([
+            'created_at' => '2020-01-15 11:57:34'
         ]);
-        $chargeback = new MediakeyChargebackController();
+        $chargebackBanortePast = factory(ContracargosMediakeyBanorte::class)->create([
+            'created_at' => '2020-01-15 11:57:34'
+        ]);
 
+        $this->get('/mediakey/chargeback/show')
+            ->assertViewIs('mediakey.chargeback.last')
+            ->assertSee($chargebackProsaToday->email)
+            ->assertSee($chargebackBanorteToday->email)
+            ->assertDontSee($chargebackProsaPast->email)
+            ->assertDontSee($chargebackBanortePast->email);
     }
-
 }
