@@ -125,4 +125,17 @@ Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@stor
 Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
 Route::post('sanbornscobro/searchdetails/', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
 
+/*
+|--------------------------------------------------------------------------
+| Shared Tools Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
 
+Route::get('/tools', 'ToolsController@index')->name('tools.index');
+
+
+Route::get('/bins', 'BinsController@index')->name('bins.index');
+Route::post('/bins', 'BinsController@store')->name('bins.store');
+Route::get('/bins/show', 'BinsController@show')->name('bins.show');

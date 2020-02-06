@@ -15,10 +15,10 @@
                 <form method="POST" action="{{ route('mediakeyBlacklist.store') }}">
                     @csrf
                     <div class="form-group">
-    <textarea class="w-100" name="emails" id="email" pattern="\d"
-              title="email debe escribirse sin comas o espacios extra, separados unicamente por el salto de linea"
-              rows="10" placeholder="Enter emails"
-              required></textarea>
+                        <textarea class="w-100" name="emails" id="email" pattern="\d"
+                                  title="email debe escribirse sin comas o espacios extra, separados unicamente por el salto de linea"
+                                  rows="10" placeholder="Enter emails"
+                                  required></textarea>
                         <button type="submit" class="btn btn-outline-primary">Registrar</button>
                     </div>
                 </form>

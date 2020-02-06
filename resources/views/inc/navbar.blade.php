@@ -13,18 +13,21 @@
                 @guest
 
                 @else
-                <li class="nav-item">
-                    <a href="{{route('aliado.index')}}" class="nav-link">Aliado</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('cellers.index')}}" class="nav-link">Cellers</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('mediakey.index')}}" class="nav-link">Mediakey</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('sanbornscobro.index')}}" class="nav-link">Sanborns</a>
-                </li>
+                    <li class="nav-item">
+                        <a href="{{route('aliado.index')}}" class="nav-link">Aliado</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('cellers.index')}}" class="nav-link">Cellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('mediakey.index')}}" class="nav-link">Mediakey</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('sanbornscobro.index')}}" class="nav-link">Sanborns</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('tools.index')}}" class="nav-link">Herramientas compartidas</a>
+                    </li>
 
                 @endguest
 
@@ -48,15 +51,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                        <a class="nav-link" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
-                            </a>
+                            {{ __('Logout') }}
+                        </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </li>
 
                 @endguest

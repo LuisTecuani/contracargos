@@ -15,7 +15,6 @@ class AliadoFileMakingControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $this->get('/aliado/file_making')
             ->assertOk()
