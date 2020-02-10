@@ -73,49 +73,72 @@ class CellersBillingUsersControllerTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_import_rejected_users_from_repscellers()
+    public function admins_can_import_rejected_users_from_three_previous_files_repscellers()
     {
         $this->signIn();
-        $expired = factory(UserTdcCellers::class)->create([
+        $this->withoutExceptionHandling();
+        $user1 = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
             'exp_date' => 1018,
         ]);
-        $active = factory(UserTdcCellers::class)->create([
+        $user2 = factory(UserTdcCellers::class)->create([
             'user_id' => '654321',
             'exp_date' => 1128,
         ]);
-        // rejected on date
-        factory(Repscellers::class)->create([
-            'user_id' => $expired->user_id,
+        // user1 first charge
+        factory(RespuestasBanorteCellers::class)->create([
+            'user_id' => $user1->user_id,
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
         ]);
-        // rejected not on date
-        factory(Repscellers::class)->create([
-            'user_id' => $active->user_id,
-            'fecha' => '2019-10-19',
-            'motivo_rechazo' => 'Supera el monto límite permitido',
+        // user2 first charge
+        factory(RespuestasBanorteCellers::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-11-19',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 second charge
+        factory(RespuestasBanorteCellers::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-11-10',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 third charge
+        factory(RespuestasBanorteCellers::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-10-30',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 fourth charge
+        factory(RespuestasBanorteCellers::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-10-15',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
         ]);
         // not rejected on date
-        factory(Repscellers::class)->create([
+        factory(RespuestasBanorteCellers::class)->create([
             'user_id' => '111111',
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Aprobado',
+            'estatus' => 'Aprobada',
+            'source_file' => 'CE201911191745097823918',
         ]);
 
-
         $this->post('/cellers/billing_users/storeRejectedProsa', [
-            'date' => '2019-11-19',
-            'procedence' => 'Rechazados por saldo',
+            'procedence' => 'Rechazos previos',
         ]);
 
         $this->assertDatabaseHas('cellers_billing_users', [
-            'user_id' => $expired->user_id,
-            'procedence' => 'Rechazados por saldo',
+            'user_id' => $user1->user_id,
+            'procedence' => 'Rechazos previos',
             'exp_date' => "18-10",
         ]);
         $this->assertDatabaseMissing('cellers_billing_users', [
-            'user_id' => $active->user_id,
+            'user_id' => $user2->user_id,
         ]);
         $this->assertDatabaseMissing('cellers_billing_users', [
             'user_id' => '111111'

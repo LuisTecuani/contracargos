@@ -40,9 +40,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <div class="card-header">
-                                        Selecciona la fecha para buscar usuarios rechazados por fondos por PROSA
-                                        <br>
-                                        <input type="date" id="date" name="date" required>
+                                        Selecciona para ingresar los usuarios rechazados por PROSA en los ultimos tres dias de cobro.
                                     </div>
                                 </div>
                                 <div class="form-group">

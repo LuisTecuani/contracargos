@@ -125,50 +125,73 @@ class AliadoBillingUsersControllerTest extends TestCase
     }
 
     /** @test */
-    public function admins_can_import_rejected_users_from_repsaliado()
+    public function admins_can_import_rejected_users_from_three_previous_files_repsaliado()
     {
         $this->signIn();
-        $expired = factory(UserTdcAliado::class)->create([
+        $user1 = factory(UserTdcAliado::class)->create([
             'user_id' => '123456',
             'exp_month' => 10,
             'exp_year' => 2018,
         ]);
-        $active = factory(UserTdcAliado::class)->create([
+        $user2 = factory(UserTdcAliado::class)->create([
             'user_id' => '654321',
             'exp_month' => 11,
             'exp_year' => 2028,
         ]);
-        // rejected on date
+        // user1 first charge
         factory(Repsaliado::class)->create([
-            'user_id' => $expired->user_id,
+            'user_id' => $user1->user_id,
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
         ]);
-        // rejected not on date
+        // user2 first charge
         factory(Repsaliado::class)->create([
-            'user_id' => $active->user_id,
-            'fecha' => '2019-10-19',
-            'motivo_rechazo' => 'Supera el monto límite permitido',
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-11-19',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 second charge
+        factory(Repsaliado::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-11-10',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 third charge
+        factory(Repsaliado::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-10-30',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user2 fourth charge
+        factory(Repsaliado::class)->create([
+            'user_id' => $user2->user_id,
+            'fecha' => '2019-10-15',
+            'estatus' => 'Rechazada',
+            'source_file' => 'CE201911191745097823918',
         ]);
         // not rejected on date
         factory(Repsaliado::class)->create([
             'user_id' => '111111',
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Aprobado',
+            'estatus' => 'Aprobada',
+            'source_file' => 'CE201911191745097823918',
         ]);
 
         $this->post('/aliado/billing_users/storeRejectedProsa', [
-            'date' => '2019-11-19',
-            'procedence' => 'Rechazados por saldo',
+            'procedence' => 'Rechazos previos',
         ]);
 
         $this->assertDatabaseHas('aliado_billing_users', [
-            'user_id' => $expired->user_id,
-            'procedence' => 'Rechazados por saldo',
+            'user_id' => $user1->user_id,
+            'procedence' => 'Rechazos previos',
             'exp_date' => "18-10",
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
-            'user_id' => $active->user_id,
+            'user_id' => $user2->user_id,
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
             'user_id' => '111111'

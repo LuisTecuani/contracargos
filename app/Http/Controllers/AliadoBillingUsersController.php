@@ -8,6 +8,7 @@ use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AliadoBillingUsersController extends Controller
 {
@@ -60,25 +61,36 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = $request->date;
+        $date = Repsaliado::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->skip(3)
+            ->first()->fecha;
 
-        $users = Repsaliado::select('user_id as id')
-            ->whereIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
-            ->where(
-                'fecha', 'like', $date
-            )->get();
+        $aReps = Repsaliado::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+
+        $aBano = RespuestasBanorteAliado::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+
+        $sub = Repsaliado::selectRaw('user_id, count(*) as c')
+            ->where([['fecha','>=',$date],['source_file','like','%3918']])
+            ->groupBy('user_id');
+
+        $users = DB::table( DB::raw("({$sub->toSql()}) as sub") )
+            ->mergeBindings($sub->getQuery())
+            ->select('user_id')
+            ->whereNotIn('user_id', $aReps)
+            ->whereNotIn('user_id', $aBano)
+            ->where('c', '<', 4)
+            ->get();
 
         foreach ($users as $user) {
 
             $data = UserTdcAliado::select("exp_month", "exp_year", "number")
-                ->where('user_id', '=', $user->id)
+                ->where('user_id', '=', $user->user_id)
                 ->latest()
                 ->first();
 
             $d = $data->exp_month . substr($data->exp_year, -2);
 
             AliadoBillingUsers::create([
-                'user_id' => $user->id,
+                'user_id' => $user->user_id,
 
                 'procedence' => $procedence,
 
