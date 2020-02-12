@@ -50,10 +50,7 @@ class AliadoBillingUsersController extends Controller
             ]);
         }
 
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
-
-        return view('/aliado/billing_users/index', compact('expUsers', 'vigUsers'));
+        return back();
     }
 
 
@@ -100,23 +97,17 @@ class AliadoBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/billing_users/index', compact('expUsers', 'vigUsers'));
+        return back();
     }
 
-    public function storeRejectedBanorte(Request $request)
+    public function storeToBanorte(Request $request)
     {
         $procedence = $request->procedence;
 
-        $date = $request->date;
-
-        $users = RespuestasBanorteAliado::select('user_id as id')
-            ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
-            ->where(
-                'fecha', 'like', $date
-            )->get();
+        $users = Repsaliado::select('user_id as id')
+            ->where([['estatus', 'not like','Aprobada'],['fecha', 'like', date("Y-m-d")],['source_file', 'like', '%0897']])
+            ->get();
 
         foreach ($users as $user) {
 
@@ -138,10 +129,40 @@ class AliadoBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/billing_users/index', compact('expUsers', 'vigUsers'));
+        return back();
+    }
+
+    public function storeTo3918(Request $request)
+    {
+        $procedence = $request->procedence;
+
+        $users = RespuestasBanorteAliado::select('user_id as id')
+            ->where([['estatus', 'not like','Aprobada'],['fecha', 'like', date("Y-m-d")]])
+            ->get();
+
+        foreach ($users as $user) {
+
+            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
+                ->where('user_id', '=', $user->id)
+                ->latest()
+                ->first();
+
+            $d = $data->exp_month . substr($data->exp_year, -2);
+
+            AliadoBillingUsers::create([
+                'user_id' => $user->id,
+
+                'procedence' => $procedence,
+
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
+
+                'number' => $data->number
+            ]);
+        }
+
+        return back();
     }
 
     public function storeTextbox(Request $request)
@@ -170,10 +191,8 @@ class AliadoBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
 
-        return view('/aliado/billing_users/index', compact('expUsers', 'vigUsers'));
+        return back();
     }
 
 

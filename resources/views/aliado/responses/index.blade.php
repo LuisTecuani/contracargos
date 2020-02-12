@@ -13,29 +13,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md">
-                <div class="card bg-light mt-2">
-                    <form action="{{ route('aliado.responses.storeReps') }}" method="POST" enctype="multipart/form-data">
-                        @include('contracargos.admin.import_rep')
-                    </form>
-                </div>
-            </div>
-            <div class="col-md">
-                <form method="POST" action="{{ route('aliado.responses.storePdf') }}" enctype="multipart/form-data">
-                    @csrf
-                    <div class="card bg-light mt-2">
-                        <div class="card-header">
-                            Importa respuestas de cobro de banorte desde .PDF
-                        </div>
-                        <div class="card-body">
-                            <input type="file" multiple="true" name="files[]" accept=".pdf"
-                                   class="btn btn-secondary btn-lg btn-block">
-                            <br>
-                            <button class="btn btn-outline-primary">Import Data</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            @include('aliado.responses._storeRep')
+            @include('aliado.responses._storePdf')
         </div>
     </div>
 

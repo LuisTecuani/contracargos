@@ -32,6 +32,6 @@ class AliadoBlacklistController extends Controller
         }
         Session()->flash('message', 'Datos Registrados');
 
-        return redirect()->route("aliado.index");
+        return back();
     }
 }

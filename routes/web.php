@@ -108,7 +108,8 @@ Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('ali
 Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
 Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@storeFtp')->name('aliado.billing_users.storeFtp');
 Route::post('/aliado/billing_users/storeRejectedProsa', 'AliadoBillingUsersController@storeRejectedProsa')->name('aliado.billing_users.storeRejectedProsa');
-Route::post('/aliado/billing_users/storeRejectedBanorte', 'AliadoBillingUsersController@storeRejectedBanorte')->name('aliado.billing_users.storeRejectedBanorte');
+Route::post('/aliado/billing_users/storeToBanorte', 'AliadoBillingUsersController@storeToBanorte')->name('aliado.billing_users.storeToBanorte');
+Route::post('/aliado/billing_users/storeTo3918', 'AliadoBillingUsersController@storeTo3918')->name('aliado.billing_users.storeTo3918');
 Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
 
 /*

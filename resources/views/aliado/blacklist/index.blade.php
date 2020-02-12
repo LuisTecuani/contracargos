@@ -12,16 +12,7 @@
                 @include('aliado._navLinks')
             </div>
             <div class="col-md mt-2">
-                <form method="POST" action="{{ route('aliadoBlacklist.store') }}">
-                    @csrf
-                    <div class="form-group">
-    <textarea class="w-100" name="emails" id="email" pattern="\d"
-              title="email debe escribirse sin comas o espacios extra, separados unicamente por el salto de linea"
-              rows="10" placeholder="Enter emails"
-              required></textarea>
-                        <button type="submit" class="btn btn-outline-primary">Registrar</button>
-                    </div>
-                </form>
+            @include('aliado.blacklist._store')
             </div>
         </div>
     </div>
