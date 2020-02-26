@@ -15,6 +15,7 @@ class CellersBanorteChargebackController extends Controller
 
         $processedText = processTxt($text);
         $chargebacks = [];
+
         foreach ($processedText[0] as $index => $cont) {
             $chargebacks[$index]['authorization'] = $cont;
         }

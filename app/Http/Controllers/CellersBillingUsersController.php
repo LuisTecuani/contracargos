@@ -65,50 +65,49 @@ class CellersBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = RespuestasBanorteCellers::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->skip(3)
-            ->first()->fecha;
+        $dates = RespuestasBanorteCellers::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->limit(4)->get();
 
-        $aReps = Repscellers::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+        foreach ($dates as $row=>$data)
+        {
+            if($row < 3) {
+                $query = RespuestasBanorteCellers::select('user_id')
+                    ->where('fecha', '=', $dates[$row + 1]->fecha);
 
-        $aBano = RespuestasBanorteCellers::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+                $users = RespuestasBanorteCellers::select('user_id')
+                    ->where([['fecha', '=', $data->fecha], ['estatus', 'not like', 'Aprobada']])
+                    ->whereNotIn('user_id', $query)
+                    ->get();
 
-        $sub = RespuestasBanorteCellers::selectRaw('user_id, count(*) as c')
-            ->where('fecha','>=',$date)
-            ->groupBy('user_id');
+                foreach ($users as $user) {
 
-        $users = DB::table( DB::raw("({$sub->toSql()}) as sub") )
-            ->mergeBindings($sub->getQuery())
-            ->select('user_id')
-            ->whereNotIn('user_id', $aReps)
-            ->whereNotIn('user_id', $aBano)
-            ->where('c', '<', 4)
-            ->get();
+                    $data = UserTdcCellers::select("exp_date", "number")
+                        ->where('user_id', '=', $user->user_id)
+                        ->latest()
+                        ->first();
 
-        foreach ($users as $user) {
+                    if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
+                        $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
+                            . '-' . substr($data->exp_date, 0, -2))
+                            ->format('y-m');
+                    } else {
+                        $date = 1111;
+                    }
 
-            $data = UserTdcCellers::select("exp_date", "number")
-                ->where('user_id', '=', $user->user_id)
-                ->latest()
-                ->first();
+                    CellersBillingUsers::create([
+                        'user_id' => $user->user_id,
 
-            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                    . '-' . substr($data->exp_date, 0, -2))
-                    ->format('y-m');
-            } else {
-                $date = 1111;
+                        'procedence' => $procedence,
+
+                        'exp_date' => $date,
+
+                        'number' => $data->number
+                    ]);
+
+
+                }
             }
-
-            CellersBillingUsers::create([
-                'user_id' => $user->user_id,
-
-                'procedence' => $procedence,
-
-                'exp_date' => $date,
-
-                'number' => $data->number
-            ]);
         }
+
 
         $expUsers = count($this->expDates());
 

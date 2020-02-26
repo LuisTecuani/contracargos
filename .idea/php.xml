@@ -91,6 +91,7 @@
       <path value="$PROJECT_DIR$/vendor/smalot/pdfparser" />
       <path value="$PROJECT_DIR$/vendor/tecnickcom/tcpdf" />
       <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/vendor/thiagoalessio/tesseract_ocr" />
     </include_path>
   </component>
   <component name="PhpUnit">

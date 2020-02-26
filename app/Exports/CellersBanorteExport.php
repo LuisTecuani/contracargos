@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\AliadoBillingUsers;
+use App\CellersBillingUsers;
 use Carbon\Carbon;
 use DateTime;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
+class CellersBanorteExport implements FromCollection, WithMapping, WithHeadings
 {
     use Exportable;
     /**
@@ -18,9 +18,9 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
      */
     public function collection()
     {
-        return AliadoBillingUsers::with('cards')
+        return CellersBillingUsers::with('cards')
             ->selectRaw("'AUTH' as CMD_TRANS,'79' as MONTO, 'Cargo unico' as COMENTARIOS, '1' as LOTE, user_id,
-                'ALIADO_E_TICKET' as REFERENCIA_PROSA, number as NUMERO_TARJETA, exp_date as FECHA_EXP")
+                'CELLERS' as REFERENCIA_PROSA, number as NUMERO_TARJETA, exp_date as FECHA_EXP")
             ->where([['created_at', 'like', now()->format('Y-m-d').'%'],['procedence', 'like', 'para banorte']])
             ->get();
     }

@@ -105,7 +105,7 @@ class AliadoBillingUsersControllerTest extends TestCase
         factory(Repsaliado::class)->create([
             'user_id' => '111111',
             'fecha' => date("Y-m-d"),
-            'detalle_mensaje' => 'Aprobado',
+            'estatus' => 'Aprobada',
             'source_file' => 'CE201911191745097820897',
         ]);
 

@@ -71,6 +71,7 @@ Route::post('/cellers/responses/storeReps', 'CellersResponsesController@storeRep
 Route::post('/cellers/responses/storePdf', 'CellersResponsesController@storePdf')->name('cellers.responses.storePdf');
 
 Route::get('/cellers/file_making', 'CellersFileMakingController@index')->name('cellers.file_making.index');
+Route::get('/cellers/file_making/exportBanorte', 'CellersFileMakingController@exportBanorte')->name('cellers.file_making.exportBanorte');
 
 Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
 Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
@@ -92,6 +93,7 @@ Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 
 Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
 Route::post('/aliado/chargeback/store', 'AliadoChargebackController@store')->name('aliadoChargeback.store');
+Route::post('/aliado/chargeback/storeImage', 'AliadoChargebackController@storeImage')->name('aliadoChargeback.storeImage');
 Route::get('/aliado/chargeback/show', 'AliadoChargebackController@show')->name('aliadoChargeback.show');
 
 Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackController@store')->name('aliadoBanorteChargeback.store');
@@ -104,6 +106,8 @@ Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps'
 Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')->name('aliado.responses.storePdf');
 
 Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
+Route::get('/aliado/file_making/exportBanorte', 'AliadoFileMakingController@exportBanorte')->name('aliado.file_making.exportBanorte');
+
 
 Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
 Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@storeFtp')->name('aliado.billing_users.storeFtp');
@@ -136,7 +140,11 @@ Route::post('sanbornscobro/searchdetails/', 'SanbornsCobrosController@searchDeta
 
 Route::get('/tools', 'ToolsController@index')->name('tools.index');
 
-
 Route::get('/bins', 'BinsController@index')->name('bins.index');
 Route::post('/bins', 'BinsController@store')->name('bins.store');
 Route::get('/bins/show', 'BinsController@show')->name('bins.show');
+
+Route::get('/bins/historic', 'BinsHistoricController@index')->name('binsHistoric.index');
+Route::post('/bins/historic/store', 'BinsHistoricController@store')->name('binsHistoric.store');
+Route::post('/bins/historic/import', 'BinsHistoricController@import')->name('binsHistoric.import');
+

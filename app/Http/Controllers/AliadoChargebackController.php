@@ -6,6 +6,8 @@ use App\ContracargosAliado;
 use App\ContracargosAliadoBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
+use http\Env\Request;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class AliadoChargebackController extends Controller
 {
@@ -64,6 +66,18 @@ class AliadoChargebackController extends Controller
 
         return redirect()->route("aliado.index");
 
+    }
+
+    public function storeImage(StoreAdminRequest $request)
+    {
+        $files = $request->file('files');
+        foreach ($files as $file)
+        {
+        echo (new TesseractOCR($file))
+            ->userPatterns('/Users/luisramos/code/contracargos/resources/patterns.txt')
+            ->setOutputFile('/Users/luisramos/Downloads/searchable.txt')
+            ->run();
+        }
     }
 
     public function update()

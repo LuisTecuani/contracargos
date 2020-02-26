@@ -48,6 +48,9 @@
             </div>
         </div>
         <div class="row">
+            @include('aliado.chargeback._storeImage')
+        </div>
+        <div class="row">
             <div class="col-12 mt-2">
                 @include('contracargos.admin.table_results')
             </div>

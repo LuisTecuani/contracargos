@@ -58,44 +58,40 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = Repsaliado::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->skip(3)
-            ->first()->fecha;
+        $dates = Repsaliado::select('fecha')->where('source_file','like','%3918')->groupBy('fecha')
+            ->orderBy('fecha', 'desc')->limit(4)->get();
+        foreach ($dates as $row=>$data)
+        {
+            if($row < 3) {
+                $query = Repsaliado::select('user_id')
+                    ->where([['fecha', '=', $dates[$row + 1]->fecha], ['source_file', 'like', '%3918']]);
 
-        $aReps = Repsaliado::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+                $users = Repsaliado::select('user_id')
+                    ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918'], ['estatus', 'not like', 'Aprobada']])
+                    ->whereNotIn('user_id', $query)
+                    ->get();
 
-        $aBano = RespuestasBanorteAliado::select('user_id')->where([['fecha','>=',$date],['estatus','=','Aprobada']])->get();
+                foreach ($users as $user) {
 
-        $sub = Repsaliado::selectRaw('user_id, count(*) as c')
-            ->where([['fecha','>=',$date],['source_file','like','%3918']])
-            ->groupBy('user_id');
+                    $data = UserTdcAliado::select("exp_month", "exp_year", "number")
+                        ->where('user_id', '=', $user->user_id)
+                        ->latest()
+                        ->first();
 
-        $users = DB::table( DB::raw("({$sub->toSql()}) as sub") )
-            ->mergeBindings($sub->getQuery())
-            ->select('user_id')
-            ->whereNotIn('user_id', $aReps)
-            ->whereNotIn('user_id', $aBano)
-            ->where('c', '<', 4)
-            ->get();
+                    $d = $data->exp_month . substr($data->exp_year, -2);
 
-        foreach ($users as $user) {
+                    AliadoBillingUsers::create([
+                        'user_id' => $user->user_id,
 
-            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
-                ->where('user_id', '=', $user->user_id)
-                ->latest()
-                ->first();
+                        'procedence' => $procedence,
 
-            $d = $data->exp_month . substr($data->exp_year, -2);
+                        'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                            . '-' . substr($d, 0, -2))->format('y-m'),
 
-            AliadoBillingUsers::create([
-                'user_id' => $user->user_id,
-
-                'procedence' => $procedence,
-
-                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                    . '-' . substr($d, 0, -2))->format('y-m'),
-
-                'number' => $data->number
-            ]);
+                        'number' => $data->number
+                    ]);
+                }
+            }
         }
 
         return back();
@@ -105,9 +101,11 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $users = Repsaliado::select('user_id as id')
-            ->where([['estatus', 'not like','Aprobada'],['fecha', 'like', date("Y-m-d")],['source_file', 'like', '%0897']])
-            ->get();
+        $date = Repsaliado::select('fecha')->where('source_file','like','%0897')
+            ->orderBy('fecha', 'desc')->first()->fecha;
+
+        $users = Repsaliado::select('user_id as id')->where([['estatus', 'not like','Aprobada'],
+            ['fecha', 'like', $date],['source_file', 'like', '%0897']])->get();
 
         foreach ($users as $user) {
 
@@ -137,9 +135,10 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $users = RespuestasBanorteAliado::select('user_id as id')
-            ->where([['estatus', 'not like','Aprobada'],['fecha', 'like', date("Y-m-d")]])
-            ->get();
+        $date = RespuestasBanorteAliado::select('fecha')->orderBy('fecha', 'desc')->first()->fecha;
+
+        $users = RespuestasBanorteAliado::select('user_id as id')->where([['estatus', 'not like','Aprobada'],
+            ['fecha', 'like', $date]])->get();
 
         foreach ($users as $user) {
 

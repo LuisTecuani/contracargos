@@ -159,6 +159,13 @@
                                     <div class="card-body">
                                         @include('aliado.file_making._rejectedToBanorte')
                                     </div>
+                                    <div class="pt-4">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item pt-2">
+                                                <a href="/aliado/file_making/exportBanorte" class="btn btn-outline-danger">crear CSV para cobro banorte</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
