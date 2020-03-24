@@ -66,9 +66,13 @@ class AliadoBillingUsersController extends Controller
                 $query = Repsaliado::select('user_id')
                     ->where([['fecha', '=', $dates[$row + 1]->fecha], ['source_file', 'like', '%3918']]);
 
+                $query2 = RespuestasBanorteAliado::select('user_id')
+                    ->where([['fecha', '>=', $dates[3]], ['estatus', 'like', 'Aprobada']]);
+
                 $users = Repsaliado::select('user_id')
                     ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918'], ['estatus', 'not like', 'Aprobada']])
                     ->whereNotIn('user_id', $query)
+                    ->whereNotIn('user_id', $query2)
                     ->get();
 
                 foreach ($users as $user) {

@@ -22,10 +22,10 @@ class AliadoChargebackController extends Controller
         $this->update();
         (New AliadoBanorteChargebackController)->update();
 
-        $query = ContracargosAliadoBanorte::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
+        $query = ContracargosAliadoBanorte::select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
             ->whereDate('created_at', today());
 
-        $cards = ContracargosAliado::select('user_id','email','autorizacion', 'tarjeta', 'fecha_rep', 'created_at', 'updated_at')
+        $cards = ContracargosAliado::select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
             ->whereDate('created_at', today())
             ->union($query)->get();
 

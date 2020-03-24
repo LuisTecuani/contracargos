@@ -18,6 +18,8 @@ class CreateBinsHistoricsTable extends Migration
             $table->integer('bin');
             $table->integer('accepted')->nullable();
             $table->integer('rejected')->nullable();
+            $table->string('platform')->nullable();
+            $table->string('bill_bank')->nullable();
             $table->timestamps();
         });
     }

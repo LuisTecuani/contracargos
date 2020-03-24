@@ -17,6 +17,8 @@ class ContracargosAliado extends Migration
             $table->bigIncrements('id');
             $table->string('autorizacion');
             $table->integer('tarjeta');
+            $table->string('fecha_consumo')->nullable();
+            $table->string('fecha_contracargo')->nullable();
             $table->string('user_id')->nullable();
             $table->string('email')->nullable();
             $table->string('fecha_rep')->nullable();

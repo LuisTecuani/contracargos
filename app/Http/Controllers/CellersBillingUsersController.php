@@ -73,9 +73,13 @@ class CellersBillingUsersController extends Controller
                 $query = RespuestasBanorteCellers::select('user_id')
                     ->where('fecha', '=', $dates[$row + 1]->fecha);
 
+                $query2 = Repscellers::select('user_id')
+                    ->where([['fecha', '>=', $dates[3]], ['estatus', 'like', 'Aprobada']]);
+
                 $users = RespuestasBanorteCellers::select('user_id')
                     ->where([['fecha', '=', $data->fecha], ['estatus', 'not like', 'Aprobada']])
                     ->whereNotIn('user_id', $query)
+                    ->whereNotIn('user_id', $query2)
                     ->get();
 
                 foreach ($users as $user) {

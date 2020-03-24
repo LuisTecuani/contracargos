@@ -25,6 +25,29 @@ class AliadoChargebackControllerTest extends TestCase
     }
 
     /** @test */
+    public function index_method_show_agregated_users_today()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $chargedbackBanorte = factory(ContracargosAliadoBanorte::class)->create();
+        $chargedbackProsa = factory(ContracargosAliado::class)->create();
+
+        $this->get('/aliado/chargeback')
+            ->assertSeeInOrder([
+                $chargedbackBanorte->email,
+                $chargedbackBanorte->fecha_contracargo,
+                $chargedbackBanorte->fecha_consumo,
+                $chargedbackBanorte->tarjeta,
+                $chargedbackBanorte->autorizacion,
+                $chargedbackProsa->email,
+                $chargedbackProsa->fecha_contracargo,
+                $chargedbackProsa->fecha_consumo,
+                $chargedbackProsa->tarjeta,
+                $chargedbackProsa->autorizacion,
+            ]);
+    }
+
+        /** @test */
     public function store_method_persist_data_on_contracargos_table()
     {
         $this->signIn();

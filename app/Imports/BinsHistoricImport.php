@@ -18,7 +18,9 @@ class BinsHistoricImport implements ToModel, WithHeadingRow
         return new BinsHistoric([
             'bin' => $row['bin'],
             'accepted' => $row['aceptados'],
-            'rejected'   => $row['rechazados']
+            'rejected'   => $row['rechazados'],
+            'platform' => $row['plataforma'],
+            'bill_bank' => $row['pasarela'],
         ]);
     }
 }
