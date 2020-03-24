@@ -35,8 +35,7 @@ class AliadoChargebackController extends Controller
 
     public function show()
     {
-        $query = ContracargosAliadoBanorte::select('email')
-            ->whereDate('created_at', today());
+        $query = ContracargosAliadoBanorte::createdToday();
 
         $emails = ContracargosAliado::select('email')
             ->whereDate('created_at', today())

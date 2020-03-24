@@ -39,6 +39,8 @@ class AliadoChargebackControllerTest extends TestCase
                 $chargedbackBanorte->fecha_consumo,
                 $chargedbackBanorte->tarjeta,
                 $chargedbackBanorte->autorizacion,
+            ])
+            ->assertSeeInOrder([
                 $chargedbackProsa->email,
                 $chargedbackProsa->fecha_contracargo,
                 $chargedbackProsa->fecha_consumo,
@@ -47,7 +49,7 @@ class AliadoChargebackControllerTest extends TestCase
             ]);
     }
 
-        /** @test */
+    /** @test */
     public function store_method_persist_data_on_contracargos_table()
     {
         $this->signIn();

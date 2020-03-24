@@ -20,6 +20,30 @@ class ContracargosAliadoBanorte extends Model
         'created_at' => 'datetime:Y-m-d'
     ];
 
+    /*
+|--------------------------------------------------------------------------
+| Eloquent Query Scopes
+|--------------------------------------------------------------------------
+*/
+
+    /**
+     * Get chargebacks created today.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCreatedToday($query)
+    {
+        return $query->select('email')
+            ->whereDate('created_at', today());
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| Eloquent Model Relationships
+|--------------------------------------------------------------------------
+*/
+
     /**
      * Define a one-to-many relationship.
      *
