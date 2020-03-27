@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Http\Controllers;
 
+use App\ContracargosAliadoBanorte;
 use App\RespuestasBanorteAliado;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,5 +44,23 @@ $79.00			•460903								\r\n
             'tarjeta' => $charge2->terminacion,
             'autorizacion' => $charge2->autorizacion,
         ]);
+    }
+
+    /** @test */
+    public function store_method_dont_persist_record_if_is_recorded_previously()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $persistedChargeback = factory(ContracargosAliadoBanorte::class)->create([
+            'fecha_contracargo' => '2019-02-10'
+        ]);
+
+        $this->post('/aliado/banorte/chargeback/store', [
+            'text' => "  $persistedChargeback->fecha_consumo.FE 2345xxxxxxxx$persistedChargeback->tarjeta,
+            C $persistedChargeback->autorizacion ",
+            'chargeback_date' => '2020-01-08',
+        ]);
+
+        $this->assertDatabaseMissing('contracargos_aliado_banorte', ['fecha_contracargo' => '2020-01-08']);
     }
 }
