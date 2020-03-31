@@ -50,6 +50,17 @@ class ContracargosAliadoBanorte extends Model
             ->whereNull('user_id');
     }
 
+    /**
+     * Get chargebacks where email is NULL.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEmailNull($query)
+    {
+        return $query->with('user')
+            ->whereNull('email');
+    }
     /*
 |--------------------------------------------------------------------------
 | Eloquent Model Relationships

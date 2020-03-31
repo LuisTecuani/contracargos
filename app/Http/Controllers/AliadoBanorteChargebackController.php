@@ -42,12 +42,12 @@ class AliadoBanorteChargebackController extends Controller
 
     public function update()
     {
-        $contracargos = ContracargosAliadoBanorte::userIdNull()->get();
+        $noUserId = ContracargosAliadoBanorte::userIdNull()->get();
 
-        foreach ($contracargos as $contracargo) {
-            foreach ($contracargo->reps as $rep) {
-                if($contracargo->tarjeta == $rep->terminacion) {
-                    ContracargosAliadoBanorte::where('id', $contracargo->id)
+        foreach ($noUserId as $row) {
+            foreach ($row->reps as $rep) {
+                if($row->tarjeta == $rep->terminacion) {
+                    ContracargosAliadoBanorte::where('id', $row->id)
                         ->update([
                             'user_id' => $rep->user_id,
                             'fecha_rep' => $rep->fecha]);
@@ -55,9 +55,7 @@ class AliadoBanorteChargebackController extends Controller
             }
         }
 
-        $noEmails = ContracargosAliadoBanorte::with('user')
-            ->whereNull('email')
-            ->get();
+        $noEmails = ContracargosAliadoBanorte::emailNull()->get();
 
         foreach ($noEmails as $row) {
             if($row->user) {
