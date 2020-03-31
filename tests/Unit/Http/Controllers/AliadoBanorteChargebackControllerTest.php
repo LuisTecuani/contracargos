@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Http\Controllers;
 
+use App\AliadoUser;
 use App\ContracargosAliadoBanorte;
+use App\Http\Controllers\AliadoBanorteChargebackController;
 use App\RespuestasBanorteAliado;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -50,7 +52,6 @@ $79.00			•460903								\r\n
     public function store_method_dont_persist_record_if_is_recorded_previously()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $persistedChargeback = factory(ContracargosAliadoBanorte::class)->create([
             'fecha_contracargo' => '2019-02-10'
         ]);
@@ -62,5 +63,39 @@ $79.00			•460903								\r\n
         ]);
 
         $this->assertDatabaseMissing('contracargos_aliado_banorte', ['fecha_contracargo' => '2020-01-08']);
+    }
+
+    /** @test */
+    public function update_method_find_and_persist_email_user_id_and_fecha_rep()
+    {
+        $this->signIn();
+        $incompleteCargeback = factory(ContracargosAliadoBanorte::class)->create([
+            'user_id' => NULL,
+            'fecha_rep' => NULL,
+            'email' => NULL,
+        ]);
+        $matchingCharge = factory(RespuestasBanorteAliado::class)->create([
+            'terminacion' => $incompleteCargeback->tarjeta,
+            'autorizacion' => $incompleteCargeback->autorizacion,
+        ]);
+        $notMatchingCharge = factory(RespuestasBanorteAliado::class)->create([
+            'terminacion' => '12345',
+            'autorizacion' => $incompleteCargeback->autorizacion,
+        ]);
+        $matchingUser = factory(AliadoUser::class)->create([
+            'id' => $matchingCharge->user_id,
+        ]);
+
+        (New AliadoBanorteChargebackController)->update();
+
+        $this->assertDatabaseHas('contracargos_aliado_banorte', [
+            'user_id' => $matchingUser->id,
+            'fecha_rep' => $matchingCharge->fecha,
+            'email' => $matchingUser->email,
+            ]);
+        $this->assertDatabaseMissing('contracargos_aliado_banorte', [
+            'user_id' => $notMatchingCharge->user_id,
+            'fecha_rep' => $notMatchingCharge->fecha,
+        ]);
     }
 }
