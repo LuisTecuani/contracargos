@@ -42,9 +42,7 @@ class AliadoBanorteChargebackController extends Controller
 
     public function update()
     {
-        $contracargos = ContracargosAliadoBanorte::with('reps')
-            ->whereNull('user_id')
-            ->get();
+        $contracargos = ContracargosAliadoBanorte::userIdNull()->get();
 
         foreach ($contracargos as $contracargo) {
             foreach ($contracargo->reps as $rep) {

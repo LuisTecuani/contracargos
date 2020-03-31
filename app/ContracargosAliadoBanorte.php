@@ -38,6 +38,18 @@ class ContracargosAliadoBanorte extends Model
             ->whereDate('created_at', today());
     }
 
+    /**
+     * Get chargebacks where user_id is NULL.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUserIdNull($query)
+    {
+        return $query->with('reps')
+            ->whereNull('user_id');
+    }
+
     /*
 |--------------------------------------------------------------------------
 | Eloquent Model Relationships
