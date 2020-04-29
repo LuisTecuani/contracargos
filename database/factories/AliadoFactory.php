@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\AliadoBillingUsers;
+use App\AliadoCancelAccountAnswer;
 use App\AliadoUser;
 use App\UserTdcAliado;
 use App\Repsaliado;
@@ -23,9 +24,16 @@ $factory->define(UserTdcAliado::class, function (Faker $faker) {
     ];
 });
 
+$factory->define(AliadoCancelAccountAnswer::class, function (Faker $faker) {
+
+    return [
+        'user_id' => $faker->randomNumber(6),
+    ];
+});
+
 $factory->define(Repsaliado::class, function (Faker $faker) {
     $estatus = Arr::random(['Aprobada', 'Declinada']);
-    if ($estatus == 'Declinada') {
+    if ($estatus != 'Aprobada') {
         $dMensaje = Arr::random([
             'Imposible autorizar en este momento',
             'Declinado general',
@@ -35,25 +43,23 @@ $factory->define(Repsaliado::class, function (Faker $faker) {
     } else {
         $dMensaje = 'Aprobado';
     }
-    $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
-    $date = $faker->date($format = 'Y-m-d');
     return [
         'motivo_rechazo' => $dMensaje,
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'estatus' => $estatus,
-        'user_id' => $uId,
+        'user_id' => $uId = $faker->randomNumber(6),
         'tarjeta' => $tarjeta,
         'terminacion' => substr($tarjeta, -4, 4),
         'monto' => 79,
-        'fecha' => $date,
+        'fecha' => $faker->date($format = 'Y-m-d', $max = '-01 days'),
         'source_file' => Str::random(24),
     ];
 });
 
 $factory->define(RespuestasBanorteAliado::class, function (Faker $faker) {
     $estatus = Arr::random(['Aprobada', 'Declinada']);
-    if ($estatus == 'Declinada') {
+    if ($estatus != 'Aprobada') {
         $dMensaje = Arr::random([
             'Imposible autorizar en este momento',
             'Declinado general',
@@ -62,14 +68,15 @@ $factory->define(RespuestasBanorteAliado::class, function (Faker $faker) {
         ]);
     } else {
         $dMensaje = 'Aprobado';
+        $aut = $faker->numberBetween($min = 100000, $max = 999999);
     }
-    $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
-    $date = $faker->date($format = 'Y-m-d');
+    $date = $faker->date($format = 'Y-m-d', $max = '-01 days');
+    $uId = $faker->randomNumber(6);
     return [
         'comentarios' => 'Cargo unico',
         'detalle_mensaje' => $dMensaje,
-        'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
+        'autorizacion' => $aut ?? null,
         'estatus' => $estatus,
         'user_id' => $uId,
         'num_control' => DateTime::createFromFormat('Ymd', $date) . $uId,
@@ -102,7 +109,7 @@ $factory->define(AliadoUser::class, function (Faker $faker) {
 
 $factory->define(ContracargosAliadoBanorte::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),
@@ -116,7 +123,7 @@ $factory->define(ContracargosAliadoBanorte::class, function (Faker $faker) {
 
 $factory->define(ContracargosAliado::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),

@@ -1,5 +1,5 @@
 <?php
 
-dd($tarjetas);
+//dd($tarjetas);
 echo $tarjetas;
 ?>

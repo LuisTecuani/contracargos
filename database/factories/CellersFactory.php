@@ -31,6 +31,17 @@ $factory->define(UserTdcCellers::class, function (Faker $faker) {
 });
 
 $factory->define(Repscellers::class, function (Faker $faker) {
+    $estatus = Arr::random(['Aprobada', 'Declinada']);
+    if ($estatus != 'Aprobada') {
+        $dMensaje = Arr::random([
+            'Imposible autorizar en este momento',
+            'Declinado general',
+            'Fondos insuficientes',
+            'Supera el monto límite permitido'
+        ]);
+    } else {
+        $dMensaje = 'Aprobado';
+    }
     $tarjeta = $faker->creditCardNumber;
     return [
         'tarjeta' => $tarjeta,
@@ -38,7 +49,7 @@ $factory->define(Repscellers::class, function (Faker $faker) {
         'motivo_rechazo' => $faker->word,
         'terminacion' => substr($tarjeta, -4, 4),
         'user_id' => $faker->randomNumber(6),
-        'fecha' => $faker->date('Y-m-d'),
+        'fecha' => $faker->date($format = 'Y-m-d', $max = '-01 days'),
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'monto' => $faker->randomNumber(4),
         'source_file' => Str::random(24),
@@ -57,15 +68,19 @@ $factory->define(CellersBillingUsers::class, function (Faker $faker) {
 
 $factory->define(ContracargosCellers::class, function (Faker $faker) {
 
+    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+        'fecha_rep' => $date,
     ];
 });
 
 $factory->define(RespuestasBanorteCellers::class, function (Faker $faker) {
     $estatus = Arr::random(['Aprobada', 'Declinada']);
-    if ($estatus == 'Declinada') {
+    if ($estatus != 'Aprobada') {
         $dMensaje = Arr::random([
             'Imposible autorizar en este momento',
             'Declinado general',
@@ -76,9 +91,9 @@ $factory->define(RespuestasBanorteCellers::class, function (Faker $faker) {
         $dMensaje = 'Aprobado';
         $aut = $faker->numberBetween($min = 100000, $max = 999999);
     }
-    $uId = $faker->randomNumber(6);
     $tarjeta = $faker->creditCardNumber;
-    $date = $faker->date($format = 'Y-m-d');
+    $date = $faker->date($format = 'Y-m-d', $max = '-01 days');
+    $uId = $faker->randomNumber(6);
     return [
         'comentarios' => 'Cargo unico',
         'detalle_mensaje' => $dMensaje,
@@ -97,7 +112,7 @@ $factory->define(RespuestasBanorteCellers::class, function (Faker $faker) {
 
 $factory->define(ContracargosCellersBanorte::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),
@@ -111,7 +126,7 @@ $factory->define(ContracargosCellersBanorte::class, function (Faker $faker) {
 
 $factory->define(ContracargosCellers::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '16-01-2020');
+    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),

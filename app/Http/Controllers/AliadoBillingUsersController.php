@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AliadoBillingUsers;
+use App\AliadoBlacklist;
 use App\Repsaliado;
 use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
@@ -58,19 +59,25 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
+        //select last four dates
         $dates = Repsaliado::select('fecha')->where('source_file','like','%3918')->groupBy('fecha')
             ->orderBy('fecha', 'desc')->limit(4)->get();
+
+
         foreach ($dates as $row=>$data)
         {
             if($row < 3) {
+                //select ids from previous date
                 $query = Repsaliado::select('user_id')
                     ->where([['fecha', '=', $dates[$row + 1]->fecha], ['source_file', 'like', '%3918']]);
-
+                //ids form all accepted charges and rejected not form founds
                 $query2 = RespuestasBanorteAliado::select('user_id')
-                    ->where([['fecha', '>=', $dates[3]], ['estatus', 'like', 'Aprobada']]);
+                    ->where('fecha', '>=', $dates[3]->fecha)
+                    ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
 
                 $users = Repsaliado::select('user_id')
-                    ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918'], ['estatus', 'not like', 'Aprobada']])
+                    ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918']])
+                    ->whereIn('motivo_rechazo', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
                     ->whereNotIn('user_id', $query)
                     ->whereNotIn('user_id', $query2)
                     ->get();
@@ -105,11 +112,22 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = Repsaliado::select('fecha')->where('source_file','like','%0897')
-            ->orderBy('fecha', 'desc')->first()->fecha;
+        //select last fourth dates
+        $dates = Repsaliado::select('fecha')->where('source_file','like','%0897')->groupBy('fecha')
+            ->orderBy('fecha', 'desc')->limit(4)->get();
+        $query = AliadoBlacklist::select('user_id')
+            ->whereNotNull('user_id');
 
-        $users = Repsaliado::select('user_id as id')->where([['estatus', 'not like','Aprobada'],
-            ['fecha', 'like', $date],['source_file', 'like', '%0897']])->get();
+        $query2 = RespuestasBanorteAliado::select('user_id')
+            ->where('fecha', '>=', $dates[3]->fecha)
+            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+
+        $users = Repsaliado::select('user_id as id')
+            ->where([['fecha', 'like', $dates[0]->fecha],['source_file', 'like', '%0897']])
+            ->whereIn('motivo_rechazo', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereNotIn('user_id', $query)
+            ->whereNotIn('user_id', $query2)
+            ->get();
 
         foreach ($users as $user) {
 
@@ -139,10 +157,22 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $date = RespuestasBanorteAliado::select('fecha')->orderBy('fecha', 'desc')->first()->fecha;
+        $dates = RespuestasBanorteAliado::select('fecha')->groupBy('fecha')
+            ->orderBy('fecha', 'desc')->limit(4)->get();
 
-        $users = RespuestasBanorteAliado::select('user_id as id')->where([['estatus', 'not like','Aprobada'],
-            ['fecha', 'like', $date]])->get();
+        $query = AliadoBlacklist::select('user_id')
+            ->whereNotNull('user_id');
+
+        $query2 = Repsaliado::select('user_id as id')
+            ->where('fecha', '>=', $dates[3]->fecha)
+            ->whereNotIn('motivo_rechazo', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+
+        $users = RespuestasBanorteAliado::select('user_id as id')
+            ->where('fecha', 'like', $dates[0]->fecha)
+            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereNotIn('user_id', $query)
+            ->whereNotIn('user_id', $query2)
+            ->get();
 
         foreach ($users as $user) {
 

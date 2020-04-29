@@ -3,8 +3,10 @@
 namespace Tests\Unit\Http\Controllers;
 
 use App\AliadoBillingUsers;
+use App\AliadoCancelAccountAnswer;
 use App\AliadoUser;
 use App\Exports\AliadoBanorteExport;
+use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Maatwebsite\Excel\Facades\Excel;
@@ -51,13 +53,14 @@ class AliadoFileMakingControllerTest extends TestCase
             'user_id' => $user3->user_id,
             'number' => $user3->number,
         ]);
+        factory(AliadoCancelAccountAnswer::class)->create([
+            'user_id' => $user3->user_id,
+        ]);
 
-        $this->get('/aliado/banorte/export0897');
+        $response = $this->get('/aliado/file_making/export0897');
 
-        $this->assertFileExists("SCAENT0897D" . now()->format('ymd') . "ER01.ftp", '');
+        $this->assertFileExist("SCAENT0897D" . now()->format('ymd') . "ER01.ftp");
     }
-
-
 
 
 
@@ -92,16 +95,7 @@ class BanorteExportTest extends TestCase
         );
     }
 
-    /** @test */   /*
-    public function can_download_a_ftp_prosa_billing_file()
-    {
-        $file = factory(FileEntry::class)->states('eticket_source')->create();
-        $charges = Importer::toCollection($file, $file->name, 'withoutFunds');
 
-        $response = $this->exporter->billing($charges, '2019-04-08 13:43:47', 'prosa');
-
-        $this->assertTrue($response->assertDownloaded('SCAENT0897D190408ER01.ftp'));
-    }
 
     /** @test */     /*
     public function can_set_the_right_billing_charge_count_format()
@@ -217,6 +211,8 @@ class BanorteExportTest extends TestCase
             'exp_date' => '27-01',
             'procedence' => 'prosa',
         ]);
+        //5 random reps
+        factory(RespuestasBanorteAliado::class, 5)->create();
         factory(UserTdcAliado::class)->create([
             'user_id' => $user1->user_id,
             'number' => $user1->number,

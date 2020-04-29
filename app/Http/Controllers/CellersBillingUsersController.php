@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CellersBillingUsers;
+use App\CellersBlacklist;
 use App\Repscellers;
 use App\RespuestasBanorteCellers;
 use App\UserTdcCellers;
@@ -74,10 +75,11 @@ class CellersBillingUsersController extends Controller
                     ->where('fecha', '=', $dates[$row + 1]->fecha);
 
                 $query2 = Repscellers::select('user_id')
-                    ->where([['fecha', '>=', $dates[3]], ['estatus', 'like', 'Aprobada']]);
-
+                    ->where('fecha', '>=', $dates[3]->fecha)
+                    ->whereNotIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
                 $users = RespuestasBanorteCellers::select('user_id')
-                    ->where([['fecha', '=', $data->fecha], ['estatus', 'not like', 'Aprobada']])
+                    ->where('fecha', '=', $data->fecha)
+                    ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
                     ->whereNotIn('user_id', $query)
                     ->whereNotIn('user_id', $query2)
                     ->get();
@@ -120,15 +122,19 @@ class CellersBillingUsersController extends Controller
         return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
     }
 
-    public function storeRejectedBanorte(Request $request)
+    public function storeToBanorte(Request $request)
     {
         $procedence = $request->procedence;
 
-        $users = RespuestasBanorteCellers::select('user_id as id')
-            ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
-            ->where(
-                'fecha', 'like', $request->date
-            )->get();
+        $date = Repscellers::select('fecha')->orderBy('fecha', 'desc')->first()->fecha;
+
+        $query = CellersBlacklist::select('user_id')->whereNotNull('user_id');
+
+        $users = Repscellers::select('user_id as id')
+            ->where('fecha', 'like', $date)
+            ->whereIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereNotIn('user_id', $query)
+            ->get();
 
         foreach ($users as $user) {
 

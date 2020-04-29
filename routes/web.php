@@ -76,7 +76,7 @@ Route::get('/cellers/file_making/exportBanorte', 'CellersFileMakingController@ex
 Route::get('/cellers/billing_users', 'CellersBillingUsersController@index')->name('cellers.billing_users.index');
 Route::post('/cellers/billing_users/storeFtp', 'CellersBillingUsersController@storeFtp')->name('cellers.billing_users.storeFtp');
 Route::post('/cellers/billing_users/storeRejectedProsa', 'CellersBillingUsersController@storeRejectedProsa')->name('cellers.billing_users.storeRejectedProsa');
-Route::post('/cellers/billing_users/storeRejectedBanorte', 'CellersBillingUsersController@storeRejectedBanorte')->name('cellers.billing_users.storeRejectedBanorte');
+Route::post('/cellers/billing_users/storeToBanorte', 'CellersBillingUsersController@storeToBanorte')->name('cellers.billing_users.storeToBanorte');
 Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
 
 
@@ -107,6 +107,7 @@ Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')-
 
 Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
 Route::get('/aliado/file_making/exportBanorte', 'AliadoFileMakingController@exportBanorte')->name('aliado.file_making.exportBanorte');
+Route::get('/aliado/file_making/export0897', 'AliadoFileMakingController@export0897')->name('aliado.file_making.export0897');
 
 
 Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');

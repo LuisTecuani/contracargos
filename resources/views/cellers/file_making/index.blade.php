@@ -54,23 +54,17 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="card bg-light mt-2">
-                            <form method="POST" action="{{ route('cellers.billing_users.storeRejectedBanorte') }}"
-                                  enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-group">
-                                    <div class="card-header">
-                                        Selecciona la fecha para buscar usuarios rechazados por fondos por BANORTE.
-                                        <br>
-                                        <input type="date" id="date" name="date" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="procedence" name="procedence"
-                                           placeholder="Ingresa la procedencia de los usuarios" required>
-                                </div>
-                                <button class="btn btn-outline-success">Import Data</button>
-                            </form>
+                        <div id="collapseTen"  aria-labelledby="headingTen" >
+                            <div class="card-body">
+                                @include('cellers.file_making._rejectedToBanorte')
+                            </div>
+                            <div class="pt-4">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item pt-2">
+                                        <a href="/cellers/file_making/exportBanorte" class="btn btn-outline-danger">crear CSV para cobro banorte</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

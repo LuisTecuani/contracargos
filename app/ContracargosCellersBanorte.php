@@ -20,6 +20,11 @@ class ContracargosCellersBanorte extends Model
         'created_at' => 'datetime:Y-m-d'
     ];
 
+    public function getNewChargebackIds()
+    {
+        return $this->select('user_id')->whereDate('created_at', today())->get();
+    }
+
     /**
      * Define a one-to-many relationship.
      *

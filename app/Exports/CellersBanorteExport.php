@@ -19,8 +19,8 @@ class CellersBanorteExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
         return CellersBillingUsers::with('cards')
-            ->selectRaw("'AUTH' as CMD_TRANS,'79' as MONTO, 'Cargo unico' as COMENTARIOS, '1' as LOTE, user_id,
-                'CELLERS' as REFERENCIA_PROSA, number as NUMERO_TARJETA, exp_date as FECHA_EXP")
+            ->select("user_id", "number", "exp_date")
+            ->distinct()
             ->where([['created_at', 'like', now()->format('Y-m-d').'%'],['procedence', 'like', 'para banorte']])
             ->get();
     }
@@ -32,22 +32,22 @@ class CellersBanorteExport implements FromCollection, WithMapping, WithHeadings
      */
     public function map($row) : array
     {
-        if($row->FECHA_EXP < now()->format('y-m')) {
-            $row->FECHA_EXP = Carbon::now()->addYears(rand(0, 7))->format('m/y');
+        if($row->exp_date < now()->format('y-m')) {
+            $row->exp_date = Carbon::now()->addYears(rand(0, 7))->format('m/y');
         } else {
-            $row->FECHA_EXP = DateTime::createFromFormat('y-m',$row->FECHA_EXP)->format('m/y');
+            $row->exp_date = DateTime::createFromFormat('y-m',$row->exp_date)->format('m/y');
         }
         $now = now()->format('Ymd');
         return [
-            $row->CMD_TRANS,
-            $row->MONTO,
-            $row->COMENTARIOS,
-            $row->LOTE,
+            'AUTH',
+            '90',
+            'Cargo unico',
+            '1',
             $now.$row->user_id,
             $row->user_id,
-            $row->REFERENCIA_PROSA,
-            $row->NUMERO_TARJETA,
-            $row->FECHA_EXP,
+            'CELLERS',
+            $row->number,
+            $row->exp_date,
         ];
     }
 
