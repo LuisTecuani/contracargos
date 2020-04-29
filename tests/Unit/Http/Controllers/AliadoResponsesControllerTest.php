@@ -47,7 +47,7 @@ class AliadoResponsesControllerTest extends TestCase
         ]);
         $this->assertDatabaseHas('repsaliado', [
             'user_id' => '234993',
-            'motivo_rechazo' => 'Rechazada'
+            'detalle_mensaje' => 'Rechazada'
         ]);
     }
 

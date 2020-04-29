@@ -46,7 +46,7 @@ $factory->define(Repscellers::class, function (Faker $faker) {
     return [
         'tarjeta' => $tarjeta,
         'estatus' => $faker->word,
-        'motivo_rechazo' => $faker->word,
+        'detalle_mensaje' => $faker->word,
         'terminacion' => substr($tarjeta, -4, 4),
         'user_id' => $faker->randomNumber(6),
         'fecha' => $faker->date($format = 'Y-m-d', $max = '-01 days'),

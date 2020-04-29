@@ -39,7 +39,7 @@ $factory->define(Repsmediakey::class, function (Faker $faker) {
     $tarjeta = $faker->creditCardNumber;
     $date = $faker->date($format = 'Y-m-d');
     return [
-        'motivo_rechazo' => $dMensaje,
+        'detalle_mensaje' => $dMensaje,
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'estatus' => $estatus,
         'user_id' => $uId,

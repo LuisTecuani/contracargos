@@ -42,7 +42,7 @@ class CellersResponsesController extends Controller
 
                         'terminacion' => substr($row[0], -4, 4),
 
-                        'motivo_rechazo' => trim($row['motivo']),
+                        'detalle_mensaje' => trim($row['motivo']),
 
                         'autorizacion' => 'N/A',
 
@@ -72,7 +72,7 @@ class CellersResponsesController extends Controller
 
                         'monto' => $row[8],
 
-                        'motivo_rechazo' => 'Aprobado',
+                        'detalle_mensaje' => 'Aprobado',
 
                         'source_file' => $source
 

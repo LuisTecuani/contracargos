@@ -96,7 +96,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => $user1->user_id,
             'fecha' => date("Y-m-d"),
             'estatus' => 'Rechazada',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 from 0897 file
@@ -104,7 +104,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => $user2->user_id,
             'fecha' => date("Y-m-d"),
             'estatus' => 'Rechazada',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097820897',
         ]);
         // not rejected user
@@ -112,7 +112,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => '111111',
             'fecha' => date("Y-m-d"),
             'estatus' => 'Aprobada',
-            'motivo_rechazo' => 'Aprobado',
+            'detalle_mensaje' => 'Aprobado',
             'source_file' => 'CE201911191745097820897',
         ]);
         $this->post('/aliado/billing_users/storeToBanorte', [
@@ -226,7 +226,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => $user1->user_id,
             'fecha' => '2019-11-19',
             'estatus' => 'Rechazada',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 first charge
@@ -262,7 +262,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => '111111',
             'fecha' => '2019-11-19',
             'estatus' => 'Aprobada',
-            'motivo_rechazo' => 'Aprobado',
+            'detalle_mensaje' => 'Aprobado',
             'source_file' => 'CE201911191745097823918',
         ]);
 

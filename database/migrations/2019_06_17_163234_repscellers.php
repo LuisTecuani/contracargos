@@ -21,7 +21,7 @@ class Repscellers extends Migration
             $table->integer('user_id');
             $table->date('fecha');
             $table->string('autorizacion')->nullable();
-            $table->string('motivo_rechazo')->nullable();
+            $table->string('detalle_mensaje')->nullable();
             $table->string('monto')->nullable();
             $table->string('source_file');
             $table->timestamps();

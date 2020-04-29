@@ -47,7 +47,7 @@ class MediakeyResponsesControllerTest extends TestCase
         ]);
         $this->assertDatabaseHas('repsmediakey', [
             'user_id' => '234993',
-            'motivo_rechazo' => 'Rechazada'
+            'detalle_mensaje' => 'Rechazada'
         ]);
     }
 

@@ -43,7 +43,7 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
 
         $query2 = Repsaliado::select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)
-            ->whereNotIn('motivo_rechazo', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
 
         return AliadoBillingUsers::with('cards')
             ->select("user_id","number", "exp_date")

@@ -76,7 +76,7 @@ class CellersBillingUsersController extends Controller
 
                 $query2 = Repscellers::select('user_id')
                     ->where('fecha', '>=', $dates[3]->fecha)
-                    ->whereNotIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+                    ->whereNotIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
                 $users = RespuestasBanorteCellers::select('user_id')
                     ->where('fecha', '=', $data->fecha)
                     ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
@@ -132,7 +132,7 @@ class CellersBillingUsersController extends Controller
 
         $users = Repscellers::select('user_id as id')
             ->where('fecha', 'like', $date)
-            ->whereIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $query)
             ->get();
 

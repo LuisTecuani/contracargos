@@ -45,7 +45,7 @@ $factory->define(Repsaliado::class, function (Faker $faker) {
     }
     $tarjeta = $faker->creditCardNumber;
     return [
-        'motivo_rechazo' => $dMensaje,
+        'detalle_mensaje' => $dMensaje,
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'estatus' => $estatus,
         'user_id' => $uId = $faker->randomNumber(6),

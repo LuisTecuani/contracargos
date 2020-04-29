@@ -63,7 +63,7 @@ class MediakeyBillingUsersController extends Controller
         $date = $request->date;
 
         $users = Repsmediakey::select('user_id as id')
-            ->whereIn('motivo_rechazo', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->where(
                 'fecha', 'like', $date
             )->get();

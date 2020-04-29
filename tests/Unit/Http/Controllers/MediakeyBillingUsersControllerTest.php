@@ -92,19 +92,19 @@ class MediakeyBillingUsersControllerTest extends TestCase
         factory(Repsmediakey::class)->create([
             'user_id' => $expired->user_id,
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Fondos insuficientes',
+            'detalle_mensaje' => 'Fondos insuficientes',
         ]);
         // rejected not on date
         factory(Repsmediakey::class)->create([
             'user_id' => $active->user_id,
             'fecha' => '2019-10-19',
-            'motivo_rechazo' => 'Supera el monto límite permitido',
+            'detalle_mensaje' => 'Supera el monto límite permitido',
         ]);
         // not rejected on date
         factory(Repsmediakey::class)->create([
             'user_id' => '111111',
             'fecha' => '2019-11-19',
-            'motivo_rechazo' => 'Aprobado',
+            'detalle_mensaje' => 'Aprobado',
         ]);
 
 

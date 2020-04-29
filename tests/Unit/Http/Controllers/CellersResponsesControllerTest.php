@@ -47,7 +47,7 @@ class CellersResponsesControllerTest extends TestCase
         ]);
         $this->assertDatabaseHas('repscellers', [
             'user_id' => '184',
-            'motivo_rechazo' => 'Rechazada'
+            'detalle_mensaje' => 'Rechazada'
         ]);
     }
 
