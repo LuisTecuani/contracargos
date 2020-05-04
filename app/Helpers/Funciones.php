@@ -34,12 +34,13 @@ function processRep($file)
     return [$rejected, $accepted];
 }
 
-function processTxt($file)
+function processText($file)
 {
     $text = preg_split("[\n]", $file);
     $authorization = [];
     $card = [];
     $date = [];
+    $chargebacks = [];
 
     $rows = preg_grep("/(\d{6})/", $text);
     foreach ($rows as $index => $content) {
@@ -63,7 +64,17 @@ function processTxt($file)
     }
     $card = array_values($card);
 
-    return [$authorization, $card, $date];
+    foreach ($authorization as $index => $cont) {
+        $chargebacks[$index]['authorization'] = $cont;
+    }
+    foreach ($card as $index => $cont) {
+        $chargebacks[$index]['card'] = $cont;
+    }
+    foreach ($date as $index => $cont) {
+        $chargebacks[$index]['date'] = $cont;
+    }
+
+    return $chargebacks;
 }
 
 function processXml($file)

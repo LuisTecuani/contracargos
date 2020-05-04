@@ -32,20 +32,6 @@ class AliadoChargebackController extends Controller
         return view("aliado.chargeback.index", compact('cards'));
     }
 
-
-    public function show()
-    {
-        $query = ContracargosAliadoBanorte::createdToday();
-
-        $emails = ContracargosAliado::select('email')
-            ->whereDate('created_at', today())
-            ->union($query)
-            ->groupBy("email")
-            ->get();
-
-        return view("aliado.chargeback.last", compact('emails'));
-    }
-
     public function store(StoreAdminRequest $request)
     {
         $autorizacionesS = $request->input('autorizaciones');
@@ -65,6 +51,19 @@ class AliadoChargebackController extends Controller
 
         return redirect()->route("aliado.index");
 
+    }
+
+    public function show()
+    {
+        $query = ContracargosAliadoBanorte::createdToday();
+
+        $emails = ContracargosAliado::select('email')
+            ->whereDate('created_at', today())
+            ->union($query)
+            ->groupBy("email")
+            ->get();
+
+        return view("aliado.chargeback.last", compact('emails'));
     }
 
     public function storeImage(StoreAdminRequest $request)

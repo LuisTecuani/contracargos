@@ -22,7 +22,7 @@ class AliadoBlacklistControllerTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_persist_emails_on_aliado_blacklist()
+    public function store_method_persist_emails_on_aliado_blacklist()
     {
         $this->signIn();
         $fakeUser = factory(AliadoUser::class)->create([

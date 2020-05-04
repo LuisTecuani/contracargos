@@ -13,18 +13,7 @@ class CellersBanorteChargebackController extends Controller
 
         $chargebackDate = $request->chargeback_date;
 
-        $processedText = processTxt($text);
-        $chargebacks = [];
-
-        foreach ($processedText[0] as $index => $cont) {
-            $chargebacks[$index]['authorization'] = $cont;
-        }
-        foreach ($processedText[1] as $index => $cont) {
-            $chargebacks[$index]['card'] = $cont;
-        }
-        foreach ($processedText[2] as $index => $cont) {
-            $chargebacks[$index]['date'] = $cont;
-        }
+        $chargebacks = processText($text);
 
         foreach ($chargebacks as $row) {
             $card = substr($row['card'], -4, 4);
