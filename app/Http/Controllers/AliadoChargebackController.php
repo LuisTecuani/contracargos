@@ -6,8 +6,8 @@ use App\ContracargosAliado;
 use App\ContracargosAliadoBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
-use http\Env\Request;
 use thiagoalessio\TesseractOCR\TesseractOCR;
+use function foo\func;
 
 class AliadoChargebackController extends Controller
 {
@@ -22,8 +22,7 @@ class AliadoChargebackController extends Controller
         $this->update();
         (New AliadoBanorteChargebackController)->update();
 
-        $query = ContracargosAliadoBanorte::select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
-            ->whereDate('created_at', today());
+        $query = ContracargosAliadoBanorte::createdToday();
 
         $cards = ContracargosAliado::select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
             ->whereDate('created_at', today())
@@ -57,12 +56,10 @@ class AliadoChargebackController extends Controller
     {
         $query = ContracargosAliadoBanorte::createdToday();
 
-        $emails = ContracargosAliado::select('email')
+        $emails = ContracargosAliado::select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
             ->whereDate('created_at', today())
             ->union($query)
-            ->groupBy("email")
             ->get();
-
         return view("aliado.chargeback.last", compact('emails'));
     }
 

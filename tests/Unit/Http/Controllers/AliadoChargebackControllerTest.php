@@ -3,8 +3,11 @@
 namespace Tests\Unit\Http\Controllers;
 
 
+use App\AliadoUser;
 use App\ContracargosAliado;
 use App\ContracargosAliadoBanorte;
+use App\FileProcessor;
+use App\Http\Controllers\AliadoChargebackController;
 use App\Repsaliado;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,6 +77,7 @@ class AliadoChargebackControllerTest extends TestCase
     public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
+        $this->withoutExceptionHandling();
         $chargebackProsaToday = factory(ContracargosAliado::class)->create();
         $chargebackBanorteToday = factory(ContracargosAliadoBanorte::class)->create();
         $chargebackProsaPast = factory(ContracargosAliado::class)->create([
@@ -89,5 +93,42 @@ class AliadoChargebackControllerTest extends TestCase
             ->assertSee($chargebackBanorteToday->email)
             ->assertDontSee($chargebackProsaPast->email)
             ->assertDontSee($chargebackBanortePast->email);
+    }
+
+    /** @test */
+    public function update_method_adds_the_apropriate_email_userId_and_repDate_to_ContracargosAliado()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $foundableUser = factory(AliadoUser::class)->create();
+        $foundableCharge = factory(Repsaliado::class)->create([
+            'user_id' => $foundableUser->id,
+        ]);
+        factory(ContracargosAliado::class)->create([
+            'autorizacion' => $foundableCharge->autorizacion,
+            'tarjeta' => $foundableCharge->terminacion,
+            'user_id' => null,
+            'fecha_rep' => null,
+            'email' => null,
+        ]);
+        $notFoundableCharge = factory(ContracargosAliado::class)->create([
+            'user_id' => null,
+            'fecha_rep' => null,
+            'email' => null,
+        ]);
+
+        (new AliadoChargebackController(new FileProcessor()))->update();
+
+        $this->assertDatabaseHas('contracargos_aliado', [
+            'user_id' => $foundableCharge->user_id,
+            'fecha_rep' => $foundableCharge->fecha,
+            'email' => $foundableUser->email,
+        ]);
+        $this->assertDatabaseHas('contracargos_aliado', [
+            'autorizacion' => $notFoundableCharge->autorizacion,
+            'user_id' => null,
+            'fecha_rep' => null,
+            'email' => null,
+        ]);
     }
 }

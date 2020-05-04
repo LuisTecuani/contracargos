@@ -39,7 +39,7 @@ class ContracargosAliadoBanorte extends Model
      */
     public function scopeCreatedToday($query)
     {
-        return $query->select('email')
+        return $query->select('email', 'fecha_contracargo', 'fecha_consumo', 'tarjeta','autorizacion', 'created_at','user_id')
             ->whereDate('created_at', today());
     }
 
@@ -66,6 +66,7 @@ class ContracargosAliadoBanorte extends Model
         return $query->with('user')
             ->whereNull('email');
     }
+
     /*
 |--------------------------------------------------------------------------
 | Eloquent Model Relationships
