@@ -20,10 +20,17 @@ class AliadoFileMakingControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->signIn();
+
+    }
+
     /** @test */
     public function admins_can_browse_to_the_index_page()
     {
-        $this->signIn();
 
         $this->get('/aliado/file_making')
             ->assertOk()
@@ -35,15 +42,12 @@ class AliadoFileMakingControllerTest extends TestCase
     public function exportBanorte_download_a_banorte_csv_file()
     {
         Excel::fake();
-        $this->signIn();
-        $this->withoutExceptionHandling();
         $date = now()->format('Y-m-d');
         //gives 4 previous billing dates
         factory(RespuestasBanorteAliado::class,4)->create();
         //user in blacklist not in final csv
         $inBlacklist = factory(AliadoBlacklist::class)->create();
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $inBlacklist->user_id,
             'procedence' => 'para banorte'
         ]);
@@ -52,14 +56,12 @@ class AliadoFileMakingControllerTest extends TestCase
             'reason_id' => '1'
         ]);
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $inUserCancellation->user_id,
             'procedence' => 'para banorte'
         ]);
         //user in cancel_account_answer not in final csv
         $inCancellAcount = factory(AliadoCancelAccountAnswer::class)->create();
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $inCancellAcount->user_id,
             'procedence' => 'para banorte'
         ]);
@@ -70,7 +72,6 @@ class AliadoFileMakingControllerTest extends TestCase
             'detalle_mensaje' => 'Aceptado'
         ]);
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $acceptedRep->user_id,
             'procedence' => 'para banorte'
         ]);
@@ -81,7 +82,6 @@ class AliadoFileMakingControllerTest extends TestCase
             'detalle_mensaje' => 'Rechazar'
         ]);
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $rejectedByRechazarRep->user_id,
             'procedence' => 'para banorte'
         ]);
@@ -92,7 +92,6 @@ class AliadoFileMakingControllerTest extends TestCase
             'detalle_mensaje' => 'Aceptado'
         ]);
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $acceptedBanorte->user_id,
             'procedence' => 'para banorte'
         ]);
@@ -103,13 +102,11 @@ class AliadoFileMakingControllerTest extends TestCase
             'detalle_mensaje' => 'Rechazar'
         ]);
         factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'user_id' => $rejectedByRechazarBanorte->user_id,
             'procedence' => 'para banorte'
         ]);
         //only user apropriate to be in csv
         $rejectedDueFounds = factory(AliadoBillingUsers::class)->create([
-            'created_at' => $date,
             'procedence' => 'para banorte'
         ]);
 
@@ -120,6 +117,7 @@ class AliadoFileMakingControllerTest extends TestCase
                 && $export->collection()->count() == 1;
         });
     }
+
     /** test  */
     public function it_can_build_a_valid_ftp_file()
     {
@@ -287,43 +285,5 @@ class BanorteExportTest extends TestCase
 }
 */
 
-    /** @test */
-    public function it_can_build_a_valid_csv_file()
-    {
-        Excel::fake();
-        $this->signIn();
-        $user1 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '18-10',
-            'procedence' => 'para banorte',
-        ]);
-        $user2 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '17-01',
-            'procedence' => 'para banorte',
-        ]);
-        $user3 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '27-01',
-            'procedence' => 'prosa',
-        ]);
-        //5 random reps
-        factory(RespuestasBanorteAliado::class, 5)->create();
-        factory(UserTdcAliado::class)->create([
-            'user_id' => $user1->user_id,
-            'number' => $user1->number,
-        ]);
-        factory(UserTdcAliado::class)->create([
-            'user_id' => $user2->user_id,
-            'number' => $user2->number,
-        ]);
-        factory(UserTdcAliado::class)->create([
-            'user_id' => $user3->user_id,
-            'number' => $user3->number,
-        ]);
-
-        $this->get('/aliado/file_making/exportBanorte');
-
-        Excel::assertDownloaded('aliado-banorte-'.now()->format('Y-m-d').'.csv', function (AliadoBanorteExport $export) {
-            return $export->collection()->count() == 2;
-        });
-    }
 
 }
