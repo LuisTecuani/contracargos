@@ -3,8 +3,10 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\AliadoBillingUsers;
+use App\AliadoBlacklist;
 use App\AliadoCancelAccountAnswer;
 use App\AliadoUser;
+use App\AliadoUserCancellation;
 use App\UserTdcAliado;
 use App\Repsaliado;
 use App\ContracargosAliado;
@@ -130,5 +132,19 @@ $factory->define(ContracargosAliado::class, function (Faker $faker) {
         'user_id' => $faker->randomNumber(6),
         'email' => $faker->email,
         'fecha_rep' => $date,
+    ];
+});
+
+$factory->define(AliadoBlacklist::class, function (Faker $faker) {
+    return [
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+    ];
+});
+
+$factory->define(AliadoUserCancellation::class, function (Faker $faker) {
+    return [
+        'user_id' => $faker->randomNumber(6),
+        'reason_id' => $faker->numberBetween($min = 1, $max = 55),
     ];
 });

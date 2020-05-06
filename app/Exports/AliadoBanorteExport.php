@@ -39,9 +39,13 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
 
         $cancelAnswers = AliadoCancelAccountAnswer::select('user_id')->get()->map(function ($item) {
             return $item->user_id;
-        })->concat($userCancellations)->unique();
+        })->concat($userCancellations)->concat($blacklist)->unique();
 
-        $query2 = Repsaliado::select('user_id as id')
+        $reps = Repsaliado::select('user_id as id')
+            ->where('fecha', '>=', $dates[3]->fecha)
+            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+
+        $banorte = RespuestasBanorteAliado::select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)
             ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
 
@@ -49,10 +53,12 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
             ->select("user_id","number", "exp_date")
             ->where([['created_at', 'like', now()->format('Y-m-d').'%'],['procedence', 'like', 'para banorte']])
             ->whereNotIn('user_id', $blacklist)
-            ->whereNotIn('user_id', $query2)
+            ->whereNotIn('user_id', $reps)
+            ->whereNotIn('user_id', $banorte)
             ->whereNotIn('user_id', $cancelAnswers)
             ->distinct()
             ->get();
+
     }
 
 

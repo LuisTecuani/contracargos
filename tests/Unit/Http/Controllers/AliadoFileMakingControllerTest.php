@@ -3,9 +3,13 @@
 namespace Tests\Unit\Http\Controllers;
 
 use App\AliadoBillingUsers;
+use App\AliadoBlacklist;
 use App\AliadoCancelAccountAnswer;
 use App\AliadoUser;
+use App\AliadoUserCancellation;
 use App\Exports\AliadoBanorteExport;
+use App\Http\Controllers\AliadoFileMakingController;
+use App\Repsaliado;
 use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,6 +31,95 @@ class AliadoFileMakingControllerTest extends TestCase
             ->assertViewIs('aliado.file_making.index');
     }
 
+    /** @test  */
+    public function exportBanorte_download_a_banorte_csv_file()
+    {
+        Excel::fake();
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $date = now()->format('Y-m-d');
+        //gives 4 previous billing dates
+        factory(RespuestasBanorteAliado::class,4)->create();
+        //user in blacklist not in final csv
+        $inBlacklist = factory(AliadoBlacklist::class)->create();
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $inBlacklist->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user cancelled with a terminal reason not in final csv
+        $inUserCancellation = factory(AliadoUserCancellation::class)->create([
+            'reason_id' => '1'
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $inUserCancellation->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user in cancel_account_answer not in final csv
+        $inCancellAcount = factory(AliadoCancelAccountAnswer::class)->create();
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $inCancellAcount->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user with accepted reps charge not in final csv
+        $acceptedRep = factory(Repsaliado::class)->create([
+            'fecha' => $date,
+            'estatus' => 'Aceptada',
+            'detalle_mensaje' => 'Aceptado'
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $acceptedRep->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user rejected reps not due founds not in final csv
+        $rejectedByRechazarRep = factory(Repsaliado::class)->create([
+            'fecha' => $date,
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Rechazar'
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $rejectedByRechazarRep->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user with accepted banorte charge not in final csv
+        $acceptedBanorte = factory(RespuestasBanorteAliado::class)->create([
+            'fecha' => $date,
+            'estatus' => 'Aceptada',
+            'detalle_mensaje' => 'Aceptado'
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $acceptedBanorte->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //user rejected banorte not due founds not in final csv
+        $rejectedByRechazarBanorte = factory(Repsaliado::class)->create([
+            'fecha' => $date,
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Rechazar'
+        ]);
+        factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'user_id' => $rejectedByRechazarBanorte->user_id,
+            'procedence' => 'para banorte'
+        ]);
+        //only user apropriate to be in csv
+        $rejectedDueFounds = factory(AliadoBillingUsers::class)->create([
+            'created_at' => $date,
+            'procedence' => 'para banorte'
+        ]);
+
+        $this->get('/aliado/file_making/exportBanorte');
+
+        Excel::assertDownloaded('aliado-banorte-'.$date.'.csv', function (AliadoBanorteExport $export) use ($rejectedDueFounds) {
+            return $export->collection()->first()->user_id == $rejectedDueFounds->user_id
+                && $export->collection()->count() == 1;
+        });
+    }
     /** test  */
     public function it_can_build_a_valid_ftp_file()
     {
