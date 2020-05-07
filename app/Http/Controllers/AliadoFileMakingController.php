@@ -28,9 +28,7 @@ class AliadoFileMakingController extends Controller
 
         $blacklist = AliadoBlacklist::select('user_id')->whereNotNull('user_id')->get();
 
-        $userCancellations = AliadoUserCancellation::select('user_id')
-            ->whereIn('reason_id', ['1','2','3','4','5','6','7','8','9','17','26','40','42','43','44'])
-            ->get();
+        $userCancellations = (new AliadoUserCancellation)->getImmovableCancel();
 
         $reps = Repsaliado::select('user_id');
 

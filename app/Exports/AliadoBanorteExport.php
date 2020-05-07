@@ -29,15 +29,10 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
         $dates = (new RespuestasBanorteAliado)->getRecentDates();
 
         $blacklist = AliadoBlacklist::userIds();
-        $userCancellations = AliadoUserCancellation::select('user_id')
-            ->whereIn('reason_id', ['1','2','3','4','5','6','7','8','9','17','26','40','42','43','44'])
-        ->get()->map(function ($item) {
-                return $item->user_id;
-            });
 
-        $cancelAnswers = AliadoCancelAccountAnswer::select('user_id')->get()->map(function ($item) {
-            return $item->user_id;
-        })->concat($userCancellations)->unique();
+        $userCancellations = (new AliadoUserCancellation)->getImmovableCancel();
+
+        $cancelAnswers = (new AliadoCancelAccountAnswer)->getIds()->concat($userCancellations)->unique();
 
         $reps = Repsaliado::select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)

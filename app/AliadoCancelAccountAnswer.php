@@ -27,4 +27,16 @@ class AliadoCancelAccountAnswer extends Model
      */
     protected $fillable = [];
 
+    /**
+     * Get ids of users cancelled with an immovable reason.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getIds()
+    {
+        return $this->select('user_id')->get()->map(function ($item) {
+            return $item->user_id;
+        });
+    }
 }
