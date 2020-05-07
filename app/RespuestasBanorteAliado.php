@@ -16,4 +16,10 @@ class RespuestasBanorteAliado extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function getRecentDates()
+    {
+        return $this->select('fecha')->groupBy('fecha')
+            ->orderBy('fecha', 'desc')->limit(4)->get();
+    }
 }

@@ -115,8 +115,7 @@ class AliadoBillingUsersController extends Controller
         //select last fourth dates
         $dates = Repsaliado::select('fecha')->where('source_file','like','%0897')->groupBy('fecha')
             ->orderBy('fecha', 'desc')->limit(4)->get();
-        $query = AliadoBlacklist::select('user_id')
-            ->whereNotNull('user_id');
+        $query = AliadoBlacklist::userIds();
 
         $query2 = RespuestasBanorteAliado::select('user_id')
             ->where('fecha', '>=', $dates[3]->fecha)
@@ -157,11 +156,9 @@ class AliadoBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
-        $dates = RespuestasBanorteAliado::select('fecha')->groupBy('fecha')
-            ->orderBy('fecha', 'desc')->limit(4)->get();
+        $dates = (new RespuestasBanorteAliado)->getRecentDates();
 
-        $query = AliadoBlacklist::select('user_id')
-            ->whereNotNull('user_id');
+        $query = AliadoBlacklist::userIds();
 
         $query2 = Repsaliado::select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)

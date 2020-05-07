@@ -26,11 +26,9 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', '240');
 
-        $dates = RespuestasBanorteAliado::select('fecha')->groupBy('fecha')
-            ->orderBy('fecha', 'desc')->limit(4)->get();
+        $dates = (new RespuestasBanorteAliado)->getRecentDates();
 
-        $blacklist = AliadoBlacklist::select('user_id')->whereNotNull('user_id');
-
+        $blacklist = AliadoBlacklist::userIds();
         $userCancellations = AliadoUserCancellation::select('user_id')
             ->whereIn('reason_id', ['1','2','3','4','5','6','7','8','9','17','26','40','42','43','44'])
         ->get()->map(function ($item) {
@@ -39,7 +37,7 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
 
         $cancelAnswers = AliadoCancelAccountAnswer::select('user_id')->get()->map(function ($item) {
             return $item->user_id;
-        })->concat($userCancellations)->concat($blacklist)->unique();
+        })->concat($userCancellations)->unique();
 
         $reps = Repsaliado::select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)
