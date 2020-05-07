@@ -71,9 +71,7 @@ class AliadoBillingUsersController extends Controller
                 $query = Repsaliado::select('user_id')
                     ->where([['fecha', '=', $dates[$row + 1]->fecha], ['source_file', 'like', '%3918']]);
                 //ids form all accepted charges and rejected not form founds
-                $query2 = RespuestasBanorteAliado::select('user_id')
-                    ->where('fecha', '>=', $dates[3]->fecha)
-                    ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+                $query2 = (new RespuestasBanorteAliado)->getNotBillables($dates);
 
                 $users = Repsaliado::select('user_id')
                     ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918']])
@@ -117,9 +115,7 @@ class AliadoBillingUsersController extends Controller
             ->orderBy('fecha', 'desc')->limit(4)->get();
         $query = AliadoBlacklist::userIds();
 
-        $query2 = RespuestasBanorteAliado::select('user_id')
-            ->where('fecha', '>=', $dates[3]->fecha)
-            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+        $query2 = (new RespuestasBanorteAliado)->getNotBillables($dates);
 
         $users = Repsaliado::select('user_id as id')
             ->where([['fecha', 'like', $dates[0]->fecha],['source_file', 'like', '%0897']])
@@ -160,9 +156,7 @@ class AliadoBillingUsersController extends Controller
 
         $query = AliadoBlacklist::userIds();
 
-        $query2 = Repsaliado::select('user_id as id')
-            ->where('fecha', '>=', $dates[3]->fecha)
-            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+        $query2 = (new Repsaliado)->getNotBillables($dates);
 
         $users = RespuestasBanorteAliado::select('user_id as id')
             ->where('fecha', 'like', $dates[0]->fecha)

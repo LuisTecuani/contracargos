@@ -34,13 +34,9 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
 
         $cancelAnswers = (new AliadoCancelAccountAnswer)->getIds()->concat($userCancellations)->unique();
 
-        $reps = Repsaliado::select('user_id as id')
-            ->where('fecha', '>=', $dates[3]->fecha)
-            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+        $reps = (new Repsaliado)->getNotBillables($dates);
 
-        $banorte = RespuestasBanorteAliado::select('user_id as id')
-            ->where('fecha', '>=', $dates[3]->fecha)
-            ->whereNotIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
+        $banorte = (new RespuestasBanorteAliado)->getNotBillables($dates);
 
         return AliadoBillingUsers::with('cards')
             ->select("user_id","number", "exp_date")
