@@ -8,6 +8,7 @@ use App\Http\Controllers\AliadoBillingUsersController;
 use App\Repsaliado;
 use App\RespuestasBanorteAliado;
 use App\UserTdcAliado;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
@@ -17,6 +18,23 @@ use Tests\TestCase;
 class AliadoBillingUsersControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tdc1 = factory(UserTdcAliado::class)->create([
+            'user_id' => '125914',
+            'exp_month' => 10,
+            'exp_year' => 2018,
+        ]);
+
+        $this->tdc2 = factory(UserTdcAliado::class)->create([
+            'user_id' => '125942',
+            'exp_month' => 11,
+            'exp_year' => 2028,
+        ]);
+    }
 
     /** @test */
     public function admins_can_browse_to_the_index_page()
@@ -34,16 +52,8 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeFtp_method_import_users_from_ftp()
     {
         $this->signIn();
-        $expired = factory(UserTdcAliado::class)->create([
-            'user_id' => '125914',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $active = factory(UserTdcAliado::class)->create([
-            'user_id' => '125942',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
+        $expired = $this->tdc1;
+        $active = $this->tdc2;
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/SCAENT0897D191113ER01.ftp',
@@ -73,23 +83,13 @@ class AliadoBillingUsersControllerTest extends TestCase
     }
 
     /** @test */
-    public function storeRejectedProsa_import_rejected_users_from_three_previous_files_repsaliado()
+    public function storeRejectedProsa_import_rejected_users_from_maximum_three_previous_files_repsaliado()
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-        $user1 = factory(UserTdcAliado::class)->create([
-            'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $user2 = factory(UserTdcAliado::class)->create([
-            'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
         // user1 first charge
         factory(Repsaliado::class)->create([
-            'user_id' => $user1->user_id,
+            'user_id' => $this->tdc1->user_id,
             'fecha' => '2019-11-19',
             'estatus' => 'Rechazada',
             'detalle_mensaje' => 'Fondos insuficientes',
@@ -97,28 +97,35 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
         // user2 first charge
         factory(Repsaliado::class)->create([
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-11-19',
-            'estatus' => 'Rechazada',
+            'estatus' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 second charge
         factory(Repsaliado::class)->create([
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-11-10',
-            'estatus' => 'Rechazada',
+            'estatus' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 third charge
         factory(Repsaliado::class)->create([
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-10-30',
-            'estatus' => 'Rechazada',
+            'estatus' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 fourth charge
         factory(Repsaliado::class)->create([
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
+            'fecha' => '2019-10-15',
+            'estatus' => 'Fondos insuficientes',
+            'source_file' => 'CE201911191745097823918',
+        ]);
+        // user3 first charge
+        factory(Repsaliado::class)->create([
+            'user_id' => '222222',
             'fecha' => '2019-10-15',
             'estatus' => 'Rechazada',
             'source_file' => 'CE201911191745097823918',
@@ -137,15 +144,18 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('aliado_billing_users', [
-            'user_id' => $user1->user_id,
+            'user_id' => $this->tdc1->user_id,
             'procedence' => 'Rechazos previos',
             'exp_date' => "18-10",
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
             'user_id' => '111111'
+        ]);
+        $this->assertDatabaseMissing('aliado_billing_users', [
+            'user_id' => '222222'
         ]);
     }
 
@@ -153,23 +163,14 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeToBanorte_import_rejected_users_to_banorte()
     {
         $this->signIn();
-        $user1 = factory(UserTdcAliado::class)->create([
-            'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $user2 = factory(UserTdcAliado::class)->create([
-            'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
+        $this->withoutExceptionHandling();
         //5 random reps
         factory(Repsaliado::class, 5)->create([
             'source_file' => 'CE201811191745097820897'
         ]);
         // user1 not from 0897 file
         factory(Repsaliado::class)->create([
-            'user_id' => $user1->user_id,
+            'user_id' => $this->tdc1->user_id,
             'fecha' => date("Y-m-d"),
             'estatus' => 'Rechazada',
             'detalle_mensaje' => 'Fondos insuficientes',
@@ -177,10 +178,18 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
         // user2 from 0897 file
         factory(Repsaliado::class)->create([
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'fecha' => date("Y-m-d"),
             'estatus' => 'Rechazada',
             'detalle_mensaje' => 'Fondos insuficientes',
+            'source_file' => 'CE201911191745097820897',
+        ]);
+        // rejected not due founds from 0897 file
+        factory(Repsaliado::class)->create([
+            'user_id' => '222222',
+            'fecha' => date("Y-m-d"),
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Rechazar',
             'source_file' => 'CE201911191745097820897',
         ]);
         // not rejected user
@@ -196,15 +205,18 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('aliado_billing_users', [
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'procedence' => 'para banorte',
             'exp_date' => "28-11",
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
-            'user_id' => $user1->user_id,
+            'user_id' => $this->tdc1->user_id,
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
             'user_id' => '111111'
+        ]);
+        $this->assertDatabaseMissing('aliado_billing_users', [
+            'user_id' => '222222'
         ]);
     }
 
@@ -213,16 +225,7 @@ class AliadoBillingUsersControllerTest extends TestCase
     {
         $this->signIn();
         $this->withoutExceptionHandling();
-        $user1 = factory(UserTdcAliado::class)->create([
-            'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $user2 = factory(UserTdcAliado::class)->create([
-            'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
+        $today = Carbon::now()->format('Y-m-d');
         $user3 = factory(UserTdcAliado::class)->create([
             'user_id' => '333333',
             'exp_month' => 11,
@@ -232,34 +235,38 @@ class AliadoBillingUsersControllerTest extends TestCase
         factory(RespuestasBanorteAliado::class, 5)->create();
         // user1 not from banorte file
         factory(Repsaliado::class)->create([
-            'user_id' => $user1->user_id,
-            'fecha' => date("Y-m-d"),
-            'estatus' => 'Rechazada',
-            'source_file' => 'CE201911191745097823918',
-        ]);
-        // user2 from banorte file
-        factory(RespuestasBanorteAliado::class)->create([
-            'user_id' => $user2->user_id,
-            'fecha' => date("Y-m-d"),
+            'user_id' => $this->tdc1->user_id,
+            'fecha' => $today,
             'estatus' => 'Rechazada',
             'detalle_mensaje' => 'Fondos insuficientes',
-            'source_file' => 'aliado-banorte-2020-02-12_Respuestas',
+        ]);
+        // user2 from banorte file rejected due founds
+        factory(RespuestasBanorteAliado::class)->create([
+            'user_id' => $this->tdc2->user_id,
+            'fecha' => $today,
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
+        ]);
+        // rejected due founds previous date
+        factory(RespuestasBanorteAliado::class)->create([
+            'user_id' => '222222',
+            'fecha' => Carbon::now()->subDay(2)->format('Y-m-d'),
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
         ]);
         // not rejected user
         factory(RespuestasBanorteAliado::class)->create([
             'user_id' => '111111',
-            'fecha' => date("Y-m-d"),
+            'fecha' => $today,
             'estatus' => 'Aprobada',
             'detalle_mensaje' => 'Aprobado',
-            'source_file' => 'aliado-banorte-2020-02-12_Respuestas',
         ]);
         // rejected not due founds banorte file
         factory(RespuestasBanorteAliado::class)->create([
             'user_id' => $user3->user_id,
-            'fecha' => date("Y-m-d"),
+            'fecha' => $today,
             'estatus' => 'Rechazada',
             'detalle_mensaje' => 'Rechazo',
-            'source_file' => 'aliado-banorte-2020-02-12_Respuestas',
         ]);
 
         $this->post('/aliado/billing_users/storeTo3918', [
@@ -267,15 +274,18 @@ class AliadoBillingUsersControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('aliado_billing_users', [
-            'user_id' => $user2->user_id,
+            'user_id' => $this->tdc2->user_id,
             'procedence' => 'para 3918',
             'exp_date' => "28-11",
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
-            'user_id' => $user1->user_id,
+            'user_id' => $this->tdc1->user_id,
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
             'user_id' => '111111'
+        ]);
+        $this->assertDatabaseMissing('aliado_billing_users', [
+            'user_id' => '222222'
         ]);
         $this->assertDatabaseMissing('aliado_billing_users', [
             'user_id' => $user3->user_id,
@@ -286,20 +296,11 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeTextbox_import_users_writing_in_text_box()
     {
         $this->signIn();
-        $expired = factory(UserTdcAliado::class)->create([
-            'user_id' => '123456',
-            'exp_month' => 10,
-            'exp_year' => 2018,
-        ]);
-        $active = factory(UserTdcAliado::class)->create([
-            'user_id' => '654321',
-            'exp_month' => 11,
-            'exp_year' => 2028,
-        ]);
-
+        $expired = $this->tdc1;
+        $active = $this->tdc2;
 
         $this->post('/aliado/billing_users/storeTextbox', [
-            'ids' => "123456\r\n654321",
+            'ids' => "125914\r\n125942",
             'procedence' => 'Rechazos historicos',
         ]);
 
@@ -338,34 +339,5 @@ class AliadoBillingUsersControllerTest extends TestCase
 
         $this->assertCount(2, $expUsers);
         $this->assertCount(3, $vigUsers);
-    }
-
-    /** incomplete test test  */
-    public function it_can_build_a_valid_ftp_file()
-    {
-        $this->signIn();
-        $user1 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '18-10',
-        ]);
-        $user2 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '17-01',
-        ]);
-        $user3 = factory(AliadoBillingUsers::class)->create([
-            'exp_date' => '27-01',
-        ]);
-        factory(AliadoUser::class)->create([
-            'id' => $user1->user_id,
-        ]);
-        factory(AliadoUser::class)->create([
-            'id' => $user2->user_id,
-        ]);
-        factory(AliadoUser::class)->create([
-            'id' => $user3->user_id,
-        ]);
-
-        $this->get('/aliado/banorte/ftpProsa');
-
-        $this->assertFileExists("SCAENT0897D" . now()->format('ymd') . "ER01.ftp",);
-
     }
 }
