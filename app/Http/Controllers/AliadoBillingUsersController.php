@@ -63,44 +63,40 @@ class AliadoBillingUsersController extends Controller
         $dates = Repsaliado::select('fecha')->where('source_file','like','%3918')->groupBy('fecha')
             ->orderBy('fecha', 'desc')->limit(4)->get();
 
+        $banorte = (new RespuestasBanorteAliado)->getNotBillables($dates);
+        $prosa = (new Repsaliado)->getNotBillables($dates);
 
-        foreach ($dates as $row=>$data)
-        {
-            if($row < 3) {
-                //select ids from previous date
-                $query = Repsaliado::select('user_id')
-                    ->where([['fecha', '=', $dates[$row + 1]->fecha], ['source_file', 'like', '%3918']]);
-                //ids form all accepted charges and rejected not form founds
-                $query2 = (new RespuestasBanorteAliado)->getNotBillables($dates);
+        $noMore = Repsaliado::select('user_id as id')
+            ->where('fecha', '=', $dates[3]->fecha)
+            ->get();
 
-                $users = Repsaliado::select('user_id')
-                    ->where([['fecha', '=', $data->fecha], ['source_file', 'like', '%3918']])
-                    ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
-                    ->whereNotIn('user_id', $query)
-                    ->whereNotIn('user_id', $query2)
-                    ->get();
+        $users = Repsaliado::select('user_id')
+            ->where([['fecha', '=', $dates[0]->fecha], ['source_file', 'like', '%3918']])
+            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereNotIn('user_id', $banorte)
+            ->whereNotIn('user_id', $prosa)
+            ->whereNotIn('user_id', $noMore)
+            ->get();
 
-                foreach ($users as $user) {
+        foreach ($users as $user) {
 
-                    $data = UserTdcAliado::select("exp_month", "exp_year", "number")
-                        ->where('user_id', '=', $user->user_id)
-                        ->latest()
-                        ->first();
+            $data = UserTdcAliado::select("exp_month", "exp_year", "number")
+                ->where('user_id', '=', $user->user_id)
+                ->latest()
+                ->first();
 
-                    $d = $data->exp_month . substr($data->exp_year, -2);
+            $d = $data->exp_month . substr($data->exp_year, -2);
 
-                    AliadoBillingUsers::create([
-                        'user_id' => $user->user_id,
+            AliadoBillingUsers::create([
+                'user_id' => $user->user_id,
 
-                        'procedence' => $procedence,
+                'procedence' => $procedence,
 
-                        'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                            . '-' . substr($d, 0, -2))->format('y-m'),
+                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
+                    . '-' . substr($d, 0, -2))->format('y-m'),
 
-                        'number' => $data->number
-                    ]);
-                }
-            }
+                'number' => $data->number
+            ]);
         }
 
         return back();

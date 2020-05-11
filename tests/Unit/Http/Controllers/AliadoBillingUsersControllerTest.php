@@ -99,28 +99,32 @@ class AliadoBillingUsersControllerTest extends TestCase
         factory(Repsaliado::class)->create([
             'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-11-19',
-            'estatus' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 second charge
         factory(Repsaliado::class)->create([
             'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-11-10',
-            'estatus' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 third charge
         factory(Repsaliado::class)->create([
             'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-10-30',
-            'estatus' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user2 fourth charge
         factory(Repsaliado::class)->create([
             'user_id' => $this->tdc2->user_id,
             'fecha' => '2019-10-15',
-            'estatus' => 'Fondos insuficientes',
+            'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Fondos insuficientes',
             'source_file' => 'CE201911191745097823918',
         ]);
         // user3 first charge
@@ -128,6 +132,7 @@ class AliadoBillingUsersControllerTest extends TestCase
             'user_id' => '222222',
             'fecha' => '2019-10-15',
             'estatus' => 'Rechazada',
+            'detalle_mensaje' => 'Rechazado',
             'source_file' => 'CE201911191745097823918',
         ]);
         // not rejected on date
