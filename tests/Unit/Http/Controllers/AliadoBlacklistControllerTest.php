@@ -3,6 +3,8 @@
 namespace Tests\Unit\Http\Controllers;
 
 use App\AliadoUser;
+use App\ContracargosAliado;
+use App\ContracargosAliadoBanorte;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -40,6 +42,38 @@ class AliadoBlacklistControllerTest extends TestCase
         $this->assertDatabaseHas('aliado_blacklist', [
             'email' => 'verapatino@hotmail.com',
             'user_id' => $fakeUser->id,
+        ]);
+    }
+
+    /** @test */
+    public function storeChargedback_method_persist_users_added_today_to_aliado_chargebacks_tables()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $noBanorte = factory(ContracargosAliado::class)->create();
+        $noBanortePrevoiuslyCreated = factory(ContracargosAliado::class)->create([
+            'created_at' => '2020-05-11 06:09:27'
+        ]);
+        $banorte = factory(ContracargosAliadoBanorte::class)->create();
+        $banortePrevoiuslyCreated = factory(ContracargosAliadoBanorte::class)->create([
+            'created_at' => '2020-05-11 06:09:27'
+        ]);
+
+        $this->post('/aliado/blacklist/storeChargedback');
+
+        $this->assertDatabaseHas('aliado_blacklist', [
+            'email' => $noBanorte->email,
+            'user_id' => $noBanorte->user_id,
+        ]);
+        $this->assertDatabaseHas('aliado_blacklist', [
+            'email' => $banorte->email,
+            'user_id' => $banorte->user_id,
+        ]);
+        $this->assertDatabaseMissing('aliado_blacklist', [
+            'user_id' => $banortePrevoiuslyCreated->user_id,
+        ]);
+        $this->assertDatabaseMissing('aliado_blacklist', [
+            'user_id' => $noBanortePrevoiuslyCreated->user_id,
         ]);
     }
 }

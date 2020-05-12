@@ -100,6 +100,7 @@ Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackControll
 
 Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliado.blacklist.index');
 Route::post('/aliado/blacklist/store', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
+Route::post('/aliado/blacklist/storeChargedback', 'AliadoBlacklistController@storeChargedback')->name('aliadoBlacklist.storeChargedback');
 
 Route::get('/aliado/responses', 'AliadoResponsesController@index')->name('aliado.responses.index');
 Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps')->name('aliado.responses.storeReps');

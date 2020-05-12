@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\AliadoBlacklist;
 use App\AliadoUser;
+use App\ContracargosAliado;
+use App\ContracargosAliadoBanorte;
 use App\Http\Requests\StoreAdminRequest;
 
 class AliadoBlacklistController extends Controller
@@ -32,6 +34,31 @@ class AliadoBlacklistController extends Controller
         }
         Session()->flash('message', 'Datos Registrados');
 
+        return back();
+    }
+
+    public function storeChargedback()
+    {
+        $today = now()->format('Y-m-d');
+
+        $banorte = ContracargosAliadoBanorte::select('user_id','email')
+            ->where('created_at', 'like', $today.'%');
+
+        $chargedback = ContracargosAliado::select('user_id','email')
+            ->where('created_at', 'like', $today.'%')
+            ->union($banorte)
+            ->get();
+
+        foreach ($chargedback as $row) {
+
+            $exist = AliadoBlacklist::where('user_id', $row->user_id)->first();
+            if (!$exist) {
+                $bList = new AliadoBlacklist();
+                $bList->email = $row->email;
+                $bList->user_id = $row->user_id ?? null;
+                $bList->save();
+            }
+        }
         return back();
     }
 }
