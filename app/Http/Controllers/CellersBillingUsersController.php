@@ -66,54 +66,50 @@ class CellersBillingUsersController extends Controller
     {
         $procedence = $request->procedence;
 
+        //select last four dates
         $dates = RespuestasBanorteCellers::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->limit(4)->get();
 
-        foreach ($dates as $row=>$data)
-        {
-            if($row < 3) {
-                $query = RespuestasBanorteCellers::select('user_id')
-                    ->where('fecha', '=', $dates[$row + 1]->fecha);
+        $banorte = (new RespuestasBanorteCellers)->getNotBillables($dates);
 
-                $query2 = Repscellers::select('user_id')
-                    ->where('fecha', '>=', $dates[3]->fecha)
-                    ->whereNotIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento']);
-                $users = RespuestasBanorteCellers::select('user_id')
-                    ->where('fecha', '=', $data->fecha)
-                    ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
-                    ->whereNotIn('user_id', $query)
-                    ->whereNotIn('user_id', $query2)
-                    ->get();
+        $prosa = (new Repscellers)->getNotBillables($dates);
 
-                foreach ($users as $user) {
+        $noMore = Repscellers::select('user_id as id')
+            ->where('fecha', '=', $dates[3]->fecha)
+            ->get();
 
-                    $data = UserTdcCellers::select("exp_date", "number")
-                        ->where('user_id', '=', $user->user_id)
-                        ->latest()
-                        ->first();
+        $users = RespuestasBanorteCellers::select('user_id')
+            ->where('fecha', '=', $dates[0]->fecha)
+            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereNotIn('user_id', $banorte)
+            ->whereNotIn('user_id', $prosa)
+            ->whereNotIn('user_id', $noMore)
+            ->get();
 
-                    if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                        $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                            . '-' . substr($data->exp_date, 0, -2))
-                            ->format('y-m');
-                    } else {
-                        $date = 1111;
-                    }
+        foreach ($users as $user) {
 
-                    CellersBillingUsers::create([
-                        'user_id' => $user->user_id,
+            $data = UserTdcCellers::select("exp_date", "number")
+                ->where('user_id', '=', $user->user_id)
+                ->latest()
+                ->first();
 
-                        'procedence' => $procedence,
-
-                        'exp_date' => $date,
-
-                        'number' => $data->number
-                    ]);
-
-
-                }
+            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
+                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
+                    . '-' . substr($data->exp_date, 0, -2))
+                    ->format('y-m');
+            } else {
+                $date = 1111;
             }
-        }
 
+            CellersBillingUsers::create([
+                'user_id' => $user->user_id,
+
+                'procedence' => $procedence,
+
+                'exp_date' => $date,
+
+                'number' => $data->number
+            ]);
+        }
 
         $expUsers = count($this->expDates());
 
