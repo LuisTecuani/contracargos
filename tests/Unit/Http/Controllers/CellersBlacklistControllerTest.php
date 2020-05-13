@@ -16,7 +16,6 @@ class CellersBlacklistControllerTest extends TestCase
     public function admins_can_browse_to_the_index_page()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
 
         $this->get('/cellers/blacklist')
             ->assertOk()
@@ -28,7 +27,6 @@ class CellersBlacklistControllerTest extends TestCase
     public function admin_can_persist_emails_on_cellers_blacklist()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $fakeUser = factory(CellersUser::class)->create([
             'email' => 'verapatino@hotmail.com'
         ]);
@@ -51,7 +49,6 @@ class CellersBlacklistControllerTest extends TestCase
     public function storeChargedback_method_persist_users_added_today_to_cellers_chargebacks_tables()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $noBanorte = factory(ContracargosCellers::class)->create();
         $noBanortePrevoiuslyCreated = factory(ContracargosCellers::class)->create([
             'created_at' => '2020-05-11 06:09:27'

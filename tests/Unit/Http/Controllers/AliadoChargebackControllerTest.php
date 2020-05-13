@@ -31,7 +31,6 @@ class AliadoChargebackControllerTest extends TestCase
     public function index_method_show_agregated_users_today()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $chargedbackBanorte = factory(ContracargosAliadoBanorte::class)->create();
         $chargedbackProsa = factory(ContracargosAliado::class)->create();
 
@@ -77,7 +76,6 @@ class AliadoChargebackControllerTest extends TestCase
     public function show_method_displays_emails_from_users_searched_today()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $chargebackProsaToday = factory(ContracargosAliado::class)->create();
         $chargebackBanorteToday = factory(ContracargosAliadoBanorte::class)->create();
         $chargebackProsaPast = factory(ContracargosAliado::class)->create([
@@ -99,7 +97,6 @@ class AliadoChargebackControllerTest extends TestCase
     public function update_method_adds_the_apropriate_email_userId_and_repDate_to_ContracargosAliado()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $foundableUser = factory(AliadoUser::class)->create();
         $foundableCharge = factory(Repsaliado::class)->create([
             'user_id' => $foundableUser->id,

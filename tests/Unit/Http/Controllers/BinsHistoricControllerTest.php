@@ -51,7 +51,6 @@ class BinsHistoricControllerTest extends TestCase
     {
         Excel::fake();
         $this->signIn();
-        $this->withoutExceptionHandling();
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/historic-bins.csv',

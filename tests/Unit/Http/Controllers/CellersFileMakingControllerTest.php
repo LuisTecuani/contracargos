@@ -30,7 +30,6 @@ class CellersFileMakingControllerTest extends TestCase
     {
         Excel::fake();
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user1 = factory(CellersBillingUsers::class)->create([
             'exp_date' => '18-10',
             'procedence' => 'para banorte',

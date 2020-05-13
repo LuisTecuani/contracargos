@@ -86,7 +86,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeRejectedProsa_import_rejected_users_from_maximum_three_previous_files_repsaliado()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         // user1 first charge
         factory(Repsaliado::class)->create([
             'user_id' => $this->tdc1->user_id,
@@ -168,7 +167,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeToBanorte_import_rejected_users_to_banorte()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         //5 random reps
         factory(Repsaliado::class, 5)->create([
             'source_file' => 'CE201811191745097820897'
@@ -229,7 +227,6 @@ class AliadoBillingUsersControllerTest extends TestCase
     public function storeTo3918_import_rejected_due_founds_users_to_3918()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $today = Carbon::now()->format('Y-m-d');
         $user3 = factory(UserTdcAliado::class)->create([
             'user_id' => '333333',

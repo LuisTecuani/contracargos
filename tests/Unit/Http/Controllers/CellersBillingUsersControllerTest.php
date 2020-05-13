@@ -76,7 +76,6 @@ class CellersBillingUsersControllerTest extends TestCase
     public function admins_can_import_rejected_users_from_three_previous_files_respuestas_banorte_cellers()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user1 = factory(UserTdcCellers::class)->create([
             'user_id' => '123456',
             'exp_date' => 1018,

@@ -49,7 +49,6 @@ class AliadoBlacklistControllerTest extends TestCase
     public function storeChargedback_method_persist_users_added_today_to_aliado_chargebacks_tables()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $noBanorte = factory(ContracargosAliado::class)->create();
         $noBanortePrevoiuslyCreated = factory(ContracargosAliado::class)->create([
             'created_at' => '2020-05-11 06:09:27'
