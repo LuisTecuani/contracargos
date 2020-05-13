@@ -151,3 +151,5 @@ Route::get('/bins/historic', 'BinsHistoricController@index')->name('binsHistoric
 Route::post('/bins/historic/store', 'BinsHistoricController@store')->name('binsHistoric.store');
 Route::post('/bins/historic/import', 'BinsHistoricController@import')->name('binsHistoric.import');
 
+Route::get('/find_user', 'FindUserController@index')->name('find_user.index');
+Route::get('/find_user/show', 'FindUserController@show')->name('find_user.show');
