@@ -65,6 +65,7 @@ Route::post('/cellers/banorte/chargeback/store', 'CellersBanorteChargebackContro
 
 Route::get('/cellers/blacklist', 'CellersBlacklistController@index')->name('cellers.blacklist.index');
 Route::post('/cellers/blacklist/store', 'CellersBlacklistController@store')->name('cellersBlacklist.store');
+Route::post('/cellers/blacklist/storeChargedback', 'CellersBlacklistController@storeChargedback')->name('cellersBlacklist.storeChargedback');
 
 Route::get('/cellers/responses', 'CellersResponsesController@index')->name('cellers.responses.index');
 Route::post('/cellers/responses/storeReps', 'CellersResponsesController@storeReps')->name('cellers.responses.storeReps');

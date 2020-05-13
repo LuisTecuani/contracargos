@@ -3,6 +3,8 @@
 namespace Tests\Unit\Http\Controllers;
 
 use App\CellersUser;
+use App\ContracargosCellers;
+use App\ContracargosCellersBanorte;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -42,6 +44,38 @@ class CellersBlacklistControllerTest extends TestCase
         $this->assertDatabaseHas('cellers_blacklist', [
             'email' => 'verapatino@hotmail.com',
             'user_id' => $fakeUser->id,
+        ]);
+    }
+
+    /** @test */
+    public function storeChargedback_method_persist_users_added_today_to_cellers_chargebacks_tables()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $noBanorte = factory(ContracargosCellers::class)->create();
+        $noBanortePrevoiuslyCreated = factory(ContracargosCellers::class)->create([
+            'created_at' => '2020-05-11 06:09:27'
+        ]);
+        $banorte = factory(ContracargosCellersBanorte::class)->create();
+        $banortePrevoiuslyCreated = factory(ContracargosCellersBanorte::class)->create([
+            'created_at' => '2020-05-11 06:09:27'
+        ]);
+
+        $this->post('/cellers/blacklist/storeChargedback');
+
+        $this->assertDatabaseHas('cellers_blacklist', [
+            'email' => $noBanorte->email,
+            'user_id' => $noBanorte->user_id,
+        ]);
+        $this->assertDatabaseHas('cellers_blacklist', [
+            'email' => $banorte->email,
+            'user_id' => $banorte->user_id,
+        ]);
+        $this->assertDatabaseMissing('cellers_blacklist', [
+            'user_id' => $banortePrevoiuslyCreated->user_id,
+        ]);
+        $this->assertDatabaseMissing('cellers_blacklist', [
+            'user_id' => $noBanortePrevoiuslyCreated->user_id,
         ]);
     }
 }
