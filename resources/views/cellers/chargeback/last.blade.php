@@ -2,9 +2,9 @@
 @section('title',"Cellers")
 @section('content')
     [
-    @foreach($emails as $email)
+    @foreach($ids as $row)
         <h6>
-            "{{$email->email}}",
+            "{{$row->user_id}}",
         </h6>
     @endforeach
 

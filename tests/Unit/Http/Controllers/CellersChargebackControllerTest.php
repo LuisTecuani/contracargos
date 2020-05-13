@@ -45,9 +45,10 @@ class CellersChargebackControllerTest extends TestCase
     }
 
     /** @test */
-    public function show_method_displays_emails_from_users_searched_today()
+    public function show_method_displays_ids_from_users_searched_today()
     {
         $this->signIn();
+        $this->withoutExceptionHandling();
         $chargebackProsaToday = factory(ContracargosCellers::class)->create();
         $chargebackBanorteToday = factory(ContracargosCellersBanorte::class)->create();
         $chargebackProsaPast = factory(ContracargosCellers::class)->create([
@@ -59,9 +60,9 @@ class CellersChargebackControllerTest extends TestCase
 
         $this->get('/cellers/chargeback/show')
             ->assertViewIs('cellers.chargeback.last')
-            ->assertSee($chargebackProsaToday->email)
-            ->assertSee($chargebackBanorteToday->email)
-            ->assertDontSee($chargebackProsaPast->email)
-            ->assertDontSee($chargebackBanortePast->email);
+            ->assertSee($chargebackProsaToday->user_id)
+            ->assertSee($chargebackBanorteToday->user_id)
+            ->assertDontSee($chargebackProsaPast->user_id)
+            ->assertDontSee($chargebackBanortePast->user_id);
     }
 }

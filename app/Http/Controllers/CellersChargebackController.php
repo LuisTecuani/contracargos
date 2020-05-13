@@ -33,17 +33,16 @@ class CellersChargebackController extends Controller
 
     public function show()
     {
-        $query = ContracargosCellersBanorte::select('email')
+        $query = ContracargosCellersBanorte::select('user_id')
             ->whereDate('created_at', today());
 
-        $emails = ContracargosCellers::select('email')
+        $ids = ContracargosCellers::select('user_id')
             ->whereDate('created_at', today())
             ->union($query)
-            ->groupBy("email")
+            ->groupBy("user_id")
             ->get();
 
-
-        return view("cellers.chargeback.last", compact('emails'));
+        return view("cellers.chargeback.last", compact('ids'));
     }
 
     public function store(StoreAdminRequest $request)
