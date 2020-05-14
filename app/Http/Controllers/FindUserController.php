@@ -27,54 +27,36 @@ class FindUserController extends Controller
         switch ($platform) {
             case 'aliado':
                 if ($user_id = $request->user_id) {
-                    $user = AliadoUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('id','=',$user_id)
-                        ->first();
+                    $user = (new AliadoUser)->findById($user_id);
                 } else {
-                    $user = AliadoUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('email','=',$request->email)
-                        ->first();
+                    $user = (new AliadoUser)->findByEmail($request->email);
                 }
-                $banorte = RespuestasBanorteAliado::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get();
-                $charges = Repsaliado::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get()->concat($banorte);
+                $banorte = (new RespuestasBanorteAliado)->getUserAcceptedCharges($user->id);
+
+                $charges = (new Repsaliado)->getUserAcceptedCharges($user->id)->concat($banorte);
+
                 break;
             case 'cellers':
                 if ($user_id = $request->user_id) {
-                    $user = CellersUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('id','=',$user_id)
-                        ->first();
+                    $user = (new CellersUser)->findById($user_id);
                 } else {
-                    $user = CellersUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('email','=',$request->email)
-                        ->first();
+                    $user = (new CellersUser)->findByEmail($request->email);
                 }
-                $banorte = RespuestasBanorteCellers::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get();
-                $charges = Repscellers::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get()->concat($banorte);
+                $banorte = (new RespuestasBanorteCellers)->getUserAcceptedCharges($user->id);
+
+                $charges = (new Repscellers)->getUserAcceptedCharges($user->id)->concat($banorte);
+
                 break;
             case 'mediakey':
                 if ($user_id = $request->user_id) {
-                    $user = MediakeyUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('id','=',$user_id)
-                        ->first();
+                    $user = (new MediakeyUser)->findById($user_id);
                 } else {
-                    $user = MediakeyUser::select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
-                        ->where('email','=',$request->email)
-                        ->first();
+                    $user = (new MediakeyUser)->findByEmail($request->email);
                 }
-                $banorte = RespuestasBanorteMediakey::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get();
-                $charges = Repsmediakey::select('fecha', 'tarjeta')
-                    ->where([['user_id','=',$user->id],['estatus','=','Aprobada']])
-                    ->get()->concat($banorte);
+                $banorte = (new RespuestasBanorteMediakey)->getUserAcceptedCharges($user->id);
+
+                $charges = (new Repsmediakey)->getUserAcceptedCharges($user->id)->concat($banorte);
+
                 break;
         }
         return view('find_user.show',compact('user','charges'));

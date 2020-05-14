@@ -28,6 +28,20 @@ class AliadoUser extends Model
      */
     protected $fillable = [];
 
+    public function findById($id)
+    {
+        return $this->select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
+            ->where('id','=',$id)
+            ->first();
+    }
+
+    public function findByEmail($email)
+    {
+        return $this->select('id', 'email','name','deleted_at as cancelled_at', 'created_at')
+            ->where('email','=',$email)
+            ->first();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Eloquent Model Relationships

@@ -26,4 +26,11 @@ class Repsaliado extends Model
             ])
             ->get();
     }
+
+    public function getUserAcceptedCharges($id)
+    {
+        return $this->select('fecha', 'tarjeta')
+            ->where([['user_id','=',$id],['estatus','=','Aprobada']])
+            ->get();
+    }
 }

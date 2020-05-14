@@ -36,6 +36,7 @@ class FindUserControllerTest extends TestCase
     public function show_method_can_find_data_from_an_aliado_user()
     {
         $this->signIn();
+        $this->withoutExceptionHandling();
         $user = factory(AliadoUser::class)->create();
         $tdc = factory(UserTdcAliado::class)->create([
             'user_id' => $user->id

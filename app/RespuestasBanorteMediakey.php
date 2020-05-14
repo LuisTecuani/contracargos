@@ -16,4 +16,11 @@ class RespuestasBanorteMediakey extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function getUserAcceptedCharges($id)
+    {
+        return $this->select('fecha', 'tarjeta')
+            ->where([['user_id','=',$id],['estatus','=','Aprobada']])
+            ->get();
+    }
 }
