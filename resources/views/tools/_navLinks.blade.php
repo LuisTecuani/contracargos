@@ -4,7 +4,7 @@
             <a href="/bins" class="btn btn-outline-success">Bins</a>
         </li>
         <li class="nav-item pt-2">
-            <a href="#" class="btn btn-outline-success">Analisis de cobros</a>
+            <a href="/find_user" class="btn btn-outline-success">Busqueda de usuarios</a>
         </li>
     </ul>
 </div>
