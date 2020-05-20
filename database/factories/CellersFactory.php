@@ -2,6 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\CellersBlacklist;
+use App\CellersCancellation;
 use App\CellersUser;
 use App\ContracargosCellers;
 use App\ContracargosCellersBanorte;
@@ -133,5 +135,19 @@ $factory->define(ContracargosCellers::class, function (Faker $faker) {
         'user_id' => $faker->randomNumber(6),
         'email' => $faker->email,
         'fecha_rep' => $date,
+    ];
+});
+
+$factory->define(CellersBlacklist::class, function (Faker $faker) {
+    return [
+        'user_id' => $faker->randomNumber(6),
+        'email' => $faker->email,
+    ];
+});
+
+$factory->define(CellersCancellation::class, function (Faker $faker) {
+    return [
+        'user_id' => $faker->randomNumber(6),
+        'reason_id' => $faker->numberBetween($min = 1, $max = 55),
     ];
 });

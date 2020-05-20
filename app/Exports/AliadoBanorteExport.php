@@ -47,7 +47,6 @@ class AliadoBanorteExport implements FromCollection, WithMapping, WithHeadings
             ->whereNotIn('user_id', $cancelAnswers)
             ->distinct()
             ->get();
-
     }
 
 

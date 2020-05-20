@@ -40,4 +40,10 @@ class RespuestasBanorteCellers extends Model
             ->where([['user_id','=',$id],['estatus','=','Aprobada']])
             ->get();
     }
+
+    public function getRecentDates()
+    {
+        return $this->select('fecha')->groupBy('fecha')
+            ->orderBy('fecha', 'desc')->limit(4)->get();
+    }
 }
