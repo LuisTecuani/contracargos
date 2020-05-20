@@ -15,7 +15,7 @@ class CellersBlacklist extends Migration
     {
         Schema::create('cellers_blacklist', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->integer('user_id')->nullable();
             $table->timestamps();
         });

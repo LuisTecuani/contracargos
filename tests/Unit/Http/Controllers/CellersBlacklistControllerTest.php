@@ -46,6 +46,29 @@ class CellersBlacklistControllerTest extends TestCase
     }
 
     /** @test */
+    public function storeByUserId_can_persist_users_on_cellers_blacklist()
+    {
+        $this->signIn();
+        $this->withoutExceptionHandling();
+        $fakeUser = factory(CellersUser::class)->create([
+            'id' => '654321'
+        ]);
+
+        $this->post('/cellers/blacklist/storeIds', [
+            'ids' => "123456\r\n654321",
+        ]);
+
+        $this->assertDatabaseHas('cellers_blacklist', [
+            'email' => null,
+            'user_id' => '123456',
+        ]);
+        $this->assertDatabaseHas('cellers_blacklist', [
+            'email' => $fakeUser->email,
+            'user_id' => '654321',
+        ]);
+    }
+
+    /** @test */
     public function storeChargedback_method_persist_users_added_today_to_cellers_chargebacks_tables()
     {
         $this->signIn();

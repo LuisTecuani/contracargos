@@ -37,6 +37,28 @@ class CellersBlacklistController extends Controller
         return redirect()->route("cellers.index");
     }
 
+    public function storeIds(StoreAdminRequest $request)
+    {
+        $idsS = $request->input('ids');
+        $ids = preg_split("[\r\n]", $idsS);
+        foreach ($ids as $id) {
+
+            $exist = CellersBlacklist::where('user_id', $id)->first();
+            if (!$exist) {
+                $bList = new CellersBlacklist();
+                $user = CellersUser::select('email')
+                    ->where('id', $id)
+                    ->first();
+                $bList->user_id = $id;
+                $bList->email = $user->email ?? null;
+                $bList->save();
+            }
+        }
+        Session()->flash('message', 'Datos Registrados');
+
+        return redirect()->route("cellers.index");
+    }
+
     public function storeChargedback()
     {
         $today = now()->format('Y-m-d');
