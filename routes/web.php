@@ -154,3 +154,5 @@ Route::post('/bins/historic/import', 'BinsHistoricController@import')->name('bin
 
 Route::get('/find_user', 'FindUserController@index')->name('find_user.index');
 Route::post('/find_user/show', 'FindUserController@show')->name('find_user.show');
+
+Route::post('/email/chargeback', 'EmailController@chargeback')->name('email.chargeback');

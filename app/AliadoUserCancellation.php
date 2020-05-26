@@ -36,7 +36,7 @@ class AliadoUserCancellation extends Model
     public function getImmovableCancel()
     {
         return $this->select('user_id')
-            ->whereIn('reason_id', ['1','2','3','4','5','6','7','8','9','17','26','40','42','43','44'])
+            ->whereIn('reason_id', ['1','2','3','4','5','6','7','8','9','17','26','40','42','43','44','56'])
             ->get()
             ->map(function ($item) {
                 return $item->user_id;

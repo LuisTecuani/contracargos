@@ -6,6 +6,8 @@ use App\ContracargosCellers;
 use App\ContracargosCellersBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
+use App\Mail\ChargebackEmail;
+use Illuminate\Support\Facades\Mail;
 
 class CellersChargebackController extends Controller
 {
@@ -41,6 +43,8 @@ class CellersChargebackController extends Controller
             ->union($query)
             ->groupBy("user_id")
             ->get();
+
+        $this->sendEmail($ids);
 
         return view("cellers.chargeback.last", compact('ids'));
     }
@@ -95,5 +99,17 @@ class CellersChargebackController extends Controller
             }
         }
 
+    }
+
+    public function sendEmail($users)
+    {
+        $data = new \stdClass();
+        $data->subject = 'contracargos cellers';
+
+        $data->users = $users->map(function ($user) {
+            return $user->user_id;
+        })->unique();
+
+        Mail::to("danielcarrillo@thehiveteam.com")->send(new ChargebackEmail($data));
     }
 }

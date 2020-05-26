@@ -6,6 +6,8 @@ use App\ContracargosMediakey;
 use App\ContracargosMediakeyBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
+use App\Mail\ChargebackEmail;
+use Illuminate\Support\Facades\Mail;
 
 class MediakeyChargebackController extends Controller
 {
@@ -42,6 +44,7 @@ class MediakeyChargebackController extends Controller
             ->groupBy("email")
             ->get();
 
+        $this->sendEmail($emails);
 
         return view("mediakey.chargeback.last", compact('emails'));
     }
@@ -96,5 +99,17 @@ class MediakeyChargebackController extends Controller
             }
         }
 
+    }
+
+    public function sendEmail($users)
+    {
+        $data = new \stdClass();
+        $data->subject = 'contracargos mediakey';
+
+        $data->users = $users->map(function ($user) {
+            return $user->email;
+        })->unique();
+
+        Mail::to("danielcarrillo@thehiveteam.com")->send(new ChargebackEmail($data));
     }
 }

@@ -22,7 +22,8 @@ class Repsaliado extends Model
                 'Fondos insuficientes',
                 'Supera el monto límite permitido',
                 'Límite diario excedido',
-                'Imposible autorizar en este momento'
+                'Imposible autorizar en este momento',
+                'Excede limite de disposicion diaria'
             ])
             ->get();
     }

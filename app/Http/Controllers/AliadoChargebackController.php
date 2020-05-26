@@ -6,6 +6,8 @@ use App\ContracargosAliado;
 use App\ContracargosAliadoBanorte;
 use App\FileProcessor;
 use App\Http\Requests\StoreAdminRequest;
+use App\Mail\ChargebackEmail;
+use Illuminate\Support\Facades\Mail;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use function foo\func;
 
@@ -60,6 +62,9 @@ class AliadoChargebackController extends Controller
             ->whereDate('created_at', today())
             ->union($query)
             ->get();
+
+        $this->sendEmail($emails);
+
         return view("aliado.chargeback.last", compact('emails'));
     }
 
@@ -104,5 +109,17 @@ class AliadoChargebackController extends Controller
             }
         }
 
+    }
+
+    public function sendEmail($users)
+    {
+        $data = new \stdClass();
+        $data->subject = 'contracargos aliado';
+
+        $data->users = $users->map(function ($user) {
+                return $user->email;
+            })->unique();
+
+        Mail::to("danielcarrillo@thehiveteam.com")->send(new ChargebackEmail($data));
     }
 }
