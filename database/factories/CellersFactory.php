@@ -4,6 +4,7 @@
 
 use App\CellersBlacklist;
 use App\CellersCancellation;
+use App\CellersPaycypsBill;
 use App\CellersUser;
 use App\ContracargosCellers;
 use App\ContracargosCellersBanorte;
@@ -149,5 +150,15 @@ $factory->define(CellersCancellation::class, function (Faker $faker) {
     return [
         'user_id' => $faker->randomNumber(6),
         'reason_id' => $faker->numberBetween($min = 1, $max = 55),
+    ];
+});
+
+$factory->define(CellersPaycypsBill::class, function (Faker $faker) {
+    return [
+        'user_id' => CellersUser::class,
+'tdc' => $faker->creditCardNumber,
+'amount' => 9000,
+'bill_day' => $faker->dayOfMonth,
+'file_name' => 'fake-file-name',
     ];
 });

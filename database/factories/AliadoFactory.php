@@ -5,6 +5,7 @@
 use App\AliadoBillingUsers;
 use App\AliadoBlacklist;
 use App\AliadoCancelAccountAnswer;
+use App\AliadoPaycypsBill;
 use App\AliadoUser;
 use App\AliadoUserCancellation;
 use App\UserTdcAliado;
@@ -146,5 +147,15 @@ $factory->define(AliadoUserCancellation::class, function (Faker $faker) {
     return [
         'user_id' => $faker->randomNumber(6),
         'reason_id' => $faker->numberBetween($min = 1, $max = 55),
+    ];
+});
+
+$factory->define(AliadoPaycypsBill::class, function (Faker $faker) {
+    return [
+        'user_id' => AliadoUser::class,
+        'tdc' => $faker->creditCardNumber,
+        'amount' => 9000,
+        'bill_day' => $faker->dayOfMonth,
+        'file_name' => 'fake-file-name',
     ];
 });

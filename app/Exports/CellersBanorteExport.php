@@ -43,6 +43,7 @@ class CellersBanorteExport implements FromCollection, WithMapping, WithHeadings
             ->whereNotIn('user_id', $banorte)
             ->whereNotIn('user_id', $userCancellations)
             ->distinct()
+            ->orderBy('user_id')
             ->get();
     }
 
@@ -54,7 +55,7 @@ class CellersBanorteExport implements FromCollection, WithMapping, WithHeadings
     public function map($row) : array
     {
         if($row->exp_date < now()->format('y-m')) {
-            $row->exp_date = Carbon::now()->addYears(rand(0, 7))->format('m/y');
+            $row->exp_date = Carbon::now()->addMonths(rand(0, 50))->format('m/y');
         } else {
             $row->exp_date = DateTime::createFromFormat('y-m',$row->exp_date)->format('m/y');
         }

@@ -48,6 +48,23 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md mt-2">
+                <form method="POST" action="{{ route('cellers.paycyps.chargebackStore') }}">
+                    <div class="card-header">
+                        Importa contracargos PAYCYPS, inserta las tarjetas a buscar
+                    </div>
+                    @csrf
+                    <div class="form-group">
+    <textarea class="w-100" name="autorizaciones" id="cards" pattern="\d"
+              title="escribe las tarjetas."
+              rows="10" placeholder=" tarjeta"
+              required></textarea>
+                        <button type="submit" class="btn btn-outline-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12 mt-2">
                 @include('contracargos.admin.table_results')
             </div>

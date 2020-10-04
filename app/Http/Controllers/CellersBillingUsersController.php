@@ -27,7 +27,11 @@ class CellersBillingUsersController extends Controller
 
         $file = $request->file('file');
 
-        $rows = preg_grep("/(809295030)/", file($file));;
+        $rows = preg_grep("/(809295030)/", file($file));
+
+        if($rows == []) {
+            $rows = preg_grep("/(754799830)/", file($file));
+        }
 
         foreach ($rows as $row) {
             $id = substr($row, 9, 6);
@@ -79,7 +83,7 @@ class CellersBillingUsersController extends Controller
 
         $users = RespuestasBanorteCellers::select('user_id')
             ->where('fecha', '=', $dates[0]->fecha)
-            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Excede intentos de NIP','Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $banorte)
             ->whereNotIn('user_id', $prosa)
             ->whereNotIn('user_id', $noMore)
@@ -128,7 +132,7 @@ class CellersBillingUsersController extends Controller
 
         $users = Repscellers::select('user_id as id')
             ->where('fecha', 'like', $date)
-            ->whereIn('detalle_mensaje', ['Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Excede limite de disposiciones diarias','Excede intentos de NIP','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $query)
             ->get();
 

@@ -30,12 +30,14 @@ class Repscellers extends Model
         return $this->select('user_id as id')
             ->where('fecha', '>=', $dates[3]->fecha)
             ->whereNotIn('detalle_mensaje', [
+                'Excede intentos de NIP',
                 'Ingrese un monto menor',
                 'Fondos insuficientes',
                 'Supera el monto límite permitido',
                 'Límite diario excedido',
                 'Imposible autorizar en este momento',
-                'Excede limite de disposicion diaria'
+                'Excede limite de disposicion diaria',
+                'Excede limite de disposiciones diarias',
             ])
             ->get();
     }

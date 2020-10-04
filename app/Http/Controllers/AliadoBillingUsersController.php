@@ -72,7 +72,7 @@ class AliadoBillingUsersController extends Controller
 
         $users = Repsaliado::select('user_id')
             ->where([['fecha', '=', $dates[0]->fecha], ['source_file', 'like', '%3918']])
-            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Excede intentos de NIP','Excede limite de disposicion diaria','Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $banorte)
             ->whereNotIn('user_id', $prosa)
             ->whereNotIn('user_id', $noMore)
@@ -115,7 +115,7 @@ class AliadoBillingUsersController extends Controller
 
         $users = Repsaliado::select('user_id as id')
             ->where([['fecha', 'like', $dates[0]->fecha],['source_file', 'like', '%0897']])
-            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Excede intentos de NIP','Excede limite de disposicion diaria','Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $query)
             ->whereNotIn('user_id', $query2)
             ->get();
@@ -156,7 +156,7 @@ class AliadoBillingUsersController extends Controller
 
         $users = RespuestasBanorteAliado::select('user_id as id')
             ->where('fecha', 'like', $dates[0]->fecha)
-            ->whereIn('detalle_mensaje', ['Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
+            ->whereIn('detalle_mensaje', ['Excede intentos de NIP','Excede limite de disposicion diaria','Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $query)
             ->whereNotIn('user_id', $query2)
             ->get();

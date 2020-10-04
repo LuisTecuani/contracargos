@@ -36,7 +36,6 @@ class FindUserControllerTest extends TestCase
     public function show_method_can_find_data_from_an_aliado_user()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user = factory(AliadoUser::class)->create();
         $tdc = factory(UserTdcAliado::class)->create([
             'user_id' => $user->id
@@ -64,23 +63,8 @@ class FindUserControllerTest extends TestCase
                 $user->name,
                 $user->cancelled_at,
                 $user->created_at,
-                $tdc->number,
-                $chargeBanorte->fecha,
                 '2',
-            ]);
-
-        $this->post('/find_user/show', [
-            'email' => $user->email,
-            'platform' => 'aliado'
-        ])->assertSeeTextInOrder([
-                $user->id,
-                $user->email,
-                $user->name,
-                $user->cancelled_at,
-                $user->created_at,
-                $tdc->number,
                 $chargeBanorte->fecha,
-                '2',
             ]);
     }
 
@@ -88,7 +72,6 @@ class FindUserControllerTest extends TestCase
     public function show_method_can_find_data_from_a_mediakey_user()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user = factory(MediakeyUser::class)->create();
         $tdc = factory(UserTdcMediakey::class)->create([
             'user_id' => $user->id
@@ -116,31 +99,15 @@ class FindUserControllerTest extends TestCase
                 $user->name,
                 $user->cancelled_at,
                 $user->created_at,
-                $tdc->number,
-                $chargeBanorte->fecha,
                 '2',
+                $chargeBanorte->fecha,
             ]);
-
-        $this->post('/find_user/show', [
-            'email' => $user->email,
-            'platform' => 'mediakey'
-        ])->assertSeeTextInOrder([
-            $user->id,
-            $user->email,
-            $user->name,
-            $user->cancelled_at,
-            $user->created_at,
-            $tdc->number,
-            $chargeBanorte->fecha,
-            '2',
-        ]);
     }
 
     /** @test */
     public function show_method_can_find_data_from_a_cellers_user()
     {
         $this->signIn();
-        $this->withoutExceptionHandling();
         $user = factory(CellersUser::class)->create();
         $tdc = factory(UserTdcCellers::class)->create([
             'user_id' => $user->id
@@ -168,23 +135,8 @@ class FindUserControllerTest extends TestCase
                 $user->name,
                 $user->cancelled_at,
                 $user->created_at,
-                $tdc->number,
-                $chargeBanorte->fecha,
                 '2',
+                $chargeBanorte->fecha,
             ]);
-
-        $this->post('/find_user/show', [
-            'email' => $user->email,
-            'platform' => 'cellers'
-        ])->assertSeeTextInOrder([
-            $user->id,
-            $user->email,
-            $user->name,
-            $user->cancelled_at,
-            $user->created_at,
-            $tdc->number,
-            $chargeBanorte->fecha,
-            '2',
-        ]);
     }
 }

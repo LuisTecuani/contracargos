@@ -12,7 +12,7 @@
                 @include('cellers._navLinks')
                 <div class="col">
                     Añade los usuarios con contracargos de hoy.
-                    <form action="{{ route('aliadoBlacklist.storeChargedback') }}" method="POST">
+                    <form action="{{ route('cellersBlacklist.storeChargedback') }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-success">Añadir</button>
                     </form>

@@ -6,5 +6,8 @@
         <li class="nav-item pt-2">
             <a href="/find_user" class="btn btn-outline-success">Busqueda de usuarios</a>
         </li>
+        <li class="nav-item pt-2">
+            <a href="/tdc_verification" class="btn btn-outline-success">Verificacion de tarjetas</a>
+        </li>
     </ul>
 </div>

@@ -81,8 +81,10 @@ Route::post('/cellers/billing_users/storeRejectedProsa', 'CellersBillingUsersCon
 Route::post('/cellers/billing_users/storeToBanorte', 'CellersBillingUsersController@storeToBanorte')->name('cellers.billing_users.storeToBanorte');
 Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersController@storeTextbox')->name('cellers.billing_users.storeTextbox');
 
-
-Route::get('/cellers/blacklist', 'CellersBlacklistController@index')->name('cellers.blacklist.index');
+Route::get('cellers/paycyps', 'CellersPaycypsController@index')->name('cellers.paycyps');
+Route::post('/cellers/paycyps/storeCsv', 'CellersPaycypsBillingController@storeCsv')->name('cellers.paycyps.storeCsv');
+Route::post('/cellers/paycyps/update', 'CellersPaycypsBillingController@update')->name('cellers.paycyps.update');
+Route::post('/cellers/paycyps/chargeback/store', 'CellersPaycypsChargebackController@store')->name('cellers.paycyps.chargebackStore');
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +122,24 @@ Route::post('/aliado/billing_users/storeToBanorte', 'AliadoBillingUsersControlle
 Route::post('/aliado/billing_users/storeTo3918', 'AliadoBillingUsersController@storeTo3918')->name('aliado.billing_users.storeTo3918');
 Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
 
+Route::get('aliado/paycyps', 'AliadoPaycypsController@index')->name('aliado.paycyps');
+Route::post('/aliado/paycyps/storeCsv', 'AliadoPaycypsBillingController@storeCsv')->name('aliado.paycyps.storeCsv');
+Route::post('/aliado/paycyps/update', 'AliadoPaycypsBillingController@update')->name('aliado.paycyps.update');
+Route::post('/aliado/paycyps/chargeback/store', 'AliadoPaycypsChargebackController@store')->name('aliado.paycyps.chargebackStore');
+
+/*
+|--------------------------------------------------------------------------
+| Urbano Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('urbano/paycyps', 'UrbanoPaycypsController@index')->name('urbano.paycyps');
+Route::post('/urbano/paycyps/storeCsv', 'UrbanoPaycypsBillingController@storeCsv')->name('urbano.paycyps.storeCsv');
+Route::post('/urbano/paycyps/update', 'UrbanoPaycypsBillingController@update')->name('urbano.paycyps.update');
+Route::post('/urbano/paycyps/chargeback/store', 'UrbanoPaycypsChargebackController@store')->name('urbano.paycyps.chargebackStore');
+
+
 /*
 |--------------------------------------------------------------------------
 | Sanborns Routes
@@ -156,3 +176,7 @@ Route::get('/find_user', 'FindUserController@index')->name('find_user.index');
 Route::post('/find_user/show', 'FindUserController@show')->name('find_user.show');
 
 Route::post('/email/chargeback', 'EmailController@chargeback')->name('email.chargeback');
+
+Route::get('/tdc_verification', 'TdcVerificationController@index')->name('tdc_verification.index');
+Route::post('/tdc_verification/show', 'TdcVerificationController@show')->name('tdc_verification.show');
+

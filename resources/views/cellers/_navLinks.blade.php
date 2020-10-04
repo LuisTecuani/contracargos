@@ -7,6 +7,9 @@
             <a href="/cellers/file_making" class="btn btn-outline-success">Creacion de files para cobro Cellers</a>
         </li>
         <li class="nav-item pt-2">
+            <a href="/cellers/paycyps" class="btn btn-outline-success">Cellers Paycyps</a>
+        </li>
+        <li class="nav-item pt-2">
             <a href="/cellers/blacklist" class="btn btn-outline-success">Añadir emails a la Blacklist</a>
         </li>
         <li class="nav-item pt-2">

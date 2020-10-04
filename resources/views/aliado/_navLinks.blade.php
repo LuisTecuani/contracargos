@@ -12,5 +12,8 @@
         <li class="nav-item pt-2">
             <a href="/aliado/responses" class="btn btn-outline-success">Procesamiento de files de respuestas de cobro</a>
         </li>
+        <li class="nav-item pt-2">
+            <a href="/aliado/paycyps" class="btn btn-outline-success">Aliado Paycyps</a>
+        </li>
     </ul>
 </div>

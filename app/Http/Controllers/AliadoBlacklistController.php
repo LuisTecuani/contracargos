@@ -30,6 +30,9 @@ class AliadoBlacklistController extends Controller
                 $bList->email = $email;
                 $bList->user_id = $user->id ?? null;
                 $bList->save();
+            } else {
+                $exist->updated_at = now();
+                $exist->save();
             }
         }
         Session()->flash('message', 'Datos Registrados');
@@ -57,6 +60,9 @@ class AliadoBlacklistController extends Controller
                 $bList->email = $row->email;
                 $bList->user_id = $row->user_id ?? null;
                 $bList->save();
+            } else {
+                $exist->updated_at = now();
+                $exist->save();
             }
         }
         return back();
