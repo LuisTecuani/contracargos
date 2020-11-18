@@ -10,6 +10,9 @@
             <a href="/urbano/paycyps" class="btn btn-outline-success">Urbano Paycyps</a>
         </li>
         <li class="nav-item pt-2">
+            <a href="/urbano/affinitas" class="btn btn-outline-success">Urbano Affinitas</a>
+        </li>
+        <li class="nav-item pt-2">
             <a href="/urbano/blacklist" class="btn btn-outline-success">Añadir emails a la Blacklist</a>
         </li>
         <li class="nav-item pt-2">

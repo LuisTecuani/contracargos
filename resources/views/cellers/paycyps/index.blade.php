@@ -19,8 +19,12 @@
                                     Importa files .CSV de cobro Paycyps
                                 </div>
                                 <div class="card-body">
-                                    <input type="file" multiple="true" name="files[]" accept=".csv"
-                                           class="btn btn-secondary btn-lg btn-block">
+                                    <input type="file" name="file" accept=".csv" class="btn btn-secondary btn-lg btn-block">
+                                    <br>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="folio" name="folio"
+                                               placeholder="Ingresa el folio de procesamiento de paycips" required>
+                                    </div>
                                     <br>
                                     <button class="btn btn-outline-primary">Import Data</button>
                                 </div>
@@ -77,6 +81,27 @@
                         </div>
                     </form>
 
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card bg-light mt-2">
+                    <form method="POST" action="{{ route('cellers.paycypsHistoric.store') }}"
+                          enctype="multipart/form-data">
+                        @csrf
+                        <div class="card bg-light mt-2">
+                            <div class="card-header">
+                                Importa files .CSV del historico de cobros Paycyps
+                            </div>
+                            <div class="card-body">
+                                <input type="file" multiple="true" name="files[]" accept=".csv"
+                                       class="btn btn-secondary btn-lg btn-block">
+                                <br>
+                                <button class="btn btn-outline-primary">Import Data</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

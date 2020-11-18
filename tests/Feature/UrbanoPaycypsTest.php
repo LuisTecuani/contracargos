@@ -61,7 +61,6 @@ class UrbanoPaycypsTest extends TestCase
     /** @test */
     public function can_import_users_from_csv_to_urbano_paycyps_bills()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $file = UploadedFile::createFromBase(
             (new UpFile(
@@ -75,7 +74,8 @@ class UrbanoPaycypsTest extends TestCase
         );
 
         $this->post('/urbano/paycyps/storeCsv', [
-            'files' => [$file,$file],
+            'file' => $file,
+            'folio' => 11
         ]);
 
         $this->assertDatabaseHas('urbano_paycyps_bills', [
@@ -83,6 +83,7 @@ class UrbanoPaycypsTest extends TestCase
             'tdc' => '5180049017032192',
             'amount' => 7900,
             'bill_day' => 14,
+            'paycyps_id' => '11_2',
             'file_name' => 'urbano-paycyps-2020-07-13.csv',
         ]);
         $this->assertEquals(5, UrbanoPaycypsBill::all()->count());

@@ -157,5 +157,6 @@ $factory->define(AliadoPaycypsBill::class, function (Faker $faker) {
         'amount' => 9000,
         'bill_day' => $faker->dayOfMonth,
         'file_name' => 'fake-file-name',
+        'paycyps_id' => '12_'.$faker->randomNumber(3),
     ];
 });

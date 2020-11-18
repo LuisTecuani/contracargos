@@ -156,9 +156,10 @@ $factory->define(CellersCancellation::class, function (Faker $faker) {
 $factory->define(CellersPaycypsBill::class, function (Faker $faker) {
     return [
         'user_id' => CellersUser::class,
-'tdc' => $faker->creditCardNumber,
-'amount' => 9000,
-'bill_day' => $faker->dayOfMonth,
-'file_name' => 'fake-file-name',
+        'tdc' => $faker->creditCardNumber,
+        'amount' => 9000,
+        'bill_day' => $faker->dayOfMonth,
+        'file_name' => 'fake-file-name',
+        'paycyps_id' => '12_'.$faker->randomNumber(3),
     ];
 });

@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\UrbanoAffinitas;
 use App\UrbanoBillingUsers;
 use App\UrbanoBlacklist;
 use App\UrbanoCancelAccountAnswer;
@@ -157,5 +158,15 @@ $factory->define(UrbanoPaycypsBill::class, function (Faker $faker) {
         'amount' => 9000,
         'bill_day' => $faker->dayOfMonth,
         'file_name' => 'fake-file-name',
+        'paycyps_id' => '12_'.$faker->randomNumber(3),
+    ];
+});
+
+$factory->define(UrbanoAffinitas::class, function (Faker $faker) {
+    return [
+        'user_id' => UrbanoUser::class,
+        'tdc' => $faker->creditCardNumber,
+        'amount' => 9000,
+        'bill_day' => $faker->dayOfMonth,
     ];
 });

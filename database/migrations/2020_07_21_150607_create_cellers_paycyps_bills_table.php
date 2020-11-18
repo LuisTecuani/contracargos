@@ -20,6 +20,7 @@ class CreateCellersPaycypsBillsTable extends Migration
             $table->integer('amount');
             $table->integer('bill_day');
             $table->string('file_name');
+            $table->string('paycyps_id');
             $table->date('billing_confirmation_date')->nullable();
             $table->timestamps();
         });

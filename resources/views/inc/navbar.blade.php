@@ -23,6 +23,9 @@
                         <a href="{{route('mediakey.index')}}" class="nav-link">Mediakey</a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{route('urbano.index')}}" class="nav-link">Urbano</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{route('sanbornscobro.index')}}" class="nav-link">Sanborns</a>
                     </li>
                     <li class="nav-item">

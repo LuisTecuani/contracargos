@@ -19,8 +19,12 @@
                                     Importa files .CSV de cobro Paycyps
                                 </div>
                                 <div class="card-body">
-                                    <input type="file" multiple="true" name="files[]" accept=".csv"
-                                           class="btn btn-secondary btn-lg btn-block">
+                                    <input type="file" name="file" accept=".csv" class="btn btn-secondary btn-lg btn-block">
+                                    <br>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="folio" name="folio"
+                                               placeholder="Ingresa el folio de procesamiento de paycips" required>
+                                    </div>
                                     <br>
                                     <button class="btn btn-outline-primary">Import Data</button>
                                 </div>
@@ -80,5 +84,30 @@
                 </div>
             </div>
         </div>
+            <div class="row">
+                <div class="col-md-7  bg-light mt-2">
+                    <form method="POST" action="{{ route('urbano.affinitas.chargebackStore') }}">
+                        <div class="card-header">
+                            Importa contracargos AFFINITAS, inserta numeros de tarjeta para buscar.
+                        </div>
+                        @csrf
+                        <div class="form-group">
+                            <textarea class="w-100" name="cards" id="cards" pattern="\d"
+                                      title="escribe tarjetas listas para buscar con 'like'.
+               e.g. 223324&2345"
+                                      rows="10" placeholder="tarjetas"
+                                      required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="chargeback_date" name="chargeback_date"
+                                   placeholder="Ingresa la fecha del contracargo" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-primary">Registrar</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
     </div>
 @endsection

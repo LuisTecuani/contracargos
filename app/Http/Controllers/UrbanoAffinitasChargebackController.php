@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\AliadoPaycypsBill;
-use App\ContracargosAliadoPaycyps;
+use App\UrbanoAffinitas;
+use App\ContracargosUrbanoAffinitas;
 use Illuminate\Http\Request;
 
-class AliadoPaycypsChargebackController extends Controller
+class UrbanoAffinitasChargebackController extends Controller
 {
     public function store(Request $request)
     {
@@ -16,13 +16,11 @@ class AliadoPaycypsChargebackController extends Controller
 
         foreach ($cards as $card) {
 
-            $cargo = AliadoPaycypsBill::where('tdc','like', $card)->get();
-
+            $cargo = UrbanoAffinitas::where('card_number','like', $card)->get();
             foreach ($cargo as $row) {
-                $Contracargos = new ContracargosAliadoPaycyps();
-                $Contracargos->user_id = $row->user_id;
-                $Contracargos->tdc = $row->tdc;
-                $Contracargos->file_name = $row->file_name;
+                $Contracargos = new ContracargosUrbanoAffinitas();
+                $Contracargos->email = $row->EMAIL;
+                $Contracargos->tdc = $row->CARD_NUMBER;
                 $Contracargos->chargeback_date = $chargebackDate;
                 $Contracargos->save();
             }

@@ -11,19 +11,18 @@ class CellersPaycypsBillingController extends Controller
 {
     public function storeCsv(Request $request)
     {
-        $files = $request->file('files');
+        $file = $request->file('file');
 
-        foreach ($files as $file) {
-            $fileName = $file->getClientOriginalName();
+        $fileName = $file->getClientOriginalName();
 
-            $saved = CellersPaycypsBill::where('file_name', 'like', $fileName)->get();
+        $saved = CellersPaycypsBill::where('file_name', 'like', $fileName)->get();
 
-            if (count($saved) === 0) {
-                $import = (new CellersPaycypsImport())->fromFile($fileName);
+        if (count($saved) === 0) {
+            $import = (new CellersPaycypsImport())->fromRequest($fileName, $request->folio);
 
-                Excel::import($import, $file);
-            }
+            Excel::import($import, $file);
         }
+
 
         return back();
     }

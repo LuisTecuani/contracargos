@@ -40,7 +40,8 @@ class BillingCellersPaycypsTest extends TestCase
         );
 
         $this->post('/cellers/paycyps/storeCsv', [
-            'files' => [$file,$file],
+            'file' => $file,
+            'folio' => 11
         ]);
 
         $this->assertDatabaseHas('cellers_paycyps_bills', [
@@ -48,6 +49,7 @@ class BillingCellersPaycypsTest extends TestCase
             'tdc' => '5180049017032192',
             'amount' => 9000,
             'bill_day' => 14,
+            'paycyps_id' => '11_2',
             'file_name' => 'cellers-paycyps-2020-07-13.csv',
         ]);
         $this->assertEquals(5, CellersPaycypsBill::all()->count());

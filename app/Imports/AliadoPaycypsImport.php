@@ -11,11 +11,14 @@ class AliadoPaycypsImport implements ToModel, WithHeadingRow
 {
     use Importable;
 
+    protected  $folio;
     protected $fileName;
+    private $rows = 0;
 
-    public function fromFile(string $fileName)
+    public function fromRequest(string $fileName, string $folio)
     {
         $this->fileName = $fileName;
+        $this->folio = $folio;
         return $this;
     }
 
@@ -26,11 +29,14 @@ class AliadoPaycypsImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+        ++$this->rows;
+
         return new AliadoPaycypsBill([
             'user_id' => $row['nombre'],
             'tdc' => $row['cuenta'],
             'amount' => $row['importe'] * 100,
             'bill_day' => $row['dia'],
+            'paycyps_id' => $this->folio.'_'.$this->rows,
             'file_name' => $this->fileName,
         ]);
     }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUrbanoPaycypsBillsTable extends Migration
+class CreateContracargosUrbanoAffinitasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateUrbanoPaycypsBillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('urbano_paycyps_bills', function (Blueprint $table) {
+        Schema::create('contracargos_urbano_affinitas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
+            $table->integer('email');
             $table->string('tdc');
-            $table->integer('amount');
-            $table->integer('bill_day');
-            $table->string('file_name');
-            $table->string('paycyps_id');
-            $table->date('billing_confirmation_date')->nullable();
+            $table->string('chargeback_date');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ class CreateUrbanoPaycypsBillsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('urbano_paycyps_bills');
+        Schema::dropIfExists('contracargos_urbano_affinitas');
     }
 }
