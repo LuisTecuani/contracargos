@@ -63,7 +63,7 @@ class AliadoPaycypsTest extends TestCase
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/aliado-paycyps-2020-07-13.csv',
-                'aliado-paycyps-2020-07-13.csv',
+                'aliado-payc    yps-2020-07-13.csv',
                 'text/csv',
                 20416,
                 null,

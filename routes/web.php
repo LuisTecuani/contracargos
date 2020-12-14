@@ -86,6 +86,7 @@ Route::post('/cellers/paycyps/storeCsv', 'CellersPaycypsBillingController@storeC
 Route::post('/cellers/paycyps/update', 'CellersPaycypsBillingController@update')->name('cellers.paycyps.update');
 Route::post('/cellers/paycyps/chargeback/store', 'CellersPaycypsChargebackController@store')->name('cellers.paycyps.chargebackStore');
 Route::post('/cellers/paycyps/historic/store', 'CellersPaycypsHistoricController@store')->name('cellers.paycypsHistoric.store');
+Route::post('/cellers/paycyps/historic/storeFolios', 'CellersPaycypsHistoricController@storeFolios')->name('cellers.paycypsHistoric.storeFolios');
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,7 @@ Route::post('/aliado/paycyps/storeCsv', 'AliadoPaycypsBillingController@storeCsv
 Route::post('/aliado/paycyps/update', 'AliadoPaycypsBillingController@update')->name('aliado.paycyps.update');
 Route::post('/aliado/paycyps/chargeback/store', 'AliadoPaycypsChargebackController@store')->name('aliado.paycyps.chargebackStore');
 Route::post('/aliado/paycyps/historic/store', 'AliadoPaycypsHistoricController@store')->name('aliado.paycypsHistoric.store');
+Route::post('/aliado/paycyps/historic/storeFolios', 'AliadoPaycypsHistoricController@storeFolios')->name('aliado.paycypsHistoric.storeFolios');
 /*
 |--------------------------------------------------------------------------
 | Urbano Routes
@@ -146,6 +148,8 @@ Route::post('/urbano/affinitas/chargeback/store', 'UrbanoAffinitasChargebackCont
 Route::get('urbano/affinitas', 'UrbanoAffinitasController@index')->name('urbano.affinitas');
 Route::post('/urbano/affinitas/store', 'UrbanoAffinitasBillingController@store')->name('urbano.affinitas.store');
 Route::post('/urbano/affinitas/historic/store', 'UrbanoAffinitasHistoricController@store')->name('urbano.affinitasHistoric.store');
+Route::post('/urbano/paycyps/historic/store', 'UrbanoPaycypsHistoricController@store')->name('urbano.paycypsHistoric.store');
+Route::post('/urbano/paycyps/historic/storeFolios', 'UrbanoPaycypsHistoricController@storeFolios')->name('urbano.paycypsHistoric.storeFolios');
 
 /*
 |--------------------------------------------------------------------------

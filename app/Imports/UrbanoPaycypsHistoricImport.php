@@ -2,14 +2,14 @@
 
 namespace App\Imports;
 
-use App\CellersPaycypsBill;
-use App\CellersPaycypsHistoric;
+use App\UrbanoPaycypsBill;
+use App\UrbanoPaycypsHistoric;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CellersPaycypsHistoricImport implements ToModel, WithHeadingRow
+class UrbanoPaycypsHistoricImport implements ToModel, WithHeadingRow
 {
     use Importable;
 
@@ -30,20 +30,20 @@ class CellersPaycypsHistoricImport implements ToModel, WithHeadingRow
     {
         preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $row['fecha_operacion'], $d);
         $part = explode('/', $d[1]);
-        $tarjeta = str_replace('*', '',str_replace(' ','',$row['tarjeta']));
+        $tarjeta = str_replace('*', '', str_replace(' ', '', $row['tarjeta']));
         $ref2 = $row['ref2'];
 
         if (!$row['ref3']) {
-            $row['ref3'] = CellersPaycypsBill::select('paycyps_id')
+            $row['ref3'] = UrbanoPaycypsBill::select('paycyps_id')
                     ->whereRaw("right(tdc, 4) = right($tarjeta, 4)")
                     ->whereRaw("left(tdc, 6) = left($tarjeta, 6)")
                     ->whereRaw("$ref2 = substr(paycyps_id, 4)")
                     ->first()->paycyps_id ?? null;
         }
 
-        return new CellersPaycypsHistoric([
+        return new UrbanoPaycypsHistoric([
             'folio' => $row['folio'],
-            'fecha_operacion' => $part[2].'-'.$part[1].'-'.$part[0].' '.$d[2],
+            'fecha_operacion' => $part[2] . '-' . $part[1] . '-' . $part[0] . ' ' . $d[2],
             'fecha_liq' => Carbon::createFromFormat('d/m/Y', $row['fecha_liq'])->format('Y-m-d'),
             'tarjeta' => $tarjeta,
             'banco' => $row['banco'],

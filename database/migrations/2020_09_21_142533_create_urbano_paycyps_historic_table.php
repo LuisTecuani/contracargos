@@ -13,10 +13,10 @@ class CreateUrbanoPaycypsHistoricTable extends Migration
      */
     public function up()
     {
-        Schema::create('urbano_paycyps_historic', function (Blueprint $table) {
+        Schema::create('urbano_paycyps_historics', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('Folio')->nullable();
-            $table->string('Fecha_Operación')->nullable();
+            $table->string('Fecha_Operacion')->nullable();
             $table->string('Fecha_Liq')->nullable();
             $table->string('Tarjeta')->nullable();
             $table->string('Banco')->nullable();
@@ -24,10 +24,10 @@ class CreateUrbanoPaycypsHistoricTable extends Migration
             $table->string('Importe_Venta')->nullable();
             $table->string('Importe_Original')->nullable();
             $table->string('Divisa')->nullable();
-            $table->string('Comisión_Cobrada')->nullable();
+            $table->string('Comision_Cobrada')->nullable();
             $table->string('Costo')->nullable();
-            $table->string('Autorización')->nullable();
-            $table->string('Tipo_Operación')->nullable();
+            $table->string('Autorizacion')->nullable();
+            $table->string('Tipo_Operacion')->nullable();
             $table->string('Tipo_Bin')->nullable();
             $table->string('Terminal')->nullable();
             $table->string('Comercio')->nullable();
@@ -35,8 +35,8 @@ class CreateUrbanoPaycypsHistoricTable extends Migration
             $table->string('Ref3')->nullable();
             $table->string('Ref4')->nullable();
             $table->string('Ticket')->nullable();
-            $table->string('Código_Respuesta')->nullable();
-            $table->string('Descripción')->nullable();
+            $table->string('Codigo_Respuesta')->nullable();
+            $table->string('Descripcion')->nullable();
             $table->string('file_name');
             $table->timestamps();
         });
@@ -49,6 +49,6 @@ class CreateUrbanoPaycypsHistoricTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('urbano_paycyps_historic');
+        Schema::dropIfExists('urbano_paycyps_historics');
     }
 }

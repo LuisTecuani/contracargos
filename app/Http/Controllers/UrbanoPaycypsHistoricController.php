@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\CellersPaycypsHistoric;
-use App\Imports\CellersPaycypsHistoricFoliosImport;
-use App\Imports\CellersPaycypsHistoricImport;
+use App\Imports\UrbanoPaycypsHistoricFoliosImport;
+use App\UrbanoPaycypsHistoric;
+use App\Imports\UrbanoPaycypsHistoricImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CellersPaycypsHistoricController extends Controller
+class UrbanoPaycypsHistoricController extends Controller
 {
     public function store(Request $request)
     {
@@ -20,10 +20,10 @@ class CellersPaycypsHistoricController extends Controller
         foreach ($files as $file) {
             $fileName = $file->getClientOriginalName();
 
-            $saved = CellersPaycypsHistoric::where('file_name', 'like', $fileName)->get();
+            $saved = UrbanoPaycypsHistoric::where('file_name', 'like', $fileName)->get();
 
             if (count($saved) === 0) {
-                $import = (new CellersPaycypsHistoricImport())->fromFile($fileName);
+                $import = (new UrbanoPaycypsHistoricImport())->fromFile($fileName);
 
                 Excel::import($import, $file);
             }
@@ -40,12 +40,12 @@ class CellersPaycypsHistoricController extends Controller
 
         foreach ($files as $file) {
             $fileName = $file->getClientOriginalName();
-            $saved = CellersPaycypsHistoric::where('file_name', 'like', $fileName)->get();
+            $saved = UrbanoPaycypsHistoric::where('file_name', 'like', $fileName)->get();
 
             if (count($saved) === 0) {
 
                 if (Str::contains($fileName, 'liq')) {
-                    $import = (new CellersPaycypsHistoricFoliosImport())->fromFile($fileName);
+                    $import = (new UrbanoPaycypsHistoricFoliosImport())->fromFile($fileName);
 
                     Excel::import($import, $file);
                 }
