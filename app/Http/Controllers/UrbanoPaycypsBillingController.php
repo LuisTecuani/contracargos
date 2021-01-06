@@ -30,14 +30,14 @@ class UrbanoPaycypsBillingController extends Controller
     {
         $cards = preg_split("[\r\n]",$request->input('cards'));
 
-        $billingConfirmationDate = $request->bill_date;
+        $deletedAt = $request->deleted_at;
 
         foreach ($cards as $card) {
 
             $entry = UrbanoPaycypsBill::where('tdc','like', $card)->get();
 
             foreach ($entry as $row) {
-                $row->billing_confirmation_date = $billingConfirmationDate;
+                $row->deleted_at = $deletedAt;
                 $row->save();
             }
         }
