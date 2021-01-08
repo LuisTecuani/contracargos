@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\feature\Controllers;
+namespace Tests\Feature;
 
 use App\AliadoPaycypsBill;
 use Illuminate\Http\UploadedFile;
@@ -63,7 +63,7 @@ class AliadoPaycypsTest extends TestCase
         $file = UploadedFile::createFromBase(
             (new UpFile(
                 __DIR__ . '/files/aliado-paycyps-2020-07-13.csv',
-                'aliado-payc    yps-2020-07-13.csv',
+                'aliado-paycyps-2020-07-13.csv',
                 'text/csv',
                 20416,
                 null,
@@ -89,9 +89,8 @@ class AliadoPaycypsTest extends TestCase
 
 
     /** @test */
-    public function a_user_can_update_bill_confirmation_date_on_aliado_paycyps_bills()
+    public function a_user_can_update_deleted_at_on_aliado_paycyps_bills()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $charge1 = factory(AliadoPaycypsBill::class)->create([
             'tdc' => '5432161111110552',
@@ -105,20 +104,20 @@ class AliadoPaycypsTest extends TestCase
 
         $this->post('/aliado/paycyps/update', [
             'cards' => "543216%0552\r\n456789%6789",
-            'bill_date' => '2020-06-22'
+            'deleted_at' => '2020-06-22'
         ]);
 
         $this->assertDatabaseHas('aliado_paycyps_bills', [
             'tdc' => $charge1->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseMissing('aliado_paycyps_bills', [
             'tdc' => $charge2->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseHas('aliado_paycyps_bills', [
             'tdc' => $charge3->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
     }
 }

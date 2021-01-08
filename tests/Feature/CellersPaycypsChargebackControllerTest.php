@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\feature\Controllers;
+namespace Tests\Feature;
 
 use App\CellersPaycypsBill;
 use Tests\TestCase;

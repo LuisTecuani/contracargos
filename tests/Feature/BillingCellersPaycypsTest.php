@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\CellersPaycypsBill;
-use App\ContracargosCellersPaycyps;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
@@ -56,7 +55,7 @@ class BillingCellersPaycypsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_update_bill_confirmation_date_on_cellers_paycyps_bills()
+    public function a_user_can_update_deleted_at_on_cellers_paycyps_bills()
     {
         $this->withoutExceptionHandling();
         $this->signIn();
@@ -72,20 +71,20 @@ class BillingCellersPaycypsTest extends TestCase
 
         $this->post('/cellers/paycyps/update', [
             'cards' => "543216%0552\r\n456789%6789",
-            'bill_date' => '2020-06-22'
+            'deleted_at' => '2020-06-22'
         ]);
 
         $this->assertDatabaseHas('cellers_paycyps_bills', [
             'tdc' => $charge1->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseMissing('cellers_paycyps_bills', [
             'tdc' => $charge2->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseHas('cellers_paycyps_bills', [
             'tdc' => $charge3->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
     }
 }

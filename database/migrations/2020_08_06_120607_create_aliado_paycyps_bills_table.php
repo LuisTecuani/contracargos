@@ -21,7 +21,7 @@ class CreateAliadoPaycypsBillsTable extends Migration
             $table->integer('bill_day');
             $table->string('file_name');
             $table->string('paycyps_id');
-            $table->date('billing_confirmation_date')->nullable();
+            $table->date('deleted_at')->nullable();
             $table->timestamps();
         });
     }

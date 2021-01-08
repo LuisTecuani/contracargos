@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\feature\Controllers;
+namespace Tests\Feature;
 
 use App\UrbanoPaycypsBill;
 use Illuminate\Http\UploadedFile;
@@ -16,7 +16,6 @@ class UrbanoPaycypsTest extends TestCase
     /** @test */
     public function method_store_persist_data_on_contracargos_table()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $charge1 = factory(UrbanoPaycypsBill::class)->create([
             'tdc' => '5432161111110552',
@@ -49,7 +48,6 @@ class UrbanoPaycypsTest extends TestCase
     /** @test */
     public function admins_can_browse_to_the_index_page()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
 
         $this->get('/urbano/paycyps')
@@ -91,7 +89,7 @@ class UrbanoPaycypsTest extends TestCase
 
 
     /** @test */
-    public function a_user_can_update_bill_confirmation_date_on_urbano_paycyps_bills()
+    public function a_user_can_update_deleted_at_on_urbano_paycyps_bills()
     {
         $this->withoutExceptionHandling();
         $this->signIn();
@@ -107,20 +105,20 @@ class UrbanoPaycypsTest extends TestCase
 
         $this->post('/urbano/paycyps/update', [
             'cards' => "543216%0552\r\n456789%6789",
-            'bill_date' => '2020-06-22'
+            'deleted_at' => '2020-06-22'
         ]);
 
         $this->assertDatabaseHas('urbano_paycyps_bills', [
             'tdc' => $charge1->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseMissing('urbano_paycyps_bills', [
             'tdc' => $charge2->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
         $this->assertDatabaseHas('urbano_paycyps_bills', [
             'tdc' => $charge3->tdc,
-            'billing_confirmation_date' => '2020-06-22',
+            'deleted_at' => '2020-06-22',
         ]);
     }
 }
