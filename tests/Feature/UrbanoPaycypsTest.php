@@ -121,4 +121,46 @@ class UrbanoPaycypsTest extends TestCase
             'deleted_at' => '2020-06-22',
         ]);
     }
+
+    /** @test */
+    public function a_user_can_update_deleted_at_with_file_on_urbano_paycyps_bills()
+    {
+        $this->signIn();
+        $charge1 = factory(UrbanoPaycypsBill::class)->create([
+            'tdc' => '5491380215318495',
+        ]);
+        $charge2 = factory(UrbanoPaycypsBill::class)->create([
+            'tdc' => '5432109876543210',
+        ]);
+        $charge3 = factory(UrbanoPaycypsBill::class)->create([
+            'tdc' => '4213169304175266',
+        ]);
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/urbano-paycips-bajas-2021-02-22.csv',
+                'urbano-paycips-bajas-2021-02-22.csv',
+                'text/csv',
+                20416,
+                null,
+                true
+            ))
+        );
+
+        $this->post('/urbano/paycyps/updateCsv', [
+            'file' => $file,
+        ]);
+
+        $this->assertDatabaseHas('urbano_paycyps_bills', [
+            'tdc' => $charge1->tdc,
+            'deleted_at' => '2021-02-22',
+        ]);
+        $this->assertDatabaseMissing('urbano_paycyps_bills', [
+            'tdc' => $charge2->tdc,
+            'deleted_at' => '2021-02-22',
+        ]);
+        $this->assertDatabaseHas('urbano_paycyps_bills', [
+            'tdc' => $charge3->tdc,
+            'deleted_at' => '2021-02-22',
+        ]);
+    }
 }

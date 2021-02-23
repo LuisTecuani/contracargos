@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AliadoPaycypsBillsUpdate;
+use App\Imports\UrbanoPaycypsBillsUpdate;
 use App\UrbanoPaycypsBill;
 use App\Imports\UrbanoPaycypsImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UrbanoPaycypsBillingController extends Controller
@@ -41,6 +44,22 @@ class UrbanoPaycypsBillingController extends Controller
                 $row->save();
             }
         }
+        return back();
+    }
+
+    public function updateCsv(Request $request)
+    {
+        $file = $request->file('file');
+
+        $fileName = $file->getClientOriginalName();
+
+        $deletedAt = Str::replaceFirst('urbano-paycips-bajas-', '', Str::before($fileName, '.'));
+
+        $import = (new UrbanoPaycypsBillsUpdate())->fromRequest($fileName, $deletedAt);
+
+        Excel::import($import, $file);
+
+
         return back();
     }
 }

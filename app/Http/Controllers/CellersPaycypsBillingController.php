@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CellersPaycypsBill;
+use App\Imports\CellersPaycypsBillsUpdate;
 use App\Imports\CellersPaycypsImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CellersPaycypsBillingController extends Controller
@@ -41,6 +43,22 @@ class CellersPaycypsBillingController extends Controller
                 $row->save();
             }
         }
+        return back();
+    }
+
+    public function updateCsv(Request $request)
+    {
+        $file = $request->file('file');
+
+        $fileName = $file->getClientOriginalName();
+
+        $deletedAt = Str::replaceFirst('cellers-paycips-bajas-', '', Str::before($fileName, '.'));
+
+        $import = (new CellersPaycypsBillsUpdate())->fromRequest($fileName, $deletedAt);
+
+        Excel::import($import, $file);
+
+
         return back();
     }
 }

@@ -89,7 +89,7 @@ class AliadoPaycypsTest extends TestCase
 
 
     /** @test */
-    public function a_user_can_update_deleted_at_on_aliado_paycyps_bills()
+    public function a_user_can_update_deleted_at_with_card_number_on_aliado_paycyps_bills()
     {
         $this->signIn();
         $charge1 = factory(AliadoPaycypsBill::class)->create([
@@ -118,6 +118,48 @@ class AliadoPaycypsTest extends TestCase
         $this->assertDatabaseHas('aliado_paycyps_bills', [
             'tdc' => $charge3->tdc,
             'deleted_at' => '2020-06-22',
+        ]);
+    }
+
+    /** @test */
+    public function a_user_can_update_deleted_at_with_file_on_aliado_paycyps_bills()
+    {
+        $this->signIn();
+        $charge1 = factory(AliadoPaycypsBill::class)->create([
+            'tdc' => '5432161111110552',
+        ]);
+        $charge2 = factory(AliadoPaycypsBill::class)->create([
+            'tdc' => '5432109876543210',
+        ]);
+        $charge3 = factory(AliadoPaycypsBill::class)->create([
+            'tdc' => '4567890123456789',
+        ]);
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/aliado-paycips-bajas-2021-02-22.csv',
+                'aliado-paycips-bajas-2021-02-22.csv',
+                'text/csv',
+                20416,
+                null,
+                true
+            ))
+        );
+
+        $this->post('/aliado/paycyps/updateCsv', [
+            'file' => $file,
+        ]);
+
+        $this->assertDatabaseHas('aliado_paycyps_bills', [
+            'tdc' => $charge1->tdc,
+            'deleted_at' => '2021-02-22',
+        ]);
+        $this->assertDatabaseMissing('aliado_paycyps_bills', [
+            'tdc' => $charge2->tdc,
+            'deleted_at' => '2021-02-22',
+        ]);
+        $this->assertDatabaseHas('aliado_paycyps_bills', [
+            'tdc' => $charge3->tdc,
+            'deleted_at' => '2021-02-22',
         ]);
     }
 }

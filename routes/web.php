@@ -83,6 +83,7 @@ Route::post('/cellers/billing_users/storeTextbox', 'CellersBillingUsersControlle
 
 Route::get('cellers/paycyps', 'CellersPaycypsController@index')->name('cellers.paycyps');
 Route::post('/cellers/paycyps/storeCsv', 'CellersPaycypsBillingController@storeCsv')->name('cellers.paycyps.storeCsv');
+Route::post('/cellers/paycyps/updateCsv', 'CellersPaycypsBillingController@updateCsv')->name('cellers.paycyps.updateCsv');
 Route::post('/cellers/paycyps/update', 'CellersPaycypsBillingController@update')->name('cellers.paycyps.update');
 Route::post('/cellers/paycyps/chargeback/store', 'CellersPaycypsChargebackController@store')->name('cellers.paycyps.chargebackStore');
 Route::post('/cellers/paycyps/historic/store', 'CellersPaycypsHistoricController@store')->name('cellers.paycypsHistoric.store');
@@ -126,6 +127,7 @@ Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@
 
 Route::get('aliado/paycyps', 'AliadoPaycypsController@index')->name('aliado.paycyps');
 Route::post('/aliado/paycyps/storeCsv', 'AliadoPaycypsBillingController@storeCsv')->name('aliado.paycyps.storeCsv');
+Route::post('/aliado/paycyps/updateCsv', 'AliadoPaycypsBillingController@updateCsv')->name('aliado.paycyps.updateCsv');
 Route::post('/aliado/paycyps/update', 'AliadoPaycypsBillingController@update')->name('aliado.paycyps.update');
 Route::post('/aliado/paycyps/chargeback/store', 'AliadoPaycypsChargebackController@store')->name('aliado.paycyps.chargebackStore');
 Route::post('/aliado/paycyps/historic/store', 'AliadoPaycypsHistoricController@store')->name('aliado.paycypsHistoric.store');
@@ -141,6 +143,7 @@ Route::get('/urbano', 'UrbanoController@index')->name('urbano.index');
 
 Route::get('urbano/paycyps', 'UrbanoPaycypsController@index')->name('urbano.paycyps');
 Route::post('/urbano/paycyps/storeCsv', 'UrbanoPaycypsBillingController@storeCsv')->name('urbano.paycyps.storeCsv');
+Route::post('/urbano/paycyps/updateCsv', 'UrbanoPaycypsBillingController@updateCsv')->name('urbano.paycyps.updateCsv');
 Route::post('/urbano/paycyps/update', 'UrbanoPaycypsBillingController@update')->name('urbano.paycyps.update');
 Route::post('/urbano/paycyps/chargeback/store', 'UrbanoPaycypsChargebackController@store')->name('urbano.paycyps.chargebackStore');
 Route::post('/urbano/affinitas/chargeback/store', 'UrbanoAffinitasChargebackController@store')->name('urbano.affinitas.chargebackStore');
