@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" id="procedence" name="procedence"
-                           value="para 3918" required>
+                           value="inbursa" required>
                 </div>
                 <button class="btn btn-outline-success">Import Data</button>
             </form>

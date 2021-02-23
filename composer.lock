@@ -4,8 +4,45 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e696943171956177f33b324d20c2a14b",
+    "content-hash": "f145d640c8e14ce07d632f6c2874485f",
     "packages": [
+        {
+            "name": "asan/phpexcel",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Janson-Leung/PHPExcel.git",
+                "reference": "07ddc15b44c1f3ee967ded35cffeab5fec49a215"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Janson-Leung/PHPExcel/zipball/07ddc15b44c1f3ee967ded35cffeab5fec49a215",
+                "reference": "07ddc15b44c1f3ee967ded35cffeab5fec49a215",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Asan\\PHPExcel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Janson Leung",
+                    "homepage": "https://github.com/Janson-Leung"
+                }
+            ],
+            "description": "A lightweight PHP library for reading spreadsheet files",
+            "homepage": "https://github.com/Janson-Leung/PHPExcel",
+            "time": "2018-07-23T01:42:26+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "v0.1.1",

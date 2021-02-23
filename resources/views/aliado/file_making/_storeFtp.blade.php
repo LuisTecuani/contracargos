@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" id="procedence" name="procedence"
-                           placeholder="Ingresa la procedencia de los usuarios" required>
+                           value="dashboard" required>
                 </div>
                 <button class="btn btn-outline-success">Import Data</button>
             </form>
