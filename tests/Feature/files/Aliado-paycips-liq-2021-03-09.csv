@@ -1,0 +1,5 @@
+Folio,Fecha Operacion,Fecha Liq,Tarjeta,Banco,Importe Venta,Comision Cobrada,Costo,Autorizacion,Tipo Operacion,Tipo Bin,Comercio,Ref2,Ref3,Ticket
+828992,13/12/2020 12:00:05,11/12/2020,5204 16** **** 2693,BANAMEX CUENTA PERFILES,(79.00),0.00,(79.00),1180,Contracargo,Débito,553 Aliado eTickets,REC,,254488
+828990,07/01/2021 19:26:17,07/01/2021,4815 15** **** 3253,BANCOMER TJ DIGITAL CRED BANCARIO,(79.00),0.00,(79.00),344249,Contracargo,Crédito,553 Aliado eTickets,REC,,340273
+828987,27/02/2021 00:12:04,26/02/2021,5288 43** **** 2414,BANAMEX CLASICA,(79.00),0.00,(79.00),519794,Contracargo,Crédito,553 Aliado eTickets,REC,,219040
+828982,27/02/2021 01:17:58,26/02/2021,5188 99** **** 6200,BANAMEX TRAVEL PASS ELITE LEVEL,(79.00),0.00,(79.00),292471,Contracargo,Crédito,553 Aliado eTickets,REC,,304901

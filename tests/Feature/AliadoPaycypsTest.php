@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\AliadoPaycypsBill;
+use App\AliadoPaycypsHistoric;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
@@ -161,5 +162,45 @@ class AliadoPaycypsTest extends TestCase
             'tdc' => $charge3->tdc,
             'deleted_at' => '2021-02-22',
         ]);
+    }
+
+    /** @test */
+    public function a_user_can_import_movements_to_aliado_paycyps_historics()
+    {
+        $this->signIn();
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/aliado-paycips-liq-2021-03-09.csv',
+                'aliado-paycips-liq-2021-03-09.csv',
+                'text/csv',
+                20416,
+                null,
+                true
+            ))
+        );
+        $this->assertCount(0, AliadoPaycypsHistoric::all());
+
+        $this->post('/aliado/paycyps/historic/storeFolios', [
+            'files' => [$file],
+        ]);
+
+        $this->assertDatabaseHas('aliado_paycyps_historics', [
+            'Folio' => '828992',
+            'Fecha_Operacion' => '2020-12-13 12:00',
+            'Fecha_Liq' => '2020-12-11',
+            'Tarjeta' => '5204162693',
+            'Banco' => 'BANAMEX CUENTA PERFILES',
+            'Importe_Venta' => '(79.00)',
+            'Comision_Cobrada' => '0',
+            'Costo' => '(79.00)',
+            'Autorizacion' => '1180',
+            'Tipo_Operacion' => 'Contracargo',
+            'Tipo_Bin' => 'Débito',
+            'Terminal' => '553 Aliado eTickets',
+            'Comercio' => 'REC',
+            'Ticket' => '254488',
+            'file_name' => 'aliado-paycips-liq-2021-03-09.csv',
+        ]);
+        $this->assertCount(4, AliadoPaycypsHistoric::all());
     }
 }
