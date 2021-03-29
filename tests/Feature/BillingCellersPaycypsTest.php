@@ -33,7 +33,7 @@ class BillingCellersPaycypsTest extends TestCase
                 'cellers-paycyps-2020-07-13.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );

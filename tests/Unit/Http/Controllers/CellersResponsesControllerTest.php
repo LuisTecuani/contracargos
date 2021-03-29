@@ -32,7 +32,7 @@ class CellersResponsesControllerTest extends TestCase
                 'CE201912021631068092950.rep',
                 'text/plain',
                 20416,
-                null,
+                0,
                 true
             ))
         );
@@ -61,7 +61,7 @@ class CellersResponsesControllerTest extends TestCase
                 'aliado-banorte-2019-11-08-1_Respuestas.pdf',
                 'application/pdf',
                 20416,
-                null,
+                0,
                 true
             ))
         );

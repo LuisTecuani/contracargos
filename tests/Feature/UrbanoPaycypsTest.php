@@ -66,7 +66,7 @@ class UrbanoPaycypsTest extends TestCase
                 'urbano-paycyps-2020-07-13.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );
@@ -141,7 +141,7 @@ class UrbanoPaycypsTest extends TestCase
                 'urbano-paycips-bajas-2021-02-22.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );

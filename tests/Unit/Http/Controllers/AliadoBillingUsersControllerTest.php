@@ -60,7 +60,7 @@ class AliadoBillingUsersControllerTest extends TestCase
                 'SCAENT0897D191113ER01.ftp',
                 'text/plain',
                 20416,
-                null,
+                0,
                 true
             ))
         );

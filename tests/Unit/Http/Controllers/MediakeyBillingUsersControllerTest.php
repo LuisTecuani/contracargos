@@ -51,7 +51,7 @@ class MediakeyBillingUsersControllerTest extends TestCase
                 'SCAENT6873D190530ER02.ftp',
                 'text/plain',
                 20416,
-                null,
+                0,
                 true
             ))
         );
