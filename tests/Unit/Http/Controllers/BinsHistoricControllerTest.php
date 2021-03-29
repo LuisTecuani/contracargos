@@ -57,7 +57,7 @@ class BinsHistoricControllerTest extends TestCase
                 'historic-bins.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );

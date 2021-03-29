@@ -67,7 +67,7 @@ class AliadoPaycypsTest extends TestCase
                 'aliado-paycyps-2020-07-13.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );
@@ -141,7 +141,7 @@ class AliadoPaycypsTest extends TestCase
                 'aliado-paycips-bajas-2021-02-22.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );
@@ -174,7 +174,7 @@ class AliadoPaycypsTest extends TestCase
                 'aliado-paycips-liq-2021-03-09.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );
