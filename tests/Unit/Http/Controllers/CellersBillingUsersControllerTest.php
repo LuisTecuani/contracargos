@@ -49,7 +49,7 @@ class CellersBillingUsersControllerTest extends TestCase
                 'SCAENT2950D191205ER01.ftp',
                 'text/plain',
                 20416,
-                null,
+                0,
                 true
             ))
         );

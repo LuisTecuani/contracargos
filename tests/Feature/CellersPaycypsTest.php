@@ -15,7 +15,6 @@ class CellersPaycypsTest extends TestCase
     /** @test */
     public function a_user_can_update_deleted_at_with_file_on_cellers_paycyps_bills()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $charge1 = factory(CellersPaycypsBill::class)->create([
             'tdc' => '4134060000709712',
@@ -32,7 +31,7 @@ class CellersPaycypsTest extends TestCase
                 'cellers-paycips-bajas-2021-02-22.csv',
                 'text/csv',
                 20416,
-                null,
+                0,
                 true
             ))
         );
