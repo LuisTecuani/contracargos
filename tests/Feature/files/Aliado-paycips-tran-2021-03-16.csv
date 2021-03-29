@@ -1,0 +1,6 @@
+Folio,Fecha Operación,Fecha Liq.,Tarjeta,Banco,Producto,Importe Venta,Importe Original,Divisa,Comisión Cobrada,Costo,Autorización,Tipo Operación,Tipo Bin,Terminal,Comercio,Ref2,Ref3,Ref4,Ticket,Código Respuesta,Descripción
+848357,16/03/2021 00:34:13,18/03/2021,4152 31** **** 5880,BANCOMER,DEBITO INTERNACIONAL,79,79,MXP,15.27,,,Venta,Débito,553 Aliado eTickets,REC,1214,,,341747,51,Fondos insuficientes
+848358,16/03/2021 00:34:15,18/03/2021,4152 31** **** 3654,BANCOMER,DEBITO INTERNACIONAL,79,79,MXP,15.27,,124700,Venta,Débito,553 Aliado eTickets,REC,1076,,,341196,0,Proceso Completo
+848364,16/03/2021 00:34:25,18/03/2021,4152 31** **** 0996,BANCOMER,DEBITO INTERNACIONAL,79,79,MXP,15.27,,124824,Venta,Débito,553 Aliado eTickets,REC,1024,,,341041,0,Proceso Completo
+848367,16/03/2021 00:34:29,18/03/2021,4772 13** **** 4952,BANCOMER,TARJETA ORO,79,79,MXP,15.27,,,Venta,Crédito,553 Aliado eTickets,REC,19,,,166027,51,Fondos insuficientes
+848377,16/03/2021 00:34:44,18/03/2021,5579 10** **** 9148,SANTANDER PR,CHEQUE ELECTRONICO DEBITO,79,79,MXP,15.27,,43333,Venta,Débito,553 Aliado eTickets,REC,1029,,,341050,0,Proceso Completo
