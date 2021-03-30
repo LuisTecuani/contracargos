@@ -1,0 +1,23 @@
+<span style="font-weight:bold;">553 Aliado eTickets</span><br></br><span>Transacciones de Tarjetas Bancarias del día Friday, March 12, 2021</span><table>
+	<thead>
+		<tr>
+			<th>Folio</th><th>Fecha Operación</th><th>Fecha Liq.</th><th>Tarjeta</th><th>Banco</th><th>Producto</th><th>Importe Venta</th><th>Importe Original</th><th>Divisa</th><th>Comisión Cobrada</th><th>Costo</th><th>Autorización</th><th>Tipo Operación</th><th>Tipo Bin</th><th>Terminal</th><th>Comercio</th><th>Ref2</th><th>Ref3</th><th>Ref4</th><th>Ticket</th><th>Código Respuesta</th><th>Descripción</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>839334</td><td>12/03/2021 00:23:42</td><td>17/03/2021</td><td>4023 18** **** 0959</td><td>IXE</td><td>IXE VISA INFINITE</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;">000478</td><td>Venta</td><td>Credito</td><td>553 Aliado eTickets</td><td>REC</td><td>603</td><td></td><td></td><td>254008</td><td style="mso-number-format:00;">00  </td><td>Proceso Completo</td>
+		</tr><tr>
+			<td>839335</td><td>12/03/2021 00:23:43</td><td>17/03/2021</td><td>4023 18** **** 0920</td><td>IXE</td><td>IXE VISA INFINITE</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Crédito</td><td>553 Aliado eTickets</td><td>REC</td><td>1835</td><td></td><td></td><td>218830</td><td style="mso-number-format:00;">33  </td><td>Retener tarjeta expirada</td>
+		</tr><tr>
+			<td>839488</td><td>12/03/2021 00:27:19</td><td>17/03/2021</td><td>4152 31** **** 8460</td><td>BANCOMER</td><td>DEBITO INTERNACIONAL</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Débito</td><td>553 Aliado eTickets</td><td>REC</td><td>632</td><td></td><td></td><td>340054</td><td style="mso-number-format:00;">51  </td><td>Fondos insuficientes</td>
+		</tr><tr>
+			<td>839507</td><td>12/03/2021 00:27:38</td><td>17/03/2021</td><td>4152 31** **** 6149</td><td>BANCOMER</td><td>DEBITO INTERNACIONAL</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Débito</td><td>553 Aliado eTickets</td><td>REC</td><td>957</td><td></td><td></td><td>340864</td><td style="mso-number-format:00;">41  </td><td>Tarjeta pérdida, retener</td>
+		</tr><tr>
+			<td>839540</td><td>12/03/2021 00:28:07</td><td>17/03/2021</td><td>4152 31** **** 0027</td><td>BANCOMER</td><td>DEBITO INTERNACIONAL</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Débito</td><td>553 Aliado eTickets</td><td>REC</td><td>506</td><td></td><td></td><td>339628</td><td style="mso-number-format:00;">14  </td><td>Número de Tarjeta Inválida</td>
+		</tr><tr>
+			<td>839541</td><td>12/03/2021 00:28:08</td><td>17/03/2021</td><td>4152 31** **** 2617</td><td>BANCOMER</td><td>DEBITO INTERNACIONAL</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;">275774</td><td>Venta</td><td>Débito</td><td>553 Aliado eTickets</td><td>REC</td><td>484</td><td></td><td></td><td>339544</td><td style="mso-number-format:00;">00  </td><td>Proceso Completo</td>
+		</tr><tr>
+			<td>846682</td><td>12/03/2021 02:48:10</td><td>17/03/2021</td><td>5579 10** **** 4688</td><td>SANTANDER PR</td><td>CHEQUE ELECTRONICO DEBITO</td><td>79.00</td><td>79.00</td><td>MXP</td><td>15.27</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Débito</td><td>553 Aliado eTickets</td><td>REC</td><td>6359</td><td></td><td></td><td>212705</td><td style="mso-number-format:00;">62  </td><td>Tarjeta restringida</td>
+		</tr>
+	</tbody>
+</table>
