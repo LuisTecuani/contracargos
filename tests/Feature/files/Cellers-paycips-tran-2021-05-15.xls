@@ -1,0 +1,19 @@
+<span style="font-weight:bold;">543 Websam de Mexico</span><br></br><span>Transacciones de Tarjetas Bancarias del día Saturday, May 15, 2021</span><table>
+	<thead>
+		<tr>
+			<th>Folio</th><th>Fecha Operación</th><th>Fecha Liq.</th><th>Tarjeta</th><th>Banco</th><th>Producto</th><th>Importe Venta</th><th>Importe Original</th><th>Divisa</th><th>Comisión Cobrada</th><th>Costo</th><th>Autorización</th><th>Tipo Operación</th><th>Tipo Bin</th><th>Terminal</th><th>Comercio</th><th>Ref2</th><th>Ref3</th><th>Ref4</th><th>Ticket</th><th>Código Respuesta</th><th>Descripción</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>1007995</td><td>15/05/2021 00:10:26</td><td>18/05/2020</td><td>4178 49** **** 7546</td><td>LIVERPOOL P.C.</td><td>LIVERPOOL PREMIUM CARD</td><td>99.00</td><td>99.00</td><td>MXP</td><td>28.95</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Credito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td></td><td>0</td><td>22678</td><td style="mso-number-format:00;">51  </td><td>Fondos insuficientes</td>
+		</tr><tr>
+			<td>1008014</td><td>15/05/2021 00:10:48</td><td>18/05/2020</td><td>4540 57** **** 0370</td><td>BANAMEX</td><td>CLASICA</td><td>99.00</td><td>99.00</td><td>MXP</td><td>28.95</td><td></td><td style="mso-number-format:000000;">545151</td><td>Venta</td><td>Crédito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td></td><td>0</td><td>89779</td><td style="mso-number-format:00;">00  </td><td>Proceso Completo</td>
+		</tr><tr>
+			<td>1008023</td><td>15/05/2021 00:10:58</td><td>18/05/2020</td><td>4540 57** **** 7298</td><td>BANAMEX</td><td>CLASICA</td><td>99.00</td><td>99.00</td><td>MXP</td><td>28.95</td><td></td><td style="mso-number-format:000000;">997339</td><td>Venta</td><td>Credito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td></td><td>0</td><td>89987</td><td style="mso-number-format:00;">00  </td><td>Proceso Completo</td>
+		</tr><tr>
+			<td>1008024</td><td>15/05/2021 00:11:00</td><td>18/05/2020</td><td>4540 69** **** 7280</td><td>BANAMEX</td><td>CLASICA</td><td>99.00</td><td>99.00</td><td>MXP</td><td>28.95</td><td></td><td style="mso-number-format:000000;">023885</td><td>Venta</td><td>Credito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td></td><td>0</td><td>90211</td><td style="mso-number-format:00;">00  </td><td>Proceso Completo</td>
+		</tr><tr>
+			<td>1008050</td><td>15/05/2021 00:11:30</td><td>18/05/2020</td><td>4772 14** **** 0953</td><td>BANCOMER</td><td>TARJETA PLATINUM</td><td>99.00</td><td>99.00</td><td>MXP</td><td>28.95</td><td></td><td style="mso-number-format:000000;"></td><td>Venta</td><td>Credito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td></td><td>0</td><td>96348</td><td style="mso-number-format:00;">05  </td><td>Rechazada</td>
+		</tr>
+	</tbody>
+</table>

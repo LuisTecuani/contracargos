@@ -168,7 +168,6 @@ class UrbanoPaycypsTest extends TestCase
     /** @test */
     public function a_user_can_import_movements_to_urbano_paycyps_historics_from_xls_file()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $file = UploadedFile::createFromBase(
             (new UpFile(
@@ -212,5 +211,45 @@ class UrbanoPaycypsTest extends TestCase
             'file_name' => 'urbano-paycips-tran-2021-03-12.xls',
         ]);
         $this->assertCount(7, UrbanoPaycypsHistoric::all());
+    }
+
+    /** @test */
+    public function a_user_can_import_liquidations_to_urbano_paycips_historics_from_xls_file()
+    {
+        $this->signIn();
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/Urbano-liq-2021-06-03.xls',
+                'Urbano-liq-2021-06-03.xls',
+                'text/xls',
+                20416,
+                0,
+                true
+            ))
+        );
+        $this->assertCount(0, UrbanoPaycypsHistoric::all());
+
+        $this->post('/urbano/paycyps/historic/store', [
+            'files' => [$file],
+        ]);
+
+        $this->assertDatabaseHas('urbano_paycyps_historics', [
+            'Folio' => '1100109',
+            'Fecha_operacion' => '2021-05-15 00:49:54',
+            'Fecha_liq' => '2021-05-14',
+            'Tarjeta' => '4931739970',
+            'Banco' => 'BANORTE BANORTE ORO VISA INTERNACIONAL',
+            'Importe_venta' => '(90.00)',
+            'Comision_cobrada' => '0.00',
+            'Costo' => '(90.00)',
+            'Autorizacion' => '009330',
+            'Tipo_operacion' => 'Contracargo',
+            'Tipo_Bin' => 'Credito',
+            "Terminal" => "594 Urbano",
+            "Comercio" => "REC",
+            "Ref3" => "",
+            "Ticket" => "6399",
+            "file_name" => "Urbano-liq-2021-06-03.xls",
+        ]);
     }
 }

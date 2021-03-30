@@ -1,0 +1,33 @@
+<span>Liquidación a Clientes para el Friday, April 23, 2021</span><br></br><span></span><br></br><table>
+	<thead>
+		<tr>
+			<th class="center-align grey darken-3 white-text" colspan="2">Tarjeta Bancaria</th><th class="center-align grey darken-3 white-text" colspan="2">PayNet</th><th class="center-align grey darken-3 white-text" colspan="2">OxxoPay</th><th class="center-align grey darken-3 white-text" rowspan="2">Contracargos</th><th class="center-align grey darken-3 white-text" rowspan="2">Liquidación</th>
+		</tr><tr>
+			<th class="center-align grey darken-3 white-text">Venta</th><th class="center-align grey darken-3 white-text">Comisión</th><th class="center-align grey darken-3 white-text">Depósito</th><th class="center-align grey darken-3 white-text">Comisión</th><th class="center-align grey darken-3 white-text">Depósito</th><th class="center-align grey darken-3 white-text">Comisión</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>2,538.00</td><td>-2,538.00</td>
+		</tr>
+	</tbody>
+</table><br></br><br></br><table>
+	<thead>
+		<tr>
+			<th rowspan="2">Folio</th><th align="center" colspan="2">Fecha</th><th rowspan="2">Tarjeta</th><th rowspan="2">Descripción</th><th colspan="3">Importe</th><th rowspan="2">Núm. Aut.</th><th colspan="2">Tipo</th><th rowspan="2">Comercio</th><th rowspan="2">Terminal</th><th rowspan="2">Referencia</th><th rowspan="2">Ticket</th>
+		</tr><tr>
+			<th>Operación</th><th>Conciliación</th><th>Venta</th><th>Comisión</th><th>X Pagar</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>939516</td><td>27/01/2021 18:45:29</td><td>27/01/2021</td><td>5188 53** **** 1493</td><td>BANAMEX TELETON</td><td>(90.00)</td><td>0.00</td><td>(90.00)</td><td>084818</td><td>Contracargo</td><td>Credito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td>101748</td>
+		</tr><tr>
+			<td>939524</td><td>27/01/2021 19:00:35</td><td>27/01/2021</td><td>5288 43** **** 3453</td><td>BANAMEX CLASICA</td><td>(90.00)</td><td>0.00</td><td>(90.00)</td><td>229610</td><td>Contracargo</td><td>Crédito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td>103696</td>
+		</tr><tr>
+			<td>939512</td><td>08/02/2021 20:17:13</td><td>08/02/2021</td><td>5470 46** **** 8466</td><td>SANTANDER PR SANTANDER UNIK ORO</td><td>(90.00)</td><td>0.00</td><td>(90.00)</td><td>071224</td><td>Contracargo</td><td>Crédito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td>107581</td>
+		</tr><tr>
+			<td>939532</td><td>08/02/2021 20:27:28</td><td>08/02/2021</td><td>4552 55** **** 6013</td><td>BANAMEX ORO</td><td>(90.00)</td><td>0.00</td><td>(90.00)</td><td>419776</td><td>Contracargo</td><td>Crédito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td>90483</td>
+		</tr><tr>
+			<td>939510</td><td>27/02/2021 01:55:03</td><td>26/02/2021</td><td>5188 53** **** 1493</td><td>BANAMEX TELETON</td><td>(90.00)</td><td>0.00</td><td>(90.00)</td><td>032118</td><td>Contracargo</td><td>Crédito</td><td>543 Websam de Mexico</td><td>REC</td><td></td><td>101748</td>
+		</tr>
+	</tbody>
+</table>
