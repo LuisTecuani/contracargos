@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\Http\Controllers;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CellersControllerTest extends TestCase
+class ViewThxTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -14,9 +14,9 @@ class CellersControllerTest extends TestCase
     {
         $this->signIn();
 
-        $this->get('/cellers')
+        $this->get('/thx')
             ->assertOk()
             ->assertSessionHasNoErrors()
-            ->assertViewIs('cellers.index');
+            ->assertViewIs('thx.index');
     }
 }
