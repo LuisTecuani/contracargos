@@ -1,0 +1,31 @@
+<span>Liquidación a Clientes para el Monday, May 10, 2021</span><br></br><span></span><br></br><table>
+	<thead>
+		<tr>
+			<th class="center-align grey darken-3 white-text" colspan="2">Tarjeta Bancaria</th><th class="center-align grey darken-3 white-text" colspan="2">PayNet</th><th class="center-align grey darken-3 white-text" colspan="2">OxxoPay</th><th class="center-align grey darken-3 white-text" rowspan="2">Contracargos</th><th class="center-align grey darken-3 white-text" rowspan="2">Liquidación</th>
+		</tr><tr>
+			<th class="center-align grey darken-3 white-text">Venta</th><th class="center-align grey darken-3 white-text">Comisión</th><th class="center-align grey darken-3 white-text">Depósito</th><th class="center-align grey darken-3 white-text">Comisión</th><th class="center-align grey darken-3 white-text">Depósito</th><th class="center-align grey darken-3 white-text">Comisión</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td><td>316.00</td><td>-316.00</td>
+		</tr>
+	</tbody>
+</table><br></br><br></br><table>
+	<thead>
+		<tr>
+			<th rowspan="2">Folio</th><th align="center" colspan="2">Fecha</th><th rowspan="2">Tarjeta</th><th rowspan="2">Descripción</th><th colspan="3">Importe</th><th rowspan="2">Núm. Aut.</th><th colspan="2">Tipo</th><th rowspan="2">Comercio</th><th rowspan="2">Terminal</th><th rowspan="2">Referencia</th><th rowspan="2">Ticket</th>
+		</tr><tr>
+			<th>Operación</th><th>Conciliación</th><th>Venta</th><th>Comisión</th><th>X Pagar</th>
+		</tr>
+	</thead><tbody>
+		<tr>
+			<td>989648</td><td>11/02/2021 22:37:39</td><td>11/02/2021</td><td>5188 99** **** 1329</td><td>BANAMEX TRAVEL PASS ELITE LEVEL</td><td>(79.00)</td><td>0.00</td><td>(79.00)</td><td>328266</td><td>Contracargo</td><td>Credito</td><td>553 Aliado eTickets</td><td>REC</td><td>3:11842@2</td><td>298008</td>
+		</tr><tr>
+			<td>989646</td><td>27/02/2021 00:10:50</td><td>26/02/2021</td><td>5288 43** **** 3679</td><td>BANAMEX CLASICA</td><td>(79.00)</td><td>0.00</td><td>(79.00)</td><td>681176</td><td>Contracargo</td><td>Crédito</td><td>553 Aliado eTickets</td><td>REC</td><td></td><td>217429</td>
+		</tr><tr>
+			<td>989645</td><td>27/02/2021 01:04:16</td><td>26/02/2021</td><td>5499 49** **** 7833</td><td>BANAMEX ORO</td><td>(79.00)</td><td>0.00</td><td>(79.00)</td><td>666336</td><td>Contracargo</td><td>Crédito</td><td>553 Aliado eTickets</td><td>REC</td><td></td><td>292212</td>
+		</tr><tr>
+			<td>989647</td><td>12/03/2021 00:45:55</td><td>12/03/2021</td><td>5188 99** **** 1329</td><td>BANAMEX TRAVEL PASS ELITE LEVEL</td><td>(79.00)</td><td>0.00</td><td>(79.00)</td><td>824384</td><td>Contracargo</td><td>Crédito</td><td>553 Aliado eTickets</td><td>REC</td><td></td><td>298308</td>
+		</tr>
+	</tbody>
+</table>

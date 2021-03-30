@@ -107,7 +107,7 @@
                                 Importa files .CSV del historico de cobros Paycyps
                             </div>
                             <div class="card-body">
-                                <input type="file" multiple="true" name="files[]" accept=".csv"
+                                <input type="file" multiple="true" name="files[]" accept=".csv, .xls"
                                        class="btn btn-secondary btn-lg btn-block">
                                 <br>
                                 <button class="btn btn-outline-primary">Import Data</button>
