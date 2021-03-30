@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\CellersPaycypsHistoric;
+use App\AliadoPaycypsHistoric;
 use App\CellersPaycypsBill;
+use App\CellersPaycypsHistoric;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile as Upfile;
 use Tests\TestCase;
@@ -54,14 +55,63 @@ class CellersPaycypsTest extends TestCase
             'deleted_at' => '2021-02-22',
         ]);
     }
+
     /** @test */
     public function a_user_can_import_movements_to_cellers_paycyps_historics_from_xls_file()
     {
         $this->signIn();
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/cellers-paycips-tran-2021-03-12.xls',
-                'cellers-paycips-tran-2021-04-13.xls',
+                __DIR__ . '/files/Cellers-paycips-tran-2021-05-15.xls',
+                'Cellers-paycips-tran-2021-05-15.xls',
+                'text/xls',
+                20416,
+                0,
+                true
+            ))
+        );
+        $this->assertCount(0, CellersPaycypsHistoric::all());
+
+        $this->post('/cellers/paycyps/historic/store', [
+            'files' => [$file],
+        ]);
+        $this->assertDatabaseHas('cellers_paycyps_historics', [
+            "id" => "1",
+            "Folio" => "1007995",
+            "Fecha_Operacion" => "2021-05-15 00:10:26",
+            "Fecha_Liq" => "2020-05-18",
+            "Tarjeta" => "4178497546",
+            "Banco" => "LIVERPOOL P.C.",
+            "Producto" => "LIVERPOOL PREMIUM CARD",
+            "Importe_Venta" => "99.00",
+            "Importe_Original" => "99.00",
+            "Divisa" => "MXP",
+            "Comision_Cobrada" => "28.95",
+            "Costo" => "",
+            "Autorizacion" => "",
+            "Tipo_Operacion" => "Venta",
+            "Tipo_Bin" => "Credito",
+            "Terminal" => "543 Websam de Mexico",
+            "Comercio" => "REC",
+            "Ref2" => "",
+            "Ref3" => "",
+            "Ref4" => "0",
+            "Ticket" => "22678",
+            "Codigo_Respuesta" => "51  ",
+            "Descripcion" => "Fondos insuficientes",
+            "file_name" => "Cellers-paycips-tran-2021-05-15.xls",
+        ]);
+        $this->assertCount(5, CellersPaycypsHistoric::all());
+    }
+
+    /**  @test */
+    public function a_user_can_import_liquidations_to_cellers_paycips_historics_from_xls_file()
+    {
+        $this->signIn();
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/Cellers-liq-2021-04-23.xls',
+                'Cellers-liq-2021-04-23.xls',
                 'text/xls',
                 20416,
                 0,
@@ -75,30 +125,24 @@ class CellersPaycypsTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('cellers_paycyps_historics', [
-            'Folio' => '839334',
-            'Fecha_Operacion' => '2021-03-12 00:23:42',
-            'Fecha_Liq' => '2021-03-17',
-            'Tarjeta' => '4023180959',
-            'Banco' => 'IXE',
-            'Producto' => 'IXE VISA INFINITE',
-            'Importe_Venta' => '79.00',
-            'Importe_Original' => '79.00',
-            'Divisa' => 'MXP',
-            'Comision_Cobrada' => '15.27',
-            'Costo' => '',
-            'Autorizacion' => '000478',
-            'Tipo_Operacion' => 'Venta',
-            'Tipo_Bin' => 'Credito',
-            'Terminal' => '553 Aliado eTickets',
-            'Comercio' => 'REC',
-            'Ref2' => '603',
-            'Ref3' => '',
-            'Ref4' => '',
-            'Ticket' => '254008',
-            'Codigo_Respuesta' => '00  ',
-            'Descripcion' => 'Proceso Completo',
-            'file_name' => 'cellers-paycips-tran-2021-04-13.xls',
+
+            "Folio" => "939516",
+            "Fecha_Operacion" => "2021-01-27 18:45:29",
+            "Fecha_Liq" => "2021-01-27",
+            "Tarjeta" => "5188531493",
+            "Banco" => "BANAMEX TELETON",
+            "Importe_Venta" => "(90.00)",
+            "Comision_Cobrada" => "0.00",
+            "Costo" => "(90.00)",
+            "Autorizacion" => "084818",
+            "Tipo_Operacion" => "Contracargo",
+            "Tipo_Bin" => "Credito",
+            "Terminal" => "543 Websam de Mexico",
+            "Comercio" => "REC",
+            "Ref3" => "",
+            "Ticket" => "101748",
+            "file_name" => "Cellers-liq-2021-04-23.xls",
         ]);
-        $this->assertCount(7, CellersPaycypsHistoric::all());
     }
 }
+

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\CellersPaycypsBill;
 use App\CellersPaycypsHistoric;
 use App\Imports\CellersPaycypsHistoricFoliosImport;
 use App\Imports\CellersPaycypsHistoricImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CellersPaycypsHistoricController extends Controller
@@ -21,13 +22,46 @@ class CellersPaycypsHistoricController extends Controller
         foreach ($files as $file) {
             $fileName = $file->getClientOriginalName();
 
-            $saved = CellersPaycypsHistoric::where('file_name', 'like', $fileName)->get();
+            $saved = (new CellersPaycypsHistoric)->getByFileName($fileName);
+            if ($saved->isNotEmpty()) {
+                return;
+            }
+            if (Str::contains($fileName, '.xls')) {
 
-            if (count($saved) === 0) {
-                if (Str::contains($fileName, '.xls')) {
-
+                if (Str::contains($fileName, 'liq')) {
                     $rows = preg_grep("/(\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4})/", file($file));
-                    $movements = [];
+                    foreach ($rows as $row => $cont) {
+                        $a = preg_split("/<\/td>/", $cont);
+                        $b = array_map(function ($c) {
+                            return Str::after($c, '>');
+                        }, $a);
+
+                        preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $b[1], $d);
+                        $part = explode('/', $d[1]);
+                        $tarjeta = str_replace('*', '', str_replace(' ', '', $b[3]));
+
+                        CellersPaycypsHistoric::create([
+                            'folio' => $b[0],
+                            'fecha_operacion' => $part[2] . '-' . $part[1] . '-' . $part[0] . ' ' . $d[2],
+                            'fecha_liq' => Carbon::createFromFormat('d/m/Y', $b[2])->format('Y-m-d'),
+                            'tarjeta' => $tarjeta,
+                            'banco' => $b[4],
+                            'importe_venta' => $b[5],
+                            'comision_cobrada' => $b[6],
+                            'costo' => $b[7],
+                            'autorizacion' => $b[8],
+                            'tipo_operacion' => $b[9],
+                            'tipo_bin' => Str::after($b[10], 'b'),
+                            'terminal' => $b[11],
+                            'comercio' => $b[12],
+                            'ref3' => $b[13],
+                            'ticket' => $b[14],
+                            'file_name' => $fileName,
+                        ]);
+                    }
+                }
+                if (Str::contains($fileName, 'tran')) {
+                    $rows = preg_grep("/(\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4})/", file($file));
 
                     foreach ($rows as $row => $cont) {
                         $a = preg_split("/<\/td>/", $cont);
@@ -35,15 +69,13 @@ class CellersPaycypsHistoricController extends Controller
                             return Str::after($c, '>');
                         }, $a);
 
-
                         preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $b[1], $d);
                         $part = explode('/', $d[1]);
                         $tarjeta = str_replace('*', '', str_replace(' ', '', $b[3]));
 
-
                         CellersPaycypsHistoric::create([
                             'folio' => $b[0],
-                            'fecha_operacion' => $part[2] . '-' . $part[1] . '-' . $part[0] . ' ' . $d[2],
+                            'fecha_operacion' => $part[2].'-'.$part[1].'-'.$part[0].' '.$d[2],
                             'fecha_liq' => Carbon::createFromFormat('d/m/Y', $b[2])->format('Y-m-d'),
                             'tarjeta' => $tarjeta,
                             'banco' => $b[4],
@@ -68,15 +100,24 @@ class CellersPaycypsHistoricController extends Controller
                         ]);
                     }
                     return back();
+                }
+            }
+            if (Str::contains($fileName, '.csv')) {
 
+                if (Str::contains($fileName, 'liq')) {
+                    $import = (new CellersPaycypsHistoricFoliosImport())->fromFile($fileName);
+
+                    Excel::import($import, $file);
                 } else {
-
                     $import = (new CellersPaycypsHistoricImport())->fromFile($fileName);
 
                     Excel::import($import, $file);
                 }
+
             }
+
         }
+
         return back();
     }
 

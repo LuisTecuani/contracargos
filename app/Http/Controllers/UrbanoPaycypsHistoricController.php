@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\UrbanoPaycypsHistoricFoliosImport;
+use App\UrbanoPaycypsBill;
 use App\UrbanoPaycypsHistoric;
+use App\Imports\UrbanoPaycypsHistoricFoliosImport;
 use App\Imports\UrbanoPaycypsHistoricImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UrbanoPaycypsHistoricController extends Controller
@@ -21,48 +22,102 @@ class UrbanoPaycypsHistoricController extends Controller
         foreach ($files as $file) {
             $fileName = $file->getClientOriginalName();
 
-            $saved = UrbanoPaycypsHistoric::where('file_name', 'like', $fileName)->get();
-            if (count($saved) === 0) {
+            $saved = (new UrbanoPaycypsHistoric)->getByFileName($fileName);
+            if ($saved->isNotEmpty()) {
+                return;
+            }
+            if (Str::contains($fileName, '.xls')) {
 
-                if (Str::contains($fileName, '.xls')) {
-                    $dataRows = preg_grep('/\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4}/', file($file));
+                if (Str::contains($fileName, 'liq')) {
+                    $rows = preg_grep("/(\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4})/", file($file));
+                    foreach ($rows as $row => $cont) {
+                        $a = preg_split("/<\/td>/", $cont);
+                        $b = array_map(function ($c) {
+                            return Str::after($c, '>');
+                        }, $a);
 
-                    foreach ($dataRows as $row) {
-                        $cleanedRow = $this->prepareRow($row);
-
+                        preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $b[1], $d);
+                        $part = explode('/', $d[1]);
+                        $tarjeta = str_replace('*', '', str_replace(' ', '', $b[3]));
 
                         UrbanoPaycypsHistoric::create([
-                            'Folio' => $cleanedRow[0],
-                            'Fecha_Operacion' => Carbon::createFromFormat('d/m/Y H:i:s', $cleanedRow[1])->format('Y-m-d H:i:s'),
-                            'Fecha_Liq' => Carbon::createFromFormat('d/m/Y', $cleanedRow[2])->format('Y-m-d'),
-                            'Tarjeta' => str_replace(' ', '', str_replace('*', '', $cleanedRow[3])),
-                            'Banco' => $cleanedRow[4],
-                            'Producto' => $cleanedRow[5],
-                            'Importe_Venta' => $cleanedRow[6],
-                            'Importe_Original' => $cleanedRow[7],
-                            'Divisa' => $cleanedRow[8],
-                            'Comision_Cobrada' => $cleanedRow[9],
-                            'Costo' => $cleanedRow[10],
-                            'Autorizacion' => $cleanedRow[11],
-                            'Tipo_Operacion' => $cleanedRow[12],
-                            'Tipo_Bin' => $cleanedRow[13],
-                            'Terminal' => $cleanedRow[14],
-                            'Comercio' => $cleanedRow[15],
-                            'Ref2' => $cleanedRow[16],
-                            'Ref3' => $cleanedRow[17],
-                            'Ref4' => $cleanedRow[18],
-                            'Ticket' => $cleanedRow[19],
-                            'Codigo_Respuesta' => $cleanedRow[20],
-                            'Descripcion' => $cleanedRow[21],
+                            'folio' => $b[0],
+                            'fecha_operacion' => $part[2] . '-' . $part[1] . '-' . $part[0] . ' ' . $d[2],
+                            'fecha_liq' => Carbon::createFromFormat('d/m/Y', $b[2])->format('Y-m-d'),
+                            'tarjeta' => $tarjeta,
+                            'banco' => $b[4],
+                            'importe_venta' => $b[5],
+                            'comision_cobrada' => $b[6],
+                            'costo' => $b[7],
+                            'autorizacion' => $b[8],
+                            'tipo_operacion' => $b[9],
+                            'tipo_bin' => Str::after($b[10], 'b'),
+                            'terminal' => $b[11],
+                            'comercio' => $b[12],
+                            'ref3' => $b[13],
+                            'ticket' => $b[14],
                             'file_name' => $fileName,
                         ]);
                     }
-                } else {
-                $import = (new UrbanoPaycypsHistoricImport())->fromFile($fileName);
+                }
 
-                Excel::import($import, $file);
+                if (Str::contains($fileName, 'tran')) {
+                    $rows = preg_grep("/(\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4})/", file($file));
+
+                    foreach ($rows as $row => $cont) {
+                        $a = preg_split("/<\/td>/", $cont);
+                        $b = array_map(function ($c) {
+                            return Str::after($c, '>');
+                        }, $a);
+
+                        preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $b[1], $d);
+                        $part = explode('/', $d[1]);
+                        $tarjeta = str_replace('*', '', str_replace(' ', '', $b[3]));
+
+                        UrbanoPaycypsHistoric::create([
+                            'folio' => $b[0],
+                            'fecha_operacion' => $part[2].'-'.$part[1].'-'.$part[0].' '.$d[2],
+                            'fecha_liq' => Carbon::createFromFormat('d/m/Y', $b[2])->format('Y-m-d'),
+                            'tarjeta' => $tarjeta,
+                            'banco' => $b[4],
+                            'producto' => $b[5],
+                            'importe_venta' => $b[6],
+                            'importe_original' => $b[7],
+                            'divisa' => $b[8],
+                            'comision_cobrada' => $b[9],
+                            'costo' => $b[10],
+                            'autorizacion' => $b[11],
+                            'tipo_operacion' => $b[12],
+                            'tipo_bin' => Str::after($b[13], 'b'),
+                            'terminal' => $b[14],
+                            'comercio' => $b[15],
+                            'ref2' => $b[16],
+                            'ref3' => $b[17],
+                            'ref4' => $b[18],
+                            'ticket' => $b[19],
+                            'codigo_respuesta' => $b[20],
+                            'descripcion' => $b[21],
+                            'file_name' => $fileName,
+                        ]);
+
+                    }
+                    return back();
                 }
             }
+            if (Str::contains($fileName, '.csv')) {
+
+                if (Str::contains($fileName, 'liq')) {
+                    $import = (new UrbanoPaycypsHistoricFoliosImport())->fromFile($fileName);
+
+                    Excel::import($import, $file);
+                } else {
+                    $import = (new UrbanoPaycypsHistoricImport())->fromFile($fileName);
+
+                    Excel::import($import, $file);
+                }
+
+            }
+
         }
 
         return back();
@@ -89,16 +144,5 @@ class UrbanoPaycypsHistoricController extends Controller
         }
 
         return back();
-    }
-
-    /**
-     * @param $row
-     * @return array|string[]
-     */
-    public function prepareRow($row)
-    {
-        return array_map(function ($a) {
-            return Str::after($a, '>');
-        }, preg_split('/<\/td>/', $row));
     }
 }
