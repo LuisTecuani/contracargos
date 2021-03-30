@@ -19,34 +19,47 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /*
 |--------------------------------------------------------------------------
-| Mediakey Routes
+| Aliado Routes
 |--------------------------------------------------------------------------
 |
 |
 */
-Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
+Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
 
-Route::get('/mediakey/chargeback', 'MediakeyChargebackController@index')->name('mediakey.chargeback.index');
-Route::post('/mediakey/chargeback/store', 'MediakeyChargebackController@store')->name('mediakeyChargeback.store');
-Route::get('/mediakey/chargeback/show', 'MediakeyChargebackController@show')->name('mediakeyChargeback.show');
-Route::post('/mediakey/chargeback/storeTxt', 'MediakeyChargebackController@storeTxt')->name('mediakeyChargeback.storeTxt');
+Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
+Route::post('/aliado/chargeback/store', 'AliadoChargebackController@store')->name('aliadoChargeback.store');
+Route::post('/aliado/chargeback/storeImage', 'AliadoChargebackController@storeImage')->name('aliadoChargeback.storeImage');
+Route::get('/aliado/chargeback/show', 'AliadoChargebackController@show')->name('aliadoChargeback.show');
 
-Route::post('/mediakey/banorte/chargeback/store', 'MediakeyBanorteChargebackController@store')->name('mediakeyBanorteChargeback.store');
+Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackController@store')->name('aliadoBanorteChargeback.store');
 
-Route::get('/mediakey/blacklist', 'MediakeyBlacklistController@index')->name('mediakey.blacklist.index');
-Route::post('/mediakey/blacklist/store', 'MediakeyBlacklistController@store')->name('mediakeyBlacklist.store');
+Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliado.blacklist.index');
+Route::post('/aliado/blacklist/store', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
+Route::post('/aliado/blacklist/storeChargedback', 'AliadoBlacklistController@storeChargedback')->name('aliadoBlacklist.storeChargedback');
 
-Route::get('/mediakey/responses', 'MediakeyResponsesController@index')->name('mediakey.responses.index');
-Route::post('/mediakey/responses/storeReps', 'MediakeyResponsesController@storeReps')->name('mediakey.responses.storeReps');
-Route::post('/mediakey/responses/storePdf', 'MediakeyResponsesController@storePdf')->name('mediakey.responses.storePdf');
+Route::get('/aliado/responses', 'AliadoResponsesController@index')->name('aliado.responses.index');
+Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps')->name('aliado.responses.storeReps');
+Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')->name('aliado.responses.storePdf');
 
-Route::get('/mediakey/file_making', 'MediakeyFileMakingController@index')->name('mediakey.file_making.index');
+Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
+Route::get('/aliado/file_making/exportBanorte', 'AliadoFileMakingController@exportBanorte')->name('aliado.file_making.exportBanorte');
+Route::get('/aliado/file_making/export0897', 'AliadoFileMakingController@export0897')->name('aliado.file_making.export0897');
 
-Route::get('/mediakey/billing_users', 'MediakeyBillingUsersController@index')->name('mediakey.billing_users.index');
-Route::post('/mediakey/billing_users/storeFtp', 'MediakeyBillingUsersController@storeFtp')->name('mediakey.billing_users.storeFtp');
-Route::post('/mediakey/billing_users/storeRejectedProsa', 'MediakeyBillingUsersController@storeRejectedProsa')->name('mediakey.billing_users.storeRejectedProsa');
-Route::post('/mediakey/billing_users/storeRejectedBanorte', 'MediakeyBillingUsersController@storeRejectedBanorte')->name('mediakey.billing_users.storeRejectedBanorte');
-Route::post('/mediakey/billing_users/storeTextbox', 'MediakeyBillingUsersController@storeTextbox')->name('mediakey.billing_users.storeTextbox');
+
+Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
+Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@storeFtp')->name('aliado.billing_users.storeFtp');
+Route::post('/aliado/billing_users/storeRejectedProsa', 'AliadoBillingUsersController@storeRejectedProsa')->name('aliado.billing_users.storeRejectedProsa');
+Route::post('/aliado/billing_users/storeToBanorte', 'AliadoBillingUsersController@storeToBanorte')->name('aliado.billing_users.storeToBanorte');
+Route::post('/aliado/billing_users/storeTo3918', 'AliadoBillingUsersController@storeTo3918')->name('aliado.billing_users.storeTo3918');
+Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
+
+Route::get('aliado/paycyps', 'AliadoPaycypsController@index')->name('aliado.paycyps');
+Route::post('/aliado/paycyps/storeCsv', 'AliadoPaycypsBillingController@storeCsv')->name('aliado.paycyps.storeCsv');
+Route::post('/aliado/paycyps/updateCsv', 'AliadoPaycypsBillingController@updateCsv')->name('aliado.paycyps.updateCsv');
+Route::post('/aliado/paycyps/update', 'AliadoPaycypsBillingController@update')->name('aliado.paycyps.update');
+Route::post('/aliado/paycyps/chargeback/store', 'AliadoPaycypsChargebackController@store')->name('aliado.paycyps.chargebackStore');
+Route::post('/aliado/paycyps/historic/store', 'AliadoPaycypsHistoricController@store')->name('aliado.paycypsHistoric.store');
+Route::post('/aliado/paycyps/historic/storeFolios', 'AliadoPaycypsHistoricController@storeFolios')->name('aliado.paycypsHistoric.storeFolios');
 
 /*
 |--------------------------------------------------------------------------
@@ -91,47 +104,60 @@ Route::post('/cellers/paycyps/historic/storeFolios', 'CellersPaycypsHistoricCont
 
 /*
 |--------------------------------------------------------------------------
-| Aliado Routes
+| Mediakey Routes
 |--------------------------------------------------------------------------
 |
 |
 */
-Route::get('/aliado', 'AliadoController@index')->name('aliado.index');
+Route::get('/mediakey', 'MediakeyController@index')->name('mediakey.index');
 
-Route::get('/aliado/chargeback', 'AliadoChargebackController@index')->name('aliado.chargeback.index');
-Route::post('/aliado/chargeback/store', 'AliadoChargebackController@store')->name('aliadoChargeback.store');
-Route::post('/aliado/chargeback/storeImage', 'AliadoChargebackController@storeImage')->name('aliadoChargeback.storeImage');
-Route::get('/aliado/chargeback/show', 'AliadoChargebackController@show')->name('aliadoChargeback.show');
+Route::get('/mediakey/chargeback', 'MediakeyChargebackController@index')->name('mediakey.chargeback.index');
+Route::post('/mediakey/chargeback/store', 'MediakeyChargebackController@store')->name('mediakeyChargeback.store');
+Route::get('/mediakey/chargeback/show', 'MediakeyChargebackController@show')->name('mediakeyChargeback.show');
+Route::post('/mediakey/chargeback/storeTxt', 'MediakeyChargebackController@storeTxt')->name('mediakeyChargeback.storeTxt');
 
-Route::post('/aliado/banorte/chargeback/store', 'AliadoBanorteChargebackController@store')->name('aliadoBanorteChargeback.store');
+Route::post('/mediakey/banorte/chargeback/store', 'MediakeyBanorteChargebackController@store')->name('mediakeyBanorteChargeback.store');
 
-Route::get('/aliado/blacklist', 'AliadoBlacklistController@index')->name('aliado.blacklist.index');
-Route::post('/aliado/blacklist/store', 'AliadoBlacklistController@store')->name('aliadoBlacklist.store');
-Route::post('/aliado/blacklist/storeChargedback', 'AliadoBlacklistController@storeChargedback')->name('aliadoBlacklist.storeChargedback');
+Route::get('/mediakey/blacklist', 'MediakeyBlacklistController@index')->name('mediakey.blacklist.index');
+Route::post('/mediakey/blacklist/store', 'MediakeyBlacklistController@store')->name('mediakeyBlacklist.store');
 
-Route::get('/aliado/responses', 'AliadoResponsesController@index')->name('aliado.responses.index');
-Route::post('/aliado/responses/storeReps', 'AliadoResponsesController@storeReps')->name('aliado.responses.storeReps');
-Route::post('/aliado/responses/storePdf', 'AliadoResponsesController@storePdf')->name('aliado.responses.storePdf');
+Route::get('/mediakey/responses', 'MediakeyResponsesController@index')->name('mediakey.responses.index');
+Route::post('/mediakey/responses/storeReps', 'MediakeyResponsesController@storeReps')->name('mediakey.responses.storeReps');
+Route::post('/mediakey/responses/storePdf', 'MediakeyResponsesController@storePdf')->name('mediakey.responses.storePdf');
 
-Route::get('/aliado/file_making', 'AliadoFileMakingController@index')->name('aliado.file_making.index');
-Route::get('/aliado/file_making/exportBanorte', 'AliadoFileMakingController@exportBanorte')->name('aliado.file_making.exportBanorte');
-Route::get('/aliado/file_making/export0897', 'AliadoFileMakingController@export0897')->name('aliado.file_making.export0897');
+Route::get('/mediakey/file_making', 'MediakeyFileMakingController@index')->name('mediakey.file_making.index');
 
+Route::get('/mediakey/billing_users', 'MediakeyBillingUsersController@index')->name('mediakey.billing_users.index');
+Route::post('/mediakey/billing_users/storeFtp', 'MediakeyBillingUsersController@storeFtp')->name('mediakey.billing_users.storeFtp');
+Route::post('/mediakey/billing_users/storeRejectedProsa', 'MediakeyBillingUsersController@storeRejectedProsa')->name('mediakey.billing_users.storeRejectedProsa');
+Route::post('/mediakey/billing_users/storeRejectedBanorte', 'MediakeyBillingUsersController@storeRejectedBanorte')->name('mediakey.billing_users.storeRejectedBanorte');
+Route::post('/mediakey/billing_users/storeTextbox', 'MediakeyBillingUsersController@storeTextbox')->name('mediakey.billing_users.storeTextbox');
 
-Route::get('/aliado/billing_users', 'AliadoBillingUsersController@index')->name('aliado.billing_users.index');
-Route::post('/aliado/billing_users/storeFtp', 'AliadoBillingUsersController@storeFtp')->name('aliado.billing_users.storeFtp');
-Route::post('/aliado/billing_users/storeRejectedProsa', 'AliadoBillingUsersController@storeRejectedProsa')->name('aliado.billing_users.storeRejectedProsa');
-Route::post('/aliado/billing_users/storeToBanorte', 'AliadoBillingUsersController@storeToBanorte')->name('aliado.billing_users.storeToBanorte');
-Route::post('/aliado/billing_users/storeTo3918', 'AliadoBillingUsersController@storeTo3918')->name('aliado.billing_users.storeTo3918');
-Route::post('/aliado/billing_users/storeTextbox', 'AliadoBillingUsersController@storeTextbox')->name('aliado.billing_users.storeTextbox');
+/*
+|--------------------------------------------------------------------------
+| Sanborns Routes
+|--------------------------------------------------------------------------
+|
+|storeChargesReturns
+*/
+Route::get('/sanborns', 'SanbornsController@index')->name('sanborns.index');
+Route::post('/sanborns/store', 'SanbornsController@store');
+Route::get('/sanbornscobro', 'SanbornsCobrosController@index')->name('sanbornscobro.index');
+Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@storeChargesReturns')->name('sanbornsStoreChargesReturnsImport');
+Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
+Route::post('sanbornscobro/searchdetails/', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
 
-Route::get('aliado/paycyps', 'AliadoPaycypsController@index')->name('aliado.paycyps');
-Route::post('/aliado/paycyps/storeCsv', 'AliadoPaycypsBillingController@storeCsv')->name('aliado.paycyps.storeCsv');
-Route::post('/aliado/paycyps/updateCsv', 'AliadoPaycypsBillingController@updateCsv')->name('aliado.paycyps.updateCsv');
-Route::post('/aliado/paycyps/update', 'AliadoPaycypsBillingController@update')->name('aliado.paycyps.update');
-Route::post('/aliado/paycyps/chargeback/store', 'AliadoPaycypsChargebackController@store')->name('aliado.paycyps.chargebackStore');
-Route::post('/aliado/paycyps/historic/store', 'AliadoPaycypsHistoricController@store')->name('aliado.paycypsHistoric.store');
-Route::post('/aliado/paycyps/historic/storeFolios', 'AliadoPaycypsHistoricController@storeFolios')->name('aliado.paycypsHistoric.storeFolios');
+/*
+|--------------------------------------------------------------------------
+| Thx Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('/thx', 'ThxController@index')->name('thx.index');
+Route::get('/thx/blacklist', 'ThxBlacklistController@index')->name('thx.blacklist.index');
+Route::post('/thx/blacklist/store', 'ThxBlacklistController@store')->name('thxBlacklist.store');
+
 /*
 |--------------------------------------------------------------------------
 | Urbano Routes
@@ -156,20 +182,6 @@ Route::post('/urbano/paycyps/historic/storeFolios', 'UrbanoPaycypsHistoricContro
 
 Route::get('/urbano/responses', 'UrbanoResponsesController@index')->name('urbano.responses.index');
 Route::post('/urbano/responses/storeReps', 'UrbanoResponsesController@storeReps')->name('urbano.responses.storeReps');
-
-/*
-|--------------------------------------------------------------------------
-| Sanborns Routes
-|--------------------------------------------------------------------------
-|
-|storeChargesReturns
-*/
-Route::get('/sanborns', 'SanbornsController@index')->name('sanborns.index');
-Route::post('/sanborns/store', 'SanbornsController@store');
-Route::get('/sanbornscobro', 'SanbornsCobrosController@index')->name('sanbornscobro.index');
-Route::post('/sanbornscobro/storechargesreturns', 'SanbornsCobrosController@storeChargesReturns')->name('sanbornsStoreChargesReturnsImport');
-Route::post('/sanbornscobro/search', 'SanbornsCobrosController@search')->name('sanbornsSearch');
-Route::post('sanbornscobro/searchdetails/', 'SanbornsCobrosController@searchDetails')->name('searchDetails');
 
 /*
 |--------------------------------------------------------------------------
