@@ -28,7 +28,7 @@ class AliadoResponsesControllerTest extends TestCase
         $this->signIn();
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/CE201912111710048010897.rep',
+                __DIR__ . '/Files/CE201912111710048010897.rep',
                 'CE201912111710048010897.rep',
                 'text/plain',
                 20416,
@@ -54,10 +54,11 @@ class AliadoResponsesControllerTest extends TestCase
     /** @test */
     public function storePdf_method_persist_billing_info_on_RespuestasBanorteAliado_model()
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/aliado-banorte-2019-11-08-1_Respuestas.pdf',
+                __DIR__ . '/Files/aliado-banorte-2019-11-08-1_Respuestas.pdf',
                 'aliado-banorte-2019-11-08-1_Respuestas.pdf',
                 'application/pdf',
                 20416,

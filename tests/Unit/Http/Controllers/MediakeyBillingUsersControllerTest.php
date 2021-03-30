@@ -47,7 +47,7 @@ class MediakeyBillingUsersControllerTest extends TestCase
         ]);
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/SCAENT6873D190530ER02.ftp',
+                __DIR__ . '/Files/SCAENT6873D190530ER02.ftp',
                 'SCAENT6873D190530ER02.ftp',
                 'text/plain',
                 20416,

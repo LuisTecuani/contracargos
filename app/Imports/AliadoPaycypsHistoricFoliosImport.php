@@ -23,7 +23,13 @@ class AliadoPaycypsHistoricFoliosImport implements ToModel, WithHeadingRow
     {
         $folio = $row['folio'];
         preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2})/", $row['fecha_operacion'], $d);
-        $part = explode('/', $d[1]);
+        if ($d[1]) {
+            $part = explode('/', $d[1]);
+        } else {
+            preg_match("/(\d{2}\/\d{2}\/\d{2})\s(\d{2}:\d{2}:\d{2})/", $row['fecha_operacion'], $d);
+            $part = explode('/', $d[1]);
+            $part[2] = '20'.$part[2];
+        }
         $tarjeta = str_replace('*', '',str_replace(' ','',$row['tarjeta']));
 
         return new AliadoPaycypsHistoric([

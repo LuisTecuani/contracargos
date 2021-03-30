@@ -29,17 +29,14 @@ class CellersPaycypsHistoricImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         preg_match("/(\d{2}\/\d{2}\/\d{4})\s(\d{2}:\d{2}:\d{2})/", $row['fecha_operacion'], $d);
-        $part = explode('/', $d[1]);
-        $tarjeta = str_replace('*', '',str_replace(' ','',$row['tarjeta']));
-        $ref2 = $row['ref2'];
-
-        if (!$row['ref3']) {
-            $row['ref3'] = CellersPaycypsBill::select('paycyps_id')
-                    ->whereRaw("right(tdc, 4) = right($tarjeta, 4)")
-                    ->whereRaw("left(tdc, 6) = left($tarjeta, 6)")
-                    ->whereRaw("$ref2 = substr(paycyps_id, 4)")
-                    ->first()->paycyps_id ?? null;
+        if ($d[1]) {
+            $part = explode('/', $d[1]);
+        } else {
+            preg_match("/(\d{2}\/\d{2}\/\d{2})\s(\d{2}:\d{2}:\d{2})/", $row['fecha_operacion'], $d);
+            $part = explode('/', $d[1]);
+            $part[2] = '20'.$part[2];
         }
+        $tarjeta = str_replace('*', '',str_replace(' ','',$row['tarjeta']));
 
         return new CellersPaycypsHistoric([
             'folio' => $row['folio'],

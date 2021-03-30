@@ -45,7 +45,7 @@ class CellersBillingUsersControllerTest extends TestCase
         ]);
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/SCAENT2950D191205ER01.ftp',
+                __DIR__ . '/Files/SCAENT2950D191205ER01.ftp',
                 'SCAENT2950D191205ER01.ftp',
                 'text/plain',
                 20416,

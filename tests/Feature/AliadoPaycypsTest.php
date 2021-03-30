@@ -203,4 +203,96 @@ class AliadoPaycypsTest extends TestCase
         ]);
         $this->assertCount(4, AliadoPaycypsHistoric::all());
     }
+
+    /** @test */
+    public function a_user_can_import_movements_to_aliado_paycyps_historics_from_xls_file()
+    {
+        $this->signIn();
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/aliado-paycips-tran-2021-03-12.xls',
+                'aliado-paycips-tran-2021-03-12.xls',
+                'text/xls',
+                20416,
+                0,
+                true
+            ))
+        );
+        $this->assertCount(0, AliadoPaycypsHistoric::all());
+
+        $this->post('/aliado/paycyps/historic/store', [
+            'files' => [$file],
+        ]);
+
+        $this->assertDatabaseHas('aliado_paycyps_historics', [
+            'Folio' => '839334',
+            'Fecha_Operacion' => '2021-03-12 00:23:42',
+            'Fecha_Liq' => '2021-03-17',
+            'Tarjeta' => '4023180959',
+            'Banco' => 'IXE',
+            'Producto' => 'IXE VISA INFINITE',
+            'Importe_Venta' => '79.00',
+            'Importe_Original' => '79.00',
+            'Divisa' => 'MXP',
+            'Comision_Cobrada' => '15.27',
+            'Costo' => '',
+            'Autorizacion' => '000478',
+            'Tipo_Operacion' => 'Venta',
+            'Tipo_Bin' => 'Credito',
+            'Terminal' => '553 Aliado eTickets',
+            'Comercio' => 'REC',
+            'Ref2' => '603',
+            'Ref3' => '',
+            'Ref4' => '',
+            'Ticket' => '254008',
+            'Codigo_Respuesta' => '00  ',
+            'Descripcion' => 'Proceso Completo',
+            'file_name' => 'aliado-paycips-tran-2021-03-12.xls',
+        ]);
+        $this->assertCount(7, AliadoPaycypsHistoric::all());
+    }
+
+    /** @test */
+    public function a_user_can_import_liquidations_to_aliado_paycips_historics_from_xls_file()
+    {
+        $this->withoutExceptionHandling();
+        $this->signIn();
+        $file = UploadedFile::createFromBase(
+            (new UpFile(
+                __DIR__ . '/files/aliado-paycips-liq-2021-05-10.xls',
+                'aliado-paycips-liq-2021-05-10.xls',
+                'text/xls',
+                20416,
+                0,
+                true
+            ))
+        );
+        $this->assertCount(0, AliadoPaycypsHistoric::all());
+
+        $this->post('/aliado/paycyps/historic/store', [
+            'files' => [$file],
+        ]);
+
+        $this->assertDatabaseHas('aliado_paycyps_historics', [
+            'Folio' => '989648',
+            'Fecha_operacion' => '2021-02-11 22:37:39',
+            'Fecha_liq' => '2021-02-11',
+            'Tarjeta' => '5188991329',
+            'Banco' => 'BANAMEX TRAVEL PASS ELITE LEVEL',
+            'Importe_venta' => '(79.00)',
+            'Comision_cobrada' => '0.00',
+            'Costo' => '(79.00)',
+            'Autorizacion' => '328266',
+            'Tipo_operacion' => 'Contracargo',
+            'Tipo_Bin' => 'Credito',
+            'Terminal' => '553 Aliado eTickets',
+            'Comercio' => 'REC',
+            'Ref3' => '3:11842@2',
+            'Ticket' => '298008',
+            'file_name' => 'aliado-paycips-liq-2021-05-10.xls',
+        ]);
+    }
 }
+
+
+

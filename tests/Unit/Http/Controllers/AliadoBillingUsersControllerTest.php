@@ -56,7 +56,7 @@ class AliadoBillingUsersControllerTest extends TestCase
         $active = $this->tdc2;
         $file = UploadedFile::createFromBase(
             (new UpFile(
-                __DIR__ . '/files/SCAENT0897D191113ER01.ftp',
+                __DIR__ . '/Files/SCAENT0897D191113ER01.ftp',
                 'SCAENT0897D191113ER01.ftp',
                 'text/plain',
                 20416,

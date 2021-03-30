@@ -15,7 +15,6 @@ class UrbanoPaycypsChargebackController extends Controller
         $chargebackDate = $request->chargeback_date;
 
         foreach ($cards as $card) {
-
             $cargo = UrbanoPaycypsBill::where('tdc','like', $card)->get();
 
             foreach ($cargo as $row) {
