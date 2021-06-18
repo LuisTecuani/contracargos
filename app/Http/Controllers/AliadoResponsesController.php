@@ -99,8 +99,13 @@ class AliadoResponsesController extends Controller
 
             if (count($valid) === 0) {
                 $processed = processPdf($file);
-
                 foreach ($processed as $row) {
+
+                    if ($row[4] == 'Rechazada') {
+                        $row[11] = $row[10];
+                        $row[10] = $row[9];
+                        $row[8] = $row[7];
+                    }
 
                     RespuestasBanorteAliado::create([
                         'comentarios' => $row[10] ?? null,

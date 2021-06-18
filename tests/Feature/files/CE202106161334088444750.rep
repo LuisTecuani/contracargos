@@ -1,0 +1,85 @@
+
+13:34                                                                          SISTEMA LOCAL DE CARGOS AUTOMATICOS                                                                   16/JUN/2021
+                                                                          REPORTE DETALLADO DE TRANSACCIONES RECHAZADAS                                                                         
+CCPA0203                                                            PERIODO DE CORTE 16/JUN/2021 10:01  Al 16/JUN/2021 10:01                                                      PAG:         1
+________________________________________________________________________________________________________________________________________________________________________________________________
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Afiliaci?n: 8444750   AFF*URBANO                                                                               Banco: 30 BANCO AUTOFIN                                                          
+                                                                                                                                                                                                
+Numero de cuenta    Referencia              Fecha-hora    Rechazo                                                    Transacci?n                       Monto       Comisi?n Numero Contrato     
+------------------- ----------------------- ------------- -- ------------------------------------------------------- -- -------------------- --------------- -------------- --------------------
+   4915663011068153 003425                  210616 133450 62 Tarjeta Restringida                                     00 VENTAS                         90.00           1.38 003425              
+   4152313393375931 020509                  210616 133450 41 Tarjeta extraviada                                      00 VENTAS                         90.00           1.38 020509              
+   4152313425855496 021738                  210616 133450 05 Rechazada                                               00 VENTAS                         90.00           1.38 021738              
+
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Totales:                                                                                                                                                                                        
+                                                                                                                                                                                                
+Total de Operaciones Rechazadas:                3                                                                                                                                               
+Monto de las Operaciones       :          $270.00                                                                                                                                               
+Importe de la Comisi?n         :            $4.14                                                                                                                                               
+Iva de la Comisi?n             :             $.66                                                                                                                                               
+Total                          :          $265.20                                                                                                                                               
+                                                                                                                                                                                                
+                                                                                                                                                                                                
+Fin de Reporte.                                                                                                                                                                                 
+                                                                                                                                                                                                
+
+13:34                                                     SISTEMA LOCAL DE CARGOS AUTOMATICOS                                               16/JUN/2021
+                                                      REPORTE DETALLADO DE TRANSACCIONES ACEPTADAS                                                     
+CCPA0204                                       PERIODO DE CORTE 16/JUN/2021 10:01  Al 16/JUN/2021 10:01                                  PAG:         1
+_______________________________________________________________________________________________________________________________________________________
+                                                                                                                                                       
+                                                                                                                                                       
+                                                                                                                                                       
+Afiliaci?n: 8444750   AFF*URBANO                                      Banco: 30 BANCO AUTOFIN                                                          
+                                                                                                                                                       
+Numero de cuenta    Referencia              Fecha-hora    Autz Autorizaci?n Transacci?n                       Monto       Comisi?n Numero Contrato     
+------------------- ----------------------- ------------- ---- ------------ -- -------------------- --------------- -------------- --------------------
+   4915735004992019 014169                  210616 133450 P128 045042       00 VENTAS                         90.00           1.38 014169              
+   5579100192801775 020958                  210616 133450 P128 045089       00 VENTAS                         90.00           1.38 020958              
+
+                                                                                                                                                       
+                                                                                                                                                       
+Totales:                                                                                                                                               
+                                                                                                                                                       
+Total de Operaciones Aceptadas:                2                                                                                                       
+Monto de las Operaciones      :          $180.00                                                                                                       
+Importe de la Comisi?n        :            $2.76                                                                                                       
+Iva de la Comisi?n            :             $.44                                                                                                       
+Total                         :          $176.80                                                                                                       
+                                                                                                                                                       
+                                                                                                                                                       
+Fin de Reporte.                                                                                                                                        
+                                                                                                                                                       
+
+13:34                     SISTEMA LOCAL DE CARGOS AUTOMATICOS              16/JUN/2021
+                     REPORTE DETALLADO DE TRANSACCIONES PROCESADAS                    
+CCPA0205       PERIODO DE CORTE 16/JUN/2021 10:01  Al 16/JUN/2021 10:01 PAG:         1
+______________________________________________________________________________________
+                                                                                      
+                                                                                      
+                                                                                      
+Afiliaci?n: 8444750 AFF*URBANO                                                        
+Banco     : 30 BANCO AUTOFIN                                                          
+                                                                                      
+                                                                                      
+                                 Transacciones       Transacciones             Periodo
+                                    Rechazadas           Aceptadas            De corte
+                               ---------------     ---------------       -------------
+                                                                                      
+Total de Operaciones     :                   3                   2                   5
+Monto de las Operaciones :             $270.00             $180.00             $450.00
+Importe de la Comisi?n   :               $4.14               $2.76               $6.90
+Iva de la Comisi?n       :                $.66                $.44               $1.10
+                                                                                      
+Total a Depositar        :                                 $176.80             $442.00
+                                                                                      
+                                                                                      
+                                                                                      
+Fin de Reporte.                                                                       
+                                                                                      
+                                                                                      

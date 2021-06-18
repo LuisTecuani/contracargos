@@ -154,6 +154,9 @@ Route::post('/urbano/affinitas/historic/store', 'UrbanoAffinitasHistoricControll
 Route::post('/urbano/paycyps/historic/store', 'UrbanoPaycypsHistoricController@store')->name('urbano.paycypsHistoric.store');
 Route::post('/urbano/paycyps/historic/storeFolios', 'UrbanoPaycypsHistoricController@storeFolios')->name('urbano.paycypsHistoric.storeFolios');
 
+Route::get('/urbano/responses', 'UrbanoResponsesController@index')->name('urbano.responses.index');
+Route::post('/urbano/responses/storeReps', 'UrbanoResponsesController@storeReps')->name('urbano.responses.storeReps');
+
 /*
 |--------------------------------------------------------------------------
 | Sanborns Routes
