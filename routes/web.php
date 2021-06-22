@@ -160,6 +160,20 @@ Route::post('/thx/blacklist/store', 'ThxBlacklistController@store')->name('thxBl
 
 /*
 |--------------------------------------------------------------------------
+| Thx Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('thx/paycyps', 'ThxPaycypsController@index')->name('thx.paycyps');
+Route::post('/thx/paycyps/storeCsv', 'ThxPaycypsBillingController@storeCsv')->name('thx.paycyps.storeCsv');
+Route::post('/thx/paycyps/updateCsv', 'ThxPaycypsBillingController@updateCsv')->name('thx.paycyps.updateCsv');
+Route::post('/thx/paycyps/update', 'ThxPaycypsBillingController@update')->name('thx.paycyps.update');
+Route::post('/thx/paycyps/chargeback/store', 'ThxPaycypsChargebackController@store')->name('thx.paycyps.chargebackStore');
+Route::post('/thx/paycyps/historic/store', 'ThxPaycypsHistoricController@store')->name('thx.paycypsHistoric.store');
+Route::post('/thx/paycyps/historic/storeFolios', 'ThxPaycypsHistoricController@storeFolios')->name('thx.paycypsHistoric.storeFolios');
+/*
+|--------------------------------------------------------------------------
 | Urbano Routes
 |--------------------------------------------------------------------------
 |
