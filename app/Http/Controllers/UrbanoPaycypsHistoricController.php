@@ -24,7 +24,7 @@ class UrbanoPaycypsHistoricController extends Controller
 
             $saved = (new UrbanoPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
 
@@ -99,9 +99,7 @@ class UrbanoPaycypsHistoricController extends Controller
                             'descripcion' => $b[21],
                             'file_name' => $fileName,
                         ]);
-
                     }
-                    return back();
                 }
             }
             if (Str::contains($fileName, '.csv')) {
@@ -115,9 +113,7 @@ class UrbanoPaycypsHistoricController extends Controller
 
                     Excel::import($import, $file);
                 }
-
             }
-
         }
 
         return back();

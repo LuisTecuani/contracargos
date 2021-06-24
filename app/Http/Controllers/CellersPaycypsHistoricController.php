@@ -24,10 +24,9 @@ class CellersPaycypsHistoricController extends Controller
 
             $saved = (new CellersPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
-
                 if (Str::contains($fileName, 'liq')) {
                     $rows = preg_grep("/(\d{4}\s\d{2}\*{2}\s\*{4}\s\d{4})/", file($file));
                     foreach ($rows as $row => $cont) {
@@ -99,11 +98,9 @@ class CellersPaycypsHistoricController extends Controller
                             'file_name' => $fileName,
                         ]);
                     }
-                    return back();
                 }
             }
             if (Str::contains($fileName, '.csv')) {
-
                 if (Str::contains($fileName, 'liq')) {
                     $import = (new CellersPaycypsHistoricFoliosImport())->fromFile($fileName);
 
@@ -113,11 +110,8 @@ class CellersPaycypsHistoricController extends Controller
 
                     Excel::import($import, $file);
                 }
-
             }
-
         }
-
         return back();
     }
 

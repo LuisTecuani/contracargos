@@ -24,7 +24,7 @@ class AliadoPaycypsHistoricController extends Controller
 
             $saved = (new AliadoPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
 
@@ -99,11 +99,9 @@ class AliadoPaycypsHistoricController extends Controller
                             'file_name' => $fileName,
                         ]);
                     }
-                    return back();
                 }
             }
             if (Str::contains($fileName, '.csv')) {
-
                 if (Str::contains($fileName, 'liq')) {
                     $import = (new AliadoPaycypsHistoricFoliosImport())->fromFile($fileName);
 
@@ -113,11 +111,8 @@ class AliadoPaycypsHistoricController extends Controller
 
                     Excel::import($import, $file);
                 }
-
             }
-
         }
-
         return back();
     }
 
@@ -140,7 +135,6 @@ class AliadoPaycypsHistoricController extends Controller
                 }
             }
         }
-
         return back();
     }
 }
