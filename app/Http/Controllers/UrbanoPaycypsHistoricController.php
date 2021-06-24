@@ -24,7 +24,7 @@ class UrbanoPaycypsHistoricController extends Controller
 
             $saved = (new UrbanoPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
 

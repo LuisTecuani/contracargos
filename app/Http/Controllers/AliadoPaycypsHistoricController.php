@@ -24,7 +24,7 @@ class AliadoPaycypsHistoricController extends Controller
 
             $saved = (new AliadoPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
 

@@ -24,7 +24,7 @@ class CellersPaycypsHistoricController extends Controller
 
             $saved = (new CellersPaycypsHistoric)->getByFileName($fileName);
             if ($saved->isNotEmpty()) {
-                return;
+                continue;
             }
             if (Str::contains($fileName, '.xls')) {
 
@@ -99,7 +99,6 @@ class CellersPaycypsHistoricController extends Controller
                             'file_name' => $fileName,
                         ]);
                     }
-                    return back();
                 }
             }
             if (Str::contains($fileName, '.csv')) {
