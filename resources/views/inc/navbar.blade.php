@@ -26,6 +26,9 @@
                         <a href="{{route('urbano.index')}}" class="nav-link">Urbano</a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{route('thx.index')}}" class="nav-link">Thx</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{route('sanbornscobro.index')}}" class="nav-link">Sanborns</a>
                     </li>
                     <li class="nav-item">
