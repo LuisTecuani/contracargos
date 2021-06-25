@@ -16,8 +16,8 @@ class ThxPaycypsChargebackController extends Controller
 
         foreach ($cards as $card) {
 
-            $cargo = ThxPaycypsBill::where('tdc','like', $card)->get();
-dd($cargo);
+            $cargo = (new ThxPaycypsBill)->getByTdc($card);
+
             foreach ($cargo as $row) {
                 $Contracargos = new ContracargosThxPaycyps();
                 $Contracargos->user_id = $row->user_id;

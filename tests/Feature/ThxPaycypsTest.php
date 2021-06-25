@@ -18,7 +18,6 @@ class ThxPaycypsTest extends TestCase
 
     public function method_store_persist_data_on_contracargos_table()
     {
-        $this->withoutExceptionHandling();
         $this->signIn();
         $charge1 = factory(ThxPaycypsBill::class)->create([
             'tdc' => '5432161111110552',
