@@ -4,11 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Repsurbano extends Model
+class RespuestasBanorteThx extends Model
 {
     protected $guarded = [];
 
-    protected $table = 'repsurbano';
+    protected $table = 'respuestas_banorte_thx';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * Get not billable users.
@@ -28,18 +35,5 @@ class Repsurbano extends Model
                 'Excede limite de disposiciones diarias'
             ])
             ->get();
-    }
-
-    public function getUserAcceptedCharges($id)
-    {
-        return $this->select('fecha', 'tarjeta')
-            ->where([['user_id','=',$id],['estatus','=','Aprobada']])
-            ->get();
-    }
-
-    public function getRecentDates()
-    {
-        return $this->select('fecha')->groupBy('fecha')
-            ->orderBy('fecha', 'desc')->limit(4)->get();
     }
 }

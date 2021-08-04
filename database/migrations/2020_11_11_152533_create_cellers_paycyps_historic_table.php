@@ -15,7 +15,7 @@ class CreateCellersPaycypsHistoricTable extends Migration
     {
         Schema::create('cellers_paycyps_historics', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('Folio')->nullable();
+            $table->unsignedBigInteger('Folio')->nullable();
             $table->string('Fecha_Operacion')->nullable();
             $table->string('Fecha_Liq')->nullable();
             $table->string('Tarjeta')->nullable();

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserTdcCellers extends Model
+class UserTdcUrbano extends Model
 {
     /**
      * Specify the connection, since this implements multitenant solution
@@ -15,10 +15,10 @@ class UserTdcCellers extends Model
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
-        $this->setConnection(config('database.cellers_connection'));
+        $this->setConnection(config('database.urbano_connection'));
     }
 
-    protected $table = 'tdc';
+    protected $table = 'cards';
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +26,6 @@ class UserTdcCellers extends Model
      * @var array
      */
     protected $fillable = [];
+
+
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserTdcCellers extends Model
+class UserTdcThx extends Model
 {
     /**
      * Specify the connection, since this implements multitenant solution
@@ -15,7 +15,7 @@ class UserTdcCellers extends Model
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
-        $this->setConnection(config('database.cellers_connection'));
+        $this->setConnection(config('database.thx_connection'));
     }
 
     protected $table = 'tdc';

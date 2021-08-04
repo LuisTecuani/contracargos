@@ -4,11 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Repsurbano extends Model
+class RespuestasBanorteUrbano extends Model
 {
     protected $guarded = [];
 
-    protected $table = 'repsurbano';
+    protected $table = 'respuestas_banorte_urbano';
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * Get not billable users.

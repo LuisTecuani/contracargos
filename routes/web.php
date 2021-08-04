@@ -158,6 +158,12 @@ Route::get('/thx', 'ThxController@index')->name('thx.index');
 Route::get('/thx/blacklist', 'ThxBlacklistController@index')->name('thx.blacklist.index');
 Route::post('/thx/blacklist/store', 'ThxBlacklistController@store')->name('thxBlacklist.store');
 
+
+Route::get('/thx/billing_users', 'ThxBillingUsersController@index')->name('thx.billing_users.index');
+Route::post('/thx/billing_users/storeFtp', 'ThxBillingUsersController@storeFtp')->name('thx.billing_users.storeFtp');
+Route::post('/thx/billing_users/storeTextbox', 'ThxBillingUsersController@storeTextbox')->name('thx.billing_users.storeTextbox');
+Route::post('/thx/billing_users/storeRejectedProsa', 'ThxBillingUsersController@storeRejectedProsa')->name('thx.billing_users.storeRejectedProsa');
+
 /*
 |--------------------------------------------------------------------------
 | Urbano Routes
@@ -182,6 +188,14 @@ Route::post('/urbano/paycyps/historic/storeFolios', 'UrbanoPaycypsHistoricContro
 
 Route::get('/urbano/responses', 'UrbanoResponsesController@index')->name('urbano.responses.index');
 Route::post('/urbano/responses/storeReps', 'UrbanoResponsesController@storeReps')->name('urbano.responses.storeReps');
+
+Route::get('/urbano/file_making', 'UrbanoFileMakingController@index')->name('urbano.file_making.index');
+
+Route::get('/urbano/billing_users', 'UrbanoBillingUsersController@index')->name('urbano.billing_users.index');
+Route::post('/urbano/billing_users/storeFtp', 'UrbanoBillingUsersController@storeFtp')->name('urbano.billing_users.storeFtp');
+Route::post('/urbano/billing_users/storeRejectedProsa', 'UrbanoBillingUsersController@storeRejectedProsa')->name('urbano.billing_users.storeRejectedProsa');
+Route::post('/urbano/billing_users/storeTextbox', 'UrbanoBillingUsersController@storeTextbox')->name('urbano.billing_users.storeTextbox');
+Route::post('/urbano/billing_users/storeToBanorte', 'UrbanoBillingUsersController@storeToBanorte')->name('urbano.billing_users.storeToBanorte');
 
 /*
 |--------------------------------------------------------------------------

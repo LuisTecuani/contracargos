@@ -12,8 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class AliadoPaycypsTest extends TestCase
 {
     use RefreshDatabase;
-
-
+    
     /** @test */
     public function method_store_persist_data_on_contracargos_table()
     {

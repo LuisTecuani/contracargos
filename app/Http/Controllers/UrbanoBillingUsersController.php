@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\CellersBillingUsers;
-use App\CellersBlacklist;
-use App\Repscellers;
-use App\RespuestasBanorteCellers;
-use App\UserTdcCellers;
+use App\UrbanoBillingUsers;
+use App\UrbanoBlacklist;
+use App\Repsurbano;
+use App\RespuestasBanorteUrbano;
+use App\UserTdcUrbano;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class CellersBillingUsersController extends Controller
+class UrbanoBillingUsersController extends Controller
 {
     public function index()
     {
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
+        $billUsers = count($this->billUsers());
 
-        return view('cellers/billing_users/index', compact('expUsers', 'vigUsers'));
+        return view('urbano/billing_users/index', compact('billUsers'));
     }
 
     public function storeFtp(Request $request)
@@ -27,29 +25,26 @@ class CellersBillingUsersController extends Controller
 
         $file = $request->file('file');
 
-        $rows = preg_grep("/(809295030)/", file($file));
+        $rows = preg_grep("/(844475030)/", file($file));
 
-        if($rows == []) {
-            $rows = preg_grep("/(754799830)/", file($file));
-        }
 
         foreach ($rows as $row) {
             $id = substr($row, 9, 6);
 
-            $data = UserTdcCellers::select("exp_date", "number")
+            $data = UserTdcUrbano::select("exp_month", "exp_year", "number")
                 ->where('user_id', '=', $id)
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                    . '-' . substr($data->exp_date, 0, -2))
+
+            if (is_numeric($data->exp_year) && strlen($data->exp_year) >= 3) {
+                $date = DateTime::createFromFormat('Y-m', $data->exp_year
+                    . '-' . $data->exp_month)
                     ->format('y-m');
             } else {
                 $date = 1111;
             }
-
-            CellersBillingUsers::create([
+            UrbanoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
@@ -59,11 +54,8 @@ class CellersBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
-
-        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
+        $billUsers = count($this->billUsers());
+        return view('urbano/billing_users/index', compact('billUsers'));
     }
 
     public function storeRejectedProsa(Request $request)
@@ -71,17 +63,16 @@ class CellersBillingUsersController extends Controller
         $procedence = $request->procedence;
 
         //select last four dates
-        $dates = RespuestasBanorteCellers::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->limit(4)->get();
+        $dates = RespuestasBanorteUrbano::select('fecha')->groupBy('fecha')->orderBy('fecha', 'desc')->limit(4)->get();
+        $banorte = (new RespuestasBanorteUrbano)->getNotBillables($dates);
 
-        $banorte = (new RespuestasBanorteCellers)->getNotBillables($dates);
+        $prosa = (new Repsurbano)->getNotBillables($dates);
 
-        $prosa = (new Repscellers)->getNotBillables($dates);
-
-        $noMore = Repscellers::select('user_id as id')
+        $noMore = Repsurbano::select('user_id as id')
             ->where('fecha', '=', $dates[3]->fecha)
             ->get();
 
-        $users = RespuestasBanorteCellers::select('user_id')
+        $users = RespuestasBanorteUrbano::select('user_id')
             ->where('fecha', '=', $dates[0]->fecha)
             ->whereIn('detalle_mensaje', ['Excede intentos de NIP','Ingrese un monto menor','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $banorte)
@@ -91,20 +82,20 @@ class CellersBillingUsersController extends Controller
 
         foreach ($users as $user) {
 
-            $data = UserTdcCellers::select("exp_date", "number")
+            $data = UserTdcUrbano::select("exp_month", "exp_year", "number")
+
                 ->where('user_id', '=', $user->user_id)
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                    . '-' . substr($data->exp_date, 0, -2))
+            if (is_numeric($data->exp_year) && strlen($data->exp_year) >= 3) {
+                $date = DateTime::createFromFormat('Y-m', $data->exp_year
+                    . '-' . $data->exp_month)
                     ->format('y-m');
             } else {
                 $date = 1111;
             }
-
-            CellersBillingUsers::create([
+            UrbanoBillingUsers::create([
                 'user_id' => $user->user_id,
 
                 'procedence' => $procedence,
@@ -114,23 +105,19 @@ class CellersBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-
-        $expUsers = count($this->expDates());
-
-        $vigUsers = count($this->vigDates());
-
-        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
+        $billUsers = count($this->billUsers());
+        return view('urbano/billing_users/index', compact('billUsers'));
     }
 
     public function storeToBanorte(Request $request)
     {
         $procedence = $request->procedence;
 
-        $date = Repscellers::select('fecha')->orderBy('fecha', 'desc')->first()->fecha;
+        $date = Repsurbano::select('fecha')->orderBy('fecha', 'desc')->first()->fecha;
 
-        $query = CellersBlacklist::select('user_id')->whereNotNull('user_id');
+        $query = UrbanoBlacklist::select('user_id')->whereNotNull('user_id');
 
-        $users = Repscellers::select('user_id as id')
+        $users = Repsurbano::select('user_id as id')
             ->where('fecha', 'like', $date)
             ->whereIn('detalle_mensaje', ['Excede limite de disposiciones diarias','Excede intentos de NIP','Fondos insuficientes', 'Supera el monto límite permitido', 'Límite diario excedido', 'Imposible autorizar en este momento'])
             ->whereNotIn('user_id', $query)
@@ -138,7 +125,7 @@ class CellersBillingUsersController extends Controller
 
         foreach ($users as $user) {
 
-            $data = UserTdcCellers::select("exp_date", "number")
+            $data = UserTdcUrbano::select("exp_date", "number")
                 ->where('user_id', '=', $user->id)
                 ->latest()
                 ->first();
@@ -151,7 +138,7 @@ class CellersBillingUsersController extends Controller
                 $date = 1111;
             }
 
-            CellersBillingUsers::create([
+            UrbanoBillingUsers::create([
                 'user_id' => $user->id,
 
                 'procedence' => $procedence,
@@ -161,10 +148,8 @@ class CellersBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
-
-        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
+        $billUsers = count($this->billUsers());
+        return view('urbano/billing_users/index', compact('billUsers'));
     }
 
     public function storeTextbox(Request $request)
@@ -175,20 +160,22 @@ class CellersBillingUsersController extends Controller
 
         foreach ($ids as $id) {
 
-            $data = UserTdcCellers::select("exp_date", "number")
-                ->where('user_id', '=', $id)
+            $data = UserTdcUrbano::select("exp_month", "exp_year", "number")
+                ->where('user_id', 'like', $id)
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                    . '-' . substr($data->exp_date, 0, -2))
+            if (is_numeric($data->exp_year) && strlen($data->exp_year) >= 3) {
+                $date = DateTime::createFromFormat('Y-m', $data->exp_year
+                    . '-' . $data->exp_month)
                     ->format('y-m');
             } else {
                 $date = 1111;
             }
-
-            CellersBillingUsers::create([
+            if (! $data->number) {
+                continue;
+            }
+            UrbanoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
@@ -198,29 +185,16 @@ class CellersBillingUsersController extends Controller
                 'number' => $data->number
             ]);
         }
-
-        $expUsers = count($this->expDates());
-        $vigUsers = count($this->vigDates());
-
-        return view('/cellers/billing_users/index', compact('expUsers', 'vigUsers'));
+        $billUsers = count($this->billUsers());
+        return view('urbano/billing_users/index', compact('billUsers'));
     }
 
 
 
-    public function expDates()
+    public function billUsers()
     {
-        return CellersBillingUsers::select('user_id')
+        return UrbanoBillingUsers::select('user_id')
             ->where([
-                ['exp_date', '<', now()->format('y-m')],
-                ['created_at', 'like', now()->format('Y-m-d') . '%']])
-            ->get();
-    }
-
-    public function vigDates()
-    {
-        return CellersBillingUsers::select('user_id')
-            ->where([
-                ['exp_date', '>=', now()->format('y-m')],
                 ['created_at', 'like', now()->format('Y-m-d') . '%']])
             ->get();
     }

@@ -35,5 +35,6 @@
         <server name="CELLERS_CONNECTION" value="testing_cellers"/>
         <server name="MEDIAKEY_CONNECTION" value="testing_mediakey"/>
         <server name="THX_CONNECTION" value="testing_thx"/>
+        <server name="URBANO_CONNECTION" value="testing_urbano"/>
     </php>
 </phpunit>
