@@ -7,9 +7,7 @@ use Tests\TestCase;
 class ThxBillingUsersTest extends TestCase
 {
     use BillingUsersContractTests;
+    use ToolsContractTests;
 
-    protected function getPlatformData()
-    {
-        return config('platforms.thx');
-    }
+    public $platform = 'platforms.thx';
 }

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Repsthx extends Model
 {
+    protected $guarded = [];
+
+    protected $table = 'repsthx';
+
     /**
      * Get not billable users.
      */
