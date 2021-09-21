@@ -180,13 +180,9 @@ class CellersBillingUsersController extends Controller
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_date) && strlen($data->exp_date)>= 3) {
-                $date = DateTime::createFromFormat('y-m', substr($data->exp_date, -2, 2)
-                    . '-' . substr($data->exp_date, 0, -2))
-                    ->format('y-m');
-            } else {
+
                 $date = 1111;
-            }
+
 
             CellersBillingUsers::create([
                 'user_id' => $id,
@@ -195,7 +191,7 @@ class CellersBillingUsersController extends Controller
 
                 'exp_date' => $date,
 
-                'number' => $data->number
+                'number' => $data->number,
             ]);
         }
 

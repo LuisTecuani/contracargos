@@ -8,8 +8,5 @@ class UrbanoBillingUsersTest extends TestCase
 {
     use BillingUsersContractTests;
 
-    protected function getPlatformData()
-    {
-        return config('platforms.urbano');
-    }
+    public $platform = 'platforms.urbano';
 }

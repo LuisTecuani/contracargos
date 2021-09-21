@@ -23,6 +23,9 @@
                         <a href="{{route('mediakey.index')}}" class="nav-link">Mediakey</a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{route('thx.index')}}" class="nav-link">THX</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{route('urbano.index')}}" class="nav-link">Urbano</a>
                     </li>
                     <li class="nav-item">
@@ -31,7 +34,6 @@
                     <li class="nav-item">
                         <a href="{{route('tools.index')}}" class="nav-link">Herramientas compartidas</a>
                     </li>
-
                 @endguest
 
             </ul>

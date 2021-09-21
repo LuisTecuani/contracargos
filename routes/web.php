@@ -158,6 +158,8 @@ Route::get('/thx', 'ThxController@index')->name('thx.index');
 Route::get('/thx/blacklist', 'ThxBlacklistController@index')->name('thx.blacklist.index');
 Route::post('/thx/blacklist/store', 'ThxBlacklistController@store')->name('thxBlacklist.store');
 
+Route::get('/thx/responses', 'ThxResponsesController@index')->name('thx.responses.index');
+Route::post('/thx/responses/storeReps', 'ThxResponsesController@storeReps')->name('thx.responses.storeReps');
 
 Route::get('/thx/billing_users', 'ThxBillingUsersController@index')->name('thx.billing_users.index');
 Route::post('/thx/billing_users/storeFtp', 'ThxBillingUsersController@storeFtp')->name('thx.billing_users.storeFtp');
@@ -214,6 +216,8 @@ Route::get('/bins/show', 'BinsController@show')->name('bins.show');
 Route::get('/bins/historic', 'BinsHistoricController@index')->name('binsHistoric.index');
 Route::post('/bins/historic/store', 'BinsHistoricController@store')->name('binsHistoric.store');
 Route::post('/bins/historic/import', 'BinsHistoricController@import')->name('binsHistoric.import');
+
+Route::post('/file-processor', 'FileProcessorController@store')->name('fileProcessor.store');
 
 Route::get('/find_user', 'FindUserController@index')->name('find_user.index');
 Route::post('/find_user/show', 'FindUserController@show')->name('find_user.show');

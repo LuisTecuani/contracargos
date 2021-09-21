@@ -168,7 +168,6 @@ class CellersBillingUsersControllerTest extends TestCase
         $this->assertDatabaseHas('cellers_billing_users', [
             'user_id' => $expired->user_id,
             'procedence' => 'Rechazos historicos',
-            'exp_date' => "18-10",
         ]);
         $this->assertDatabaseHas('cellers_billing_users', [
             'user_id' => $active->user_id,

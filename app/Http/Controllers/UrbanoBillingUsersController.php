@@ -9,6 +9,7 @@ use App\RespuestasBanorteUrbano;
 use App\UserTdcUrbano;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UrbanoBillingUsersController extends Controller
 {
@@ -165,24 +166,18 @@ class UrbanoBillingUsersController extends Controller
                 ->latest()
                 ->first();
 
-            if (is_numeric($data->exp_year) && strlen($data->exp_year) >= 3) {
-                $date = DateTime::createFromFormat('Y-m', $data->exp_year
-                    . '-' . $data->exp_month)
-                    ->format('y-m');
-            } else {
-                $date = 1111;
+            if( Str::contains($data->number, '*') or !$data->number) {
+                $data->number = '1';
             }
-            if (! $data->number) {
-                continue;
-            }
+
             UrbanoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => $date,
+                'exp_date' => 1111,
 
-                'number' => $data->number
+                'number' => $data->number ?? '1'
             ]);
         }
         $billUsers = count($this->billUsers());
