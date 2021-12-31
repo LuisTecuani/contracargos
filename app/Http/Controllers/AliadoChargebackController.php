@@ -9,7 +9,6 @@ use App\Http\Requests\StoreAdminRequest;
 use App\Mail\ChargebackEmail;
 use Illuminate\Support\Facades\Mail;
 use thiagoalessio\TesseractOCR\TesseractOCR;
-use function foo\func;
 
 class AliadoChargebackController extends Controller
 {
@@ -85,8 +84,7 @@ class AliadoChargebackController extends Controller
 
         $contracargos = ContracargosAliado::with('reps')
             ->whereNull('user_id')
-            ->get();
-
+            ->orderByDesc('created_at')->take(20)->get();
         foreach ($contracargos as $contracargo) {
             foreach ($contracargo->reps as $rep) {
                 if($contracargo->tarjeta == $rep->terminacion) {
@@ -100,7 +98,7 @@ class AliadoChargebackController extends Controller
 
         $noEmails = ContracargosAliado::with('user')
             ->whereNull('email')
-            ->get();
+            ->orderByDesc('created_at')->take(20)->get();
 
         foreach ($noEmails as $row) {
             if($row->user) {

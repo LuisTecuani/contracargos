@@ -156,12 +156,11 @@ class UrbanoBillingUsersController extends Controller
     public function storeTextbox(Request $request)
     {
         $procedence = $request->procedence;
-
         $ids = preg_split("[\r\n]", $request->ids);
 
         foreach ($ids as $id) {
 
-            $data = UserTdcUrbano::select("exp_month", "exp_year", "number")
+            $data = UserTdcUrbano::select("number")
                 ->where('user_id', 'like', $id)
                 ->latest()
                 ->first();

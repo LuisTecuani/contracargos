@@ -48,10 +48,10 @@ $factory->define(Repscellers::class, function (Faker $faker) {
     $tarjeta = $faker->creditCardNumber;
     return [
         'tarjeta' => $tarjeta,
-        'estatus' => $faker->word,
-        'detalle_mensaje' => $faker->word,
+        'estatus' => $estatus,
+        'detalle_mensaje' => $dMensaje,
         'terminacion' => substr($tarjeta, -4, 4),
-        'user_id' => $faker->randomNumber(6),
+        'user_id' => factory(CellersUser::class)->create()->id,
         'fecha' => $faker->date($format = 'Y-m-d', $max = '-01 days'),
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'monto' => $faker->randomNumber(4),
@@ -71,7 +71,8 @@ $factory->define(CellersBillingUsers::class, function (Faker $faker) {
 
 $factory->define(ContracargosCellers::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
+    $date = $faker->date($format = 'Y-m-d', $max = '-01 days');
+    dd($date);
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),

@@ -13,10 +13,12 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-            $this->pName = strtolower($this->getPlatformData()['name']);
-            $this->card = $this->getPlatformData()['card_model'];
-            $this->affinitas = substr($this->getPlatformData()['affinitas'], -4);
-            $this->respuestasBanorte = $this->getPlatformData()['respuestas_banorte_model'];
+        $this->pName = $this->getPlatformData()['name'];
+        $this->card = $this->getPlatformData()['card_model'];
+        $this->affinitas = substr($this->getPlatformData()['affinitas'], -4);
+        $this->respuestasBanorte = $this->getPlatformData()['respuestas_banorte_model'];
+        $this->user_model = $this->getPlatformData()['user_model'];
+        $this->reps_model = $this->getPlatformData()['reps_model'];
     }
 
     protected function signIn($user = null)

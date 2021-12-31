@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Bin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
@@ -54,5 +55,49 @@ trait ToolsContractTests
         foreach ($platforms as $platform) {
             $this->assertDatabaseCount('reps'. $platform['name'], 0);
         }
+    }
+
+    /** @test */
+    public function admins_can_browse_to_the_users_by_bank_index_page()
+    {
+        $this->signIn();
+
+        $this->get("/users-bank")
+            ->assertOk()
+            ->assertViewIs('users-bank.index')
+            ->assertSeeInOrder(['Plataforma', 'option', $this->pName, '/option']);
+    }
+
+    /** @test */
+    public function users_by_bank_show_displays_the_amounts()
+    {
+        $this->withoutExceptionHandling();
+        $bank1 = factory(Bin::class)->create();
+        $bank2 = factory(Bin::class)->create();
+        $bank3 = factory(Bin::class)->create();
+        factory($this->card)->times(2)->create(['number' => $bank1->bin.str_repeat(rand(0,9), 10)]);
+        factory($this->card)->times(3)->create(['number' => $bank2->bin.str_repeat(rand(0,9), 10)]);
+        factory($this->card)->times(4)->create(['number' => $bank3->bin.str_repeat(rand(0,9), 10)]);
+        $cards = $this->card::all();
+        foreach($cards as $card) {
+            factory($this->reps_model)->create([
+                'tarjeta' => $card->number,
+                'estatus' => 'Declinada',
+                'detalle_mensaje' => 'Fondos insuficientes',
+                'terminacion' => substr($card->number, -4, 4),
+                'user_id' => $card->user_id,
+            ]);
+        }
+        $approved = $this->reps_model::whereIn('id', ['0', '2', '5'])->get();
+        $approved->map(function ($charge) {
+            $charge->forceFill([
+                'estatus' => 'Aprobada',
+                'detalle_mensaje' => 'Aprobado',
+            ])->save();
+        });
+        $this->signIn();
+
+        $this->post("/users-bank", ['platform' => $this->pName])
+        ->assertSeeInOrder([$this->pName, $bank1->bank, $this->reps_model, 'Aprobado', '1', $this->pName, $bank3->bank, $this->reps_model, 'Aprobado', '1']);
     }
 }

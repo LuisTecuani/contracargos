@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Repsthx extends Model
 {
@@ -28,5 +29,15 @@ class Repsthx extends Model
                 'Excede limite de disposiciones diarias'
             ])
             ->get();
+    }
+
+    public function getBinAttribute()
+    {
+        return Str::substr($this->tarjetas, 0, 6);
+    }
+
+    public function bin()
+    {
+        return $this->belongsTo(Bin::class, 'bin', 'bin');
     }
 }
