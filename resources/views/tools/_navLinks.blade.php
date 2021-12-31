@@ -9,5 +9,8 @@
         <li class="nav-item pt-2">
             <a href="/tdc_verification" class="btn btn-outline-success">Verificacion de tarjetas</a>
         </li>
+        <li class="nav-item pt-2">
+            <a href="{{ route('usersBank.index') }}" class="btn btn-outline-success">Usuarios por banco</a>
+        </li>
     </ul>
 </div>

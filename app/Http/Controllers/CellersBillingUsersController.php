@@ -191,7 +191,7 @@ class CellersBillingUsersController extends Controller
 
                 'exp_date' => $date,
 
-                'number' => $data->number,
+                'number' => $data->number ?? 1,
             ]);
         }
 

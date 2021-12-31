@@ -49,6 +49,7 @@ class AliadoBlacklistController extends Controller
 
         $chargedback = ContracargosAliado::select('user_id','email')
             ->where('created_at', 'like', $today.'%')
+            ->whereNotNull('email')
             ->union($banorte)
             ->get();
 

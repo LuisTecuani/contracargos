@@ -174,6 +174,8 @@ Route::post('/thx/billing_users/storeRejectedProsa', 'ThxBillingUsersController@
 |
 */
 Route::get('/urbano', 'UrbanoController@index')->name('urbano.index');
+Route::get('/urbano/blacklist', 'UrbanoBlacklistController@index')->name('urbano.blacklist.index');
+Route::post('/urbano/blacklist/store', 'UrbanoBlacklistController@store')->name('urbanoBlacklist.store');
 
 Route::get('urbano/paycyps', 'UrbanoPaycypsController@index')->name('urbano.paycyps');
 Route::post('/urbano/paycyps/storeCsv', 'UrbanoPaycypsBillingController@storeCsv')->name('urbano.paycyps.storeCsv');
@@ -198,6 +200,11 @@ Route::post('/urbano/billing_users/storeFtp', 'UrbanoBillingUsersController@stor
 Route::post('/urbano/billing_users/storeRejectedProsa', 'UrbanoBillingUsersController@storeRejectedProsa')->name('urbano.billing_users.storeRejectedProsa');
 Route::post('/urbano/billing_users/storeTextbox', 'UrbanoBillingUsersController@storeTextbox')->name('urbano.billing_users.storeTextbox');
 Route::post('/urbano/billing_users/storeToBanorte', 'UrbanoBillingUsersController@storeToBanorte')->name('urbano.billing_users.storeToBanorte');
+
+Route::get('/urbano/chargeback', 'UrbanoChargebackController@index')->name('urbano.chargeback.index');
+Route::post('/urbano/chargeback/store', 'UrbanoChargebackController@store')->name('urbanoChargeback.store');
+Route::get('/urbano/chargeback/show', 'UrbanoChargebackController@show')->name('urbanoChargeback.show');
+Route::post('/urbano/banorte/chargeback/store', 'UrbanoBanorteChargebackController@store')->name('urbanoBanorteChargeback.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -226,4 +233,8 @@ Route::post('/email/chargeback', 'EmailController@chargeback')->name('email.char
 
 Route::get('/tdc_verification', 'TdcVerificationController@index')->name('tdc_verification.index');
 Route::post('/tdc_verification/show', 'TdcVerificationController@show')->name('tdc_verification.show');
+
+Route::get('/users-bank', 'UsersBankController@index')->name('usersBank.index');
+Route::post('/users-bank', 'UsersBankController@show')->name('usersBank.show');
+
 

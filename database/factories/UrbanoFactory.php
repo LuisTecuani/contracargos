@@ -28,6 +28,14 @@ $factory->define(UserTdcUrbano::class, function (Faker $faker) {
     ];
 });
 
+$factory->define(UrbanoUser::class, function (Faker $faker) {
+    return [
+        'id' => $faker->randomNumber(6),
+        'name' => $faker->name,
+        'email' => $faker->email,
+    ];
+});
+
 $factory->define(UrbanoCancelAccountAnswer::class, function (Faker $faker) {
 
     return [
@@ -127,7 +135,7 @@ $factory->define(ContracargosUrbanoBanorte::class, function (Faker $faker) {
 
 $factory->define(ContracargosUrbano::class, function (Faker $faker) {
 
-    $date = $faker->date($format = 'd-m-Y', $max = '-01 days');
+    $date = $faker->date($format = 'Y-m-d', $max = '-1 days');
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),

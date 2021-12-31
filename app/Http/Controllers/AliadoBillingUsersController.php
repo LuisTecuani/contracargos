@@ -146,6 +146,7 @@ class AliadoBillingUsersController extends Controller
 
     public function storeTo3918(Request $request)
     {
+        dd($request->headers->all());
         $procedence = $request->procedence;
 
         $dates = (new RespuestasBanorteAliado)->getRecentDates();
@@ -198,17 +199,15 @@ class AliadoBillingUsersController extends Controller
                 ->latest()
                 ->first();
 
-            $d = $data->exp_month . substr($data->exp_year, -2);
 
             AliadoBillingUsers::create([
                 'user_id' => $id,
 
                 'procedence' => $procedence,
 
-                'exp_date' => DateTime::createFromFormat('y-m', substr($d, -2, 2)
-                    . '-' . substr($d, 0, -2))->format('y-m'),
+                'exp_date' => '1111',
 
-                'number' => $data->number
+                'number' => $data->number ?? '111111111',
             ]);
         }
 
