@@ -146,7 +146,7 @@ class AliadoBillingUsersController extends Controller
 
     public function storeTo3918(Request $request)
     {
-        dd($request->headers->all());
+        
         $procedence = $request->procedence;
 
         $dates = (new RespuestasBanorteAliado)->getRecentDates();

@@ -27,9 +27,9 @@ class UrbanoResponsesController extends Controller
                 if (Str::contains($fileName, 'pdf')) {
 
                     $processed = processPdf($file);
-
                     foreach ($processed as $row) {
                         $tarjeta = UserTdcUrbano::where('user_id', '=', $row[1])->firstOrFail()->number;
+                        //dd($tarjeta);
 
                         Repsurbano::create([
                             'tarjeta' => $tarjeta ?? null,

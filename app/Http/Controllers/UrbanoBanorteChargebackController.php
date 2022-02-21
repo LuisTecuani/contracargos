@@ -20,8 +20,10 @@ class UrbanoBanorteChargebackController extends Controller
                 $Contracargos = new ContracargosUrbano();
                 $Contracargos->autorizacion = $row['authorization'];
                 $Contracargos->tarjeta = $card;
+                $Contracargos->chargeback_date = $request->chargeback_date;
                 $Contracargos->save();
             }
+           // dd(ContracargosUrbano::where([['autorizacion', $row['authorization']],['tarjeta', $card]])->first());
         }
         return back();
     }

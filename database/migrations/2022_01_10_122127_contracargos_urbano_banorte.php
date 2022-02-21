@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ContracargosUrbano extends Migration
+class ContracargosUrbanoBanorte extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class ContracargosUrbano extends Migration
      */
     public function up()
     {
-        Schema::create('contracargos_urbano', function (Blueprint $table) {
+        Schema::create('contracargos_urbano_banorte', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('autorizacion');
             $table->integer('tarjeta');
-            $table->integer('user_id')->nullable();
+            $table->string('fecha_consumo');
+            $table->string('fecha_contracargo');
+            $table->string('user_id')->nullable();
             $table->string('email')->nullable();
-            $table->date('fecha_rep')->nullable();
-            $table->date('chargeback_date')->nullable();
+            $table->string('fecha_rep')->nullable();
             $table->timestamps();
         });
     }
