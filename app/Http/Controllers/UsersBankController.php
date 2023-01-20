@@ -11,7 +11,12 @@ class UsersBankController extends Controller
     public function index()
     {
         $platforms = array_unique(Arr::pluck(config('platforms'), 'name'));
-
+        $newEncrypter = new \Illuminate\Encryption\Encrypter( 'llaveDePrueba123');
+        $plainTextToEncrypt = '1234567890123456';
+        $encrypted = $newEncrypter->encrypt( $plainTextToEncrypt );
+        $encrypted = "eyJpdiI6InlRWURKSHdLRVM5VEVMay9CR3FlTVE9PSIsInZhbHVlIjoiVHhVbmdDUTdEUHJHbjlEbHhCSWptc3Q0VkkzTzdyQldBZFM1Sm5uUXh2ND0iLCJtYWMiOiJlYTI3NzI5YTg1YmRkZjE3YzI2OGQxODJjZTgyMGJhNDRmZWFiMTQxM2Q4MTkxYjVlYjgxMmFjMmRiYjc1ZDY2In0=";
+        $decrypted = $newEncrypter->decrypt( $encrypted );
+//        dd($decrypted);
         return view("users-bank.index", compact('platforms'));
     }
 
@@ -23,7 +28,7 @@ class UsersBankController extends Controller
             ->select('bin.bank', 'detalle_mensaje', DB::raw('count(*) as amount'))
             ->groupBy('detalle_mensaje')
             ->get();
-dd($results);
+
         return view("users-bank.index", compact('platforms', 'results'));
     }
 }

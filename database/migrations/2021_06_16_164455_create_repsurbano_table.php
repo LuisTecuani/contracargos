@@ -16,8 +16,8 @@ class CreateRepsurbanoTable extends Migration
         Schema::create('repsurbano', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('estatus');
-            $table->bigInteger('tarjeta');
-            $table->integer('terminacion');
+            $table->string('tarjeta')->nullable();
+            $table->string('terminacion')->nullable();
             $table->integer('user_id');
             $table->date('fecha');
             $table->string('autorizacion')->nullable();
