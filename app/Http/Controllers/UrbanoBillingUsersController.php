@@ -52,7 +52,7 @@ class UrbanoBillingUsersController extends Controller
 
                 'exp_date' => $date,
 
-                'number' => $data->number
+                'number' => 1
             ]);
         }
         $billUsers = count($this->billUsers());
@@ -159,11 +159,16 @@ class UrbanoBillingUsersController extends Controller
         $ids = preg_split("[\r\n]", $request->ids);
 
         foreach ($ids as $id) {
-
             $data = UserTdcUrbano::select("number")
                 ->where('user_id', 'like', $id)
+                ->whereDefault('1')
                 ->latest()
                 ->first();
+
+            if (! $data) {
+                $data = collect();
+                $data->number = '1';
+            }
 
             if( Str::contains($data->number, '*') or !$data->number) {
                 $data->number = '1';
@@ -177,6 +182,7 @@ class UrbanoBillingUsersController extends Controller
                 'exp_date' => 1111,
 
                 'number' => $data->number ?? '1'
+
             ]);
         }
         $billUsers = count($this->billUsers());
