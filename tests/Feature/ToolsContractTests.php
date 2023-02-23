@@ -20,7 +20,8 @@ trait ToolsContractTests
         $this->get("/tools")
             ->assertOk()
             ->assertSessionHasNoErrors()
-            ->assertViewIs('tools.index');
+            ->assertViewIs('tools.index')
+            ->assertSee(route('affinitas.index'));
     }
 
     /** @test */

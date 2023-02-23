@@ -72,7 +72,6 @@ $factory->define(CellersBillingUsers::class, function (Faker $faker) {
 $factory->define(ContracargosCellers::class, function (Faker $faker) {
 
     $date = $faker->date($format = 'Y-m-d', $max = '-01 days');
-    dd($date);
     return [
         'autorizacion' => $faker->numberBetween($min = 100000, $max = 999999),
         'tarjeta' => $faker->randomNumber(4),

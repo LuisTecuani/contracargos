@@ -23,7 +23,7 @@ class UsersBankController extends Controller
             ->select('bin.bank', 'detalle_mensaje', DB::raw('count(*) as amount'))
             ->groupBy('detalle_mensaje')
             ->get();
-dd($results);
+//dd($results);
         return view("users-bank.index", compact('platforms', 'results'));
     }
 }

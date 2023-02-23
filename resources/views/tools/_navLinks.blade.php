@@ -12,5 +12,8 @@
         <li class="nav-item pt-2">
             <a href="{{ route('usersBank.index') }}" class="btn btn-outline-success">Usuarios por banco</a>
         </li>
+        <li class="nav-item pt-2">
+            <a href="{{ route('affinitas.index') }}" class="btn btn-outline-success">Cobranza Affinitas</a>
+        </li>
     </ul>
 </div>
