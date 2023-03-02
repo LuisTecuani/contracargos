@@ -40,7 +40,7 @@ class AliadoFileMakingController extends Controller
             ->whereNotIn('user_id', $userCancellations)
             ->whereNotIn('user_id', $reps)
             ->get();
-        //dd($users);
+
 
     }
 }

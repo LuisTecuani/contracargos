@@ -237,4 +237,12 @@ Route::post('/tdc_verification/show', 'TdcVerificationController@show')->name('t
 Route::get('/users-bank', 'UsersBankController@index')->name('usersBank.index');
 Route::post('/users-bank', 'UsersBankController@show')->name('usersBank.show');
 
+/*
+|--------------------------------------------------------------------------
+| Affinitas Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('affinitas', 'AffinitasController@index')->name('affinitas.index');
 
